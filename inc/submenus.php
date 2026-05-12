@@ -1,0 +1,272 @@
+<?php
+
+/**
+ * Customize admin sidebar submenus for custom post types.
+ */
+
+add_action('admin_menu', function () {
+
+  global $menu, $submenu;
+
+  // Helper: remove a submenu item matching a substring of its URL
+  $remove_submenu = function ($key, $url_fragment) use (&$submenu) {
+    if (!isset($submenu[$key])) return;
+    foreach ($submenu[$key] as $index => $item) {
+      if (isset($item[2]) && strpos($item[2], $url_fragment) !== false) {
+        unset($submenu[$key][$index]);
+        break;
+      }
+    }
+  };
+
+  // ── Rename "Posts" to "Blog" ────────────────────────────────────────────────
+  foreach ($menu as $pos => $item) {
+    if (isset($item[2]) && $item[2] === 'edit.php') {
+      $menu[$pos][0] = 'Blog';
+      $menu[$pos][3] = 'Blog';
+      break;
+    }
+  }
+
+  // ── Move Media (pos 10) before Blog/Posts (pos 5) ───────────────────────────
+  if (isset($menu[5]) && isset($menu[10])) {
+    $temp     = $menu[5];
+    $menu[5]  = $menu[10];
+    $menu[10] = $temp;
+  }
+
+  // ── Swap Blog (pos 10) and Pages (pos 20) to get Media, Pages, Blog ──────────
+  if (isset($menu[10]) && isset($menu[20])) {
+    $temp     = $menu[10];
+    $menu[10] = $menu[20];
+    $menu[20] = $temp;
+  }
+
+  // ── Move Comments under Venues ──────────────────────────────────────────────
+  foreach ($menu as $pos => $item) {
+    if (isset($item[2]) && $item[2] === 'edit-comments.php') {
+      unset($menu[$pos]);
+      break;
+    }
+  }
+
+  // Separator between Venues (30) and Comments (32)
+  $menu[31] = ['', 'read', 'separator-venues-comments', '', 'wp-menu-separator'];
+
+  // Place Comments as top-level item right after Venues (pos 30)
+  $menu[32] = [
+    'Comments',
+    'moderate_comments',
+    'edit-comments.php',
+    'Comments',
+    'menu-top menu-icon-comments',
+    'menu-comments',
+    'dashicons-admin-comments',
+  ];
+
+  // ── Separator in Blog submenu after "Add Post" ──────────────────────────────
+  if (!empty($submenu['edit.php'])) {
+    $rebuilt = [];
+    foreach (array_values($submenu['edit.php']) as $item) {
+      $rebuilt[] = $item;
+      if (isset($item[2]) && $item[2] === 'post-new.php') {
+        $rebuilt[] = ['<span class="ct-sub-sep"></span>', 'read', '#ct-blog-sep', '', 'ct-submenu-separator'];
+      }
+    }
+    $submenu['edit.php'] = $rebuilt;
+  }
+
+  // ── Separator after 2nd subitem for other post types ────────────────────────
+  $insert_sep = function ($key) use (&$submenu) {
+    if (empty($submenu[$key])) return;
+    $items   = array_values($submenu[$key]);
+    $rebuilt = [];
+    foreach ($items as $i => $item) {
+      $rebuilt[] = $item;
+      if ($i === 1) {
+        $rebuilt[] = ['<span class="ct-sub-sep"></span>', 'read', '#sep-' . sanitize_key($key), '', 'ct-submenu-separator'];
+      }
+    }
+    $submenu[$key] = $rebuilt;
+  };
+
+  $insert_sep('edit.php?post_type=page');
+  $insert_sep('edit.php?post_type=ct-artist');
+  $insert_sep('edit.php?post_type=ct-event');
+  $insert_sep('edit.php?post_type=ct-production');
+  $insert_sep('edit.php?post_type=ct-supporter');
+  $insert_sep('edit.php?post_type=ct-class');
+  // $insert_sep('edit.php?post_type=ct-venue');
+
+  // ── Hide Tags ───────────────────────────────────────────────────────────────
+  $remove_submenu('edit.php?post_type=page',        'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=ct-venue',    'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=ct-event',    'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=ct-artist',   'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=ct-production', 'taxonomy=post_tag');
+
+  // ── ct-production: put Series before Season ─────────────────────────────────
+  $key = 'edit.php?post_type=ct-production';
+
+  if (!isset($submenu[$key])) return;
+
+  $series_item = $season_item = null;
+  $series_index = $season_index = null;
+
+  foreach ($submenu[$key] as $index => $item) {
+    if (isset($item[2]) && strpos($item[2], 'taxonomy=series') !== false) {
+      $series_item  = $item;
+      $series_index = $index;
+    }
+    if (isset($item[2]) && strpos($item[2], 'taxonomy=season') !== false) {
+      $season_item  = $item;
+      $season_index = $index;
+    }
+  }
+
+  if ($series_item && $season_item && $season_index < $series_index) {
+    $submenu[$key][$season_index] = $series_item;
+    $submenu[$key][$series_index] = $season_item;
+  }
+
+  // ── Top-level Tags menu (before the separator before Appearance) ────────────
+  global $menu;
+  $menu[58] = [
+    'Tags',
+    'edit_posts',
+    'edit-tags.php?taxonomy=post_tag',
+    'Tags',
+    'menu-top menu-icon-post_tag',
+    'menu-posts-post_tag',
+    'dashicons-tag',
+  ];
+
+  // ── Move Themes from Appearance to Settings submenu ────────────────────────
+  // Remove Themes from Appearance
+  if (isset($submenu['themes'])) {
+    foreach ($submenu['themes'] as $index => $item) {
+      if (isset($item[2]) && $item[2] === 'themes') {
+        unset($submenu['themes'][$index]);
+        break;
+      }
+    }
+  }
+
+  // Add Themes to Settings
+  if (!isset($submenu['options-general'])) {
+    $submenu['options-general'] = [];
+  }
+  $submenu['options-general'][] = [
+    'Themes',
+    'switch_themes',
+    'themes',
+    'Themes',
+  ];
+
+  // Hidden page for the all-types tagged-posts view
+  add_submenu_page(null, 'Tagged Posts', 'Tagged Posts', 'edit_posts', 'ct-tagged-posts', 'ct_render_tagged_posts_page');
+}, 999);
+
+// ── Style the Blog submenu separator ────────────────────────────────────────
+
+add_action('admin_head', function () {
+  echo '<style>
+    #adminmenu .ct-submenu-separator > a {
+      display: block !important;
+      height: 1px !important;
+      background: #3c434a !important;
+      margin: 4px 8px !important;
+      padding: 0 !important;
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+  </style>';
+});
+
+// ── Override count column in the global tag list to link to the all-types view ─
+
+add_filter('manage_edit-post_tag_columns', function ($columns) {
+  // Only on the generic tags list — not when scoped to a specific post type
+  if (!empty($_GET['post_type'])) {
+    return $columns;
+  }
+  unset($columns['posts']);
+  $columns['ct_all_posts'] = __('Posts', 'chance-theater');
+  return $columns;
+});
+
+add_filter('manage_post_tag_custom_column', function ($string, $column_name, $term_id) {
+  if ($column_name !== 'ct_all_posts') {
+    return $string;
+  }
+  $term = get_term($term_id, 'post_tag');
+  if (!$term || is_wp_error($term)) {
+    return '0';
+  }
+  $url = admin_url('admin.php?page=ct-tagged-posts&tag=' . urlencode($term->slug));
+  return '<a href="' . esc_url($url) . '">' . (int) $term->count . '</a>';
+}, 10, 3);
+
+// ── Render: all posts of all types with the given tag ───────────────────────
+
+function ct_render_tagged_posts_page()
+{
+  $tag_slug = isset($_GET['tag']) ? sanitize_text_field($_GET['tag']) : '';
+
+  echo '<div class="wrap">';
+
+  if (!$tag_slug) {
+    echo '<h1>Tagged Posts</h1><p>No tag specified.</p></div>';
+    return;
+  }
+
+  $term = get_term_by('slug', $tag_slug, 'post_tag');
+  if (!$term) {
+    echo '<h1>Tagged Posts</h1><p>Tag not found.</p></div>';
+    return;
+  }
+
+  echo '<h1>Posts tagged &ldquo;' . esc_html($term->name) . '&rdquo;</h1>';
+  echo '<p><a href="' . esc_url(admin_url('edit-tags.php?taxonomy=post_tag')) . '">&larr; Back to Tags</a></p>';
+
+  // All post types that use post_tag
+  $tagged_post_types = array_values(array_filter(
+    get_post_types(['public' => true], 'names'),
+    function ($pt) {
+      return in_array('post_tag', get_object_taxonomies($pt), true);
+    }
+  ));
+
+  $posts = get_posts([
+    'post_type'      => $tagged_post_types,
+    'posts_per_page' => -1,
+    'post_status'    => ['publish', 'draft', 'pending', 'private'],
+    'tax_query'      => [[
+      'taxonomy' => 'post_tag',
+      'field'    => 'slug',
+      'terms'    => $tag_slug,
+    ]],
+    'orderby'        => 'post_type',
+    'order'          => 'ASC',
+  ]);
+
+  if (empty($posts)) {
+    echo '<p>No posts found with this tag.</p></div>';
+    return;
+  }
+
+  echo '<table class="wp-list-table widefat fixed striped">';
+  echo '<thead><tr><th>Title</th><th>Type</th><th>Status</th></tr></thead><tbody>';
+
+  foreach ($posts as $post) {
+    $type_obj = get_post_type_object($post->post_type);
+    $label    = $type_obj ? $type_obj->labels->singular_name : $post->post_type;
+    echo '<tr>';
+    echo '<td><a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html($post->post_title ?: '(no title)') . '</a></td>';
+    echo '<td>' . esc_html($label) . '</td>';
+    echo '<td>' . esc_html($post->post_status) . '</td>';
+    echo '</tr>';
+  }
+
+  echo '</tbody></table></div>';
+}
