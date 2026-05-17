@@ -5,8 +5,8 @@
 	"license": "ISC",
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
-		"start": "vite build --watch"
+		"deploy": "vite build",
+    "build": "vite build && vite build --watch"
 	},
 	"dependencies": {
 		"@wordpress/block-editor": "^12.0.0",
