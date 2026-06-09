@@ -15,11 +15,11 @@ if (! defined('ABSPATH')) {
 
 define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
 
-// require_once THEATRUM_ADMIN_DIR . 'ct-artist-all.php';
-// require_once THEATRUM_ADMIN_DIR . 'ct-class-all.php';
-// require_once THEATRUM_ADMIN_DIR . 'ct-event-all.php';
-// require_once THEATRUM_ADMIN_DIR . 'ct-production-all.php';
-// require_once THEATRUM_ADMIN_DIR . 'ct-supporter-all.php';
+// require_once THEATRUM_ADMIN_DIR . 'artist-all.php';
+// require_once THEATRUM_ADMIN_DIR . 'class-all.php';
+// require_once THEATRUM_ADMIN_DIR . 'event-all.php';
+// require_once THEATRUM_ADMIN_DIR . 'production-all.php';
+// require_once THEATRUM_ADMIN_DIR . 'supporter-all.php';
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 // require_once THEATRUM_ADMIN_DIR . 'block-custom-css.php';
 require_once THEATRUM_ADMIN_DIR . 'block-row-customization.php';

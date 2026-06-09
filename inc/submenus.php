@@ -91,22 +91,22 @@ add_action('admin_menu', function () {
   };
 
   $insert_sep('edit.php?post_type=page');
-  $insert_sep('edit.php?post_type=ct-artist');
-  $insert_sep('edit.php?post_type=ct-event');
-  $insert_sep('edit.php?post_type=ct-production');
-  $insert_sep('edit.php?post_type=ct-supporter');
-  $insert_sep('edit.php?post_type=ct-class');
-  // $insert_sep('edit.php?post_type=ct-venue');
+  $insert_sep('edit.php?post_type=artist');
+  $insert_sep('edit.php?post_type=event');
+  $insert_sep('edit.php?post_type=production');
+  $insert_sep('edit.php?post_type=supporter');
+  $insert_sep('edit.php?post_type=class');
+  // $insert_sep('edit.php?post_type=venue');
 
   // ── Hide Tags ───────────────────────────────────────────────────────────────
   $remove_submenu('edit.php?post_type=page',        'taxonomy=post_tag');
-  $remove_submenu('edit.php?post_type=ct-venue',    'taxonomy=post_tag');
-  $remove_submenu('edit.php?post_type=ct-event',    'taxonomy=post_tag');
-  $remove_submenu('edit.php?post_type=ct-artist',   'taxonomy=post_tag');
-  $remove_submenu('edit.php?post_type=ct-production', 'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=venue',    'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=event',    'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=artist',   'taxonomy=post_tag');
+  $remove_submenu('edit.php?post_type=production', 'taxonomy=post_tag');
 
-  // ── ct-production: put Series before Season ─────────────────────────────────
-  $key = 'edit.php?post_type=ct-production';
+  // ── production: put Series before Season ─────────────────────────────────
+  $key = 'edit.php?post_type=production';
 
   if (!isset($submenu[$key])) return;
 
