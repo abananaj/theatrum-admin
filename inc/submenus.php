@@ -110,6 +110,15 @@ add_action('admin_menu', function () {
 
   if (!isset($submenu[$key])) return;
 
+  // ── Rename "All Productions" to "Chance Productions" ─────────────────────────
+  foreach ($submenu[$key] as $index => $item) {
+    if (isset($item[2]) && $item[2] === 'edit.php?post_type=production') {
+      $submenu[$key][$index][0] = 'Chance Productions';
+      $submenu[$key][$index][3] = 'Chance Productions';
+      break;
+    }
+  }
+
   $series_item = $season_item = null;
   $series_index = $season_index = null;
 
@@ -127,6 +136,24 @@ add_action('admin_menu', function () {
   if ($series_item && $season_item && $season_index < $series_index) {
     $submenu[$key][$season_index] = $series_item;
     $submenu[$key][$series_index] = $season_item;
+  }
+
+  // ── Add "Visiting Companies" custom submenu item after "All Productions" ─────
+  $visiting_companies_item = [
+    'Visiting Companies',
+    'read',
+    'edit.php?post_type=production&series=visiting-companies',
+    'Visiting Companies',
+  ];
+  
+  // Insert after first item (All Productions)
+  $items = array_values($submenu[$key]);
+  $submenu[$key] = [];
+  foreach ($items as $i => $item) {
+    $submenu[$key][] = $item;
+    if ($i === 0) {
+      $submenu[$key][] = $visiting_companies_item;
+    }
   }
 
   // ── Top-level Tags menu (before the separator before Appearance) ────────────
@@ -166,6 +193,38 @@ add_action('admin_menu', function () {
   // Hidden page for the all-types tagged-posts view
   add_submenu_page(null, 'Tagged Posts', 'Tagged Posts', 'edit_posts', 'ct-tagged-posts', 'ct_render_tagged_posts_page');
 }, 999);
+
+// ── Filter productions to exclude visiting-companies from "Chance Productions" ──
+
+add_action('pre_get_posts', function ($query) {
+  if (!is_admin() || !$query->is_main_query()) {
+    return;
+  }
+
+  if ($query->get('post_type') !== 'production') {
+    return;
+  }
+
+  // Only filter when viewing the main Chance Productions list (no series filter)
+  if (isset($_GET['series'])) {
+    return;
+  }
+
+  // Exclude visiting-companies term from the main list
+  $tax_query = $query->get('tax_query');
+  if (!is_array($tax_query)) {
+    $tax_query = [];
+  }
+
+  $tax_query[] = [
+    'taxonomy' => 'series',
+    'field'    => 'slug',
+    'terms'    => 'visiting-companies',
+    'operator' => 'NOT IN',
+  ];
+
+  $query->set('tax_query', $tax_query);
+});
 
 // ── Style the Blog submenu separator ────────────────────────────────────────
 
