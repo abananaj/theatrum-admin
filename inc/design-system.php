@@ -171,110 +171,268 @@ function chance_render_templates_page()
 // render patterns page
 function chance_render_patterns_page()
 {
-  // Synced patterns: those WITHOUT wp_pattern_sync_status meta
-  $synced_pattern_ids = get_posts([
-    'post_type' => 'wp_block',
-    'posts_per_page' => -1,
-    'fields' => 'ids',
-    'meta_query' => [
-      [
-        'key' => 'wp_pattern_sync_status',
-        'compare' => 'NOT EXISTS',
-      ],
-    ],
-  ]);
+  // Check for category filter
+  $filter_category = isset($_GET['pattern_category']) ? sanitize_text_field($_GET['pattern_category']) : '';
 
-  $synced_patterns = get_posts([
+  // Get registered patterns from WordPress registry
+  $registry = WP_Block_Patterns_Registry::get_instance();
+  $registered_patterns = $registry->get_all_registered();
+
+  // Build a map of registered patterns by slug
+  $registered_map = [];
+  foreach ($registered_patterns as $pattern) {
+    $slug = str_replace('chance-ollie/', '', $pattern['name']);
+    $categories = isset($pattern['categories']) ? $pattern['categories'] : [];
+    $registered_map[$slug] = [
+      'categories' => $categories,
+      'synced' => true,
+    ];
+  }
+
+  // Get pattern files from the theme
+  $theme = wp_get_theme();
+  $theme_root = $theme->get_theme_root();
+  $theme_slug = $theme->get_stylesheet();
+  $patterns_dir = $theme_root . '/' . $theme_slug . '/patterns';
+
+  $pattern_files = [];
+  if (is_dir($patterns_dir)) {
+    $files = scandir($patterns_dir);
+    foreach ($files as $file) {
+      if (strpos($file, '.html') !== false) {
+        $file_slug = str_replace('.html', '', $file);
+        $categories = isset($registered_map[$file_slug]) ? $registered_map[$file_slug]['categories'] : [];
+        $pattern_files[] = [
+          'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
+          'slug' => $file_slug,
+          'source' => 'theme',
+          'id' => null,
+          'categories' => $categories,
+          'synced' => isset($registered_map[$file_slug]) ? true : false,
+        ];
+      }
+    }
+  }
+
+  // Get all patterns from database
+  $db_patterns = get_posts([
     'post_type' => 'wp_block',
     'posts_per_page' => -1,
     'orderby' => 'title',
     'order' => 'ASC',
-    'post__in' => ! empty($synced_pattern_ids) ? $synced_pattern_ids : [0],
   ]);
 
-  // Unsynced patterns: those WITH wp_pattern_sync_status meta
-  $unsynced_pattern_ids = get_posts([
-    'post_type' => 'wp_block',
-    'posts_per_page' => -1,
-    'fields' => 'ids',
-    'meta_query' => [
-      [
-        'key' => 'wp_pattern_sync_status',
-        'compare' => 'EXISTS',
-      ],
-    ],
-  ]);
+  // Merge patterns, database takes precedence
+  $patterns = [];
+  $processed_slugs = [];
 
-  $unsynced_patterns = get_posts([
-    'post_type' => 'wp_block',
-    'posts_per_page' => -1,
-    'orderby' => 'title',
-    'order' => 'ASC',
-    'post__in' => ! empty($unsynced_pattern_ids) ? $unsynced_pattern_ids : [0],
-  ]);
+  // Add database patterns first
+  foreach ($db_patterns as $pattern) {
+    // Check sync status
+    $sync_status = get_post_meta($pattern->ID, 'wp_pattern_sync_status', true);
+    $is_synced = empty($sync_status);
+
+    // Get categories from wp_pattern_category taxonomy (as objects)
+    $categories = wp_get_post_terms($pattern->ID, 'wp_pattern_category');
+    $category_list = [];
+    if (is_array($categories) && ! empty($categories)) {
+      foreach ($categories as $cat) {
+        $category_list[] = [
+          'name' => $cat->name,
+          'slug' => $cat->slug,
+        ];
+      }
+    }
+
+    // If no taxonomy categories, check registered pattern
+    if (empty($category_list) && isset($registered_map[$pattern->post_name])) {
+      foreach ($registered_map[$pattern->post_name]['categories'] as $cat_slug) {
+        $category_list[] = [
+          'name' => ucfirst(str_replace('-', ' ', $cat_slug)),
+          'slug' => $cat_slug,
+        ];
+      }
+    }
+
+    $patterns[] = [
+      'title' => $pattern->post_title,
+      'slug' => $pattern->post_name,
+      'source' => 'database',
+      'id' => $pattern->ID,
+      'synced' => $is_synced,
+      'categories' => $category_list,
+    ];
+    $processed_slugs[] = $pattern->post_name;
+  }
+
+  // Add theme patterns (skip if already in database)
+  foreach ($pattern_files as $file) {
+    if (!in_array($file['slug'], $processed_slugs)) {
+      $category_list = [];
+      foreach ($file['categories'] as $cat_slug) {
+        $category_list[] = [
+          'name' => ucfirst(str_replace('-', ' ', $cat_slug)),
+          'slug' => $cat_slug,
+        ];
+      }
+      $patterns[] = [
+        'title' => $file['title'],
+        'slug' => $file['slug'],
+        'source' => $file['source'],
+        'id' => $file['id'],
+        'categories' => $category_list,
+        'synced' => $file['synced'],
+      ];
+    }
+  }
+
+  // Sort by title
+  usort($patterns, function ($a, $b) {
+    return strcmp($a['title'], $b['title']);
+  });
+
+  // Filter by category if specified
+  if (!empty($filter_category)) {
+    $patterns = array_filter($patterns, function ($p) use ($filter_category) {
+      foreach ($p['categories'] as $cat) {
+        if ($cat['slug'] === $filter_category) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  // Separate synced and unsynced
+  $synced_patterns = array_filter($patterns, function ($p) {
+    return $p['synced'] === true;
+  });
+  $unsynced_patterns = array_filter($patterns, function ($p) {
+    return $p['synced'] === false;
+  });
+
+  // Group patterns by category
+  $group_patterns_by_category = function ($patterns_list) {
+    $grouped = [];
+    foreach ($patterns_list as $pattern) {
+      if (empty($pattern['categories'])) {
+        // Add uncategorized patterns
+        if (!isset($grouped['Uncategorized'])) {
+          $grouped['Uncategorized'] = [];
+        }
+        $grouped['Uncategorized'][] = $pattern;
+      } else {
+        // Add pattern to each of its categories
+        foreach ($pattern['categories'] as $cat) {
+          if (!isset($grouped[$cat['name']])) {
+            $grouped[$cat['name']] = [];
+          }
+          $grouped[$cat['name']][] = $pattern;
+        }
+      }
+    }
+    // Sort by category name
+    ksort($grouped);
+    return $grouped;
+  };
+
+  $synced_grouped = $group_patterns_by_category($synced_patterns);
+  $unsynced_grouped = $group_patterns_by_category($unsynced_patterns);
 ?>
   <div class="wrap">
     <h1>Patterns</h1>
+    <?php if (!empty($filter_category)) : ?>
+      <p>
+        Filtering by category: <strong><?php echo esc_html(ucfirst(str_replace('-', ' ', $filter_category))); ?></strong>
+        <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns')); ?>">Clear filter</a>
+      </p>
+    <?php endif; ?>
 
     <h2>Synced Patterns (<?php echo count($synced_patterns); ?>)</h2>
-    <table class="wp-list-table widefat fixed striped">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Slug</th>
-          <th>Created</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (! empty($synced_patterns)) : ?>
-          <?php foreach ($synced_patterns as $pattern) : ?>
+    <?php foreach ($synced_grouped as $category_name => $category_patterns) : ?>
+      <h3 style="margin-top: 20px; font-size: 14px; color: #555;"><?php echo esc_html($category_name); ?> (<?php echo count($category_patterns); ?>)</h3>
+      <table class="wp-list-table widefat fixed striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Categories</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($category_patterns as $pattern) : ?>
             <tr>
               <td>
-                <strong><a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern->ID . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern->post_title); ?></a></strong>
+                <strong>
+                  <?php if ($pattern['source'] === 'database') : ?>
+                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                  <?php else : ?>
+                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                  <?php endif; ?>
+                </strong>
               </td>
-              <td><?php echo esc_html($pattern->post_name); ?></td>
-              <td><?php echo esc_html($pattern->post_date); ?></td>
-              <td><?php echo esc_html(ucfirst($pattern->post_status)); ?></td>
+              <td><?php echo esc_html($pattern['slug']); ?></td>
+              <td>
+                <?php if (!empty($pattern['categories'])) : ?>
+                  <?php foreach ($pattern['categories'] as $index => $cat) : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_category=' . $cat['slug'])); ?>"><?php echo esc_html($cat['name']); ?></a><?php echo ($index < count($pattern['categories']) - 1) ? ', ' : ''; ?>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </td>
+              <td>
+                <span style="font-size: 0.85em; background: <?php echo $pattern['source'] === 'database' ? '#d5e9ff' : '#e8f5e9'; ?>; padding: 2px 8px; border-radius: 3px;">
+                  <?php echo esc_html(ucfirst($pattern['source'])); ?>
+                </span>
+              </td>
             </tr>
           <?php endforeach; ?>
-        <?php else : ?>
-          <tr>
-            <td colspan="4">No synced patterns found.</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    <?php endforeach; ?>
 
     <h2>Unsynced Patterns (<?php echo count($unsynced_patterns); ?>)</h2>
-    <table class="wp-list-table widefat fixed striped">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Slug</th>
-          <th>Created</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (! empty($unsynced_patterns)) : ?>
-          <?php foreach ($unsynced_patterns as $pattern) : ?>
+    <?php foreach ($unsynced_grouped as $category_name => $category_patterns) : ?>
+      <h3 style="margin-top: 20px; font-size: 14px; color: #555;"><?php echo esc_html($category_name); ?> (<?php echo count($category_patterns); ?>)</h3>
+      <table class="wp-list-table widefat fixed striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Categories</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($category_patterns as $pattern) : ?>
             <tr>
               <td>
-                <strong><a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern->ID . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern->post_title); ?></a></strong>
+                <strong>
+                  <?php if ($pattern['source'] === 'database') : ?>
+                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                  <?php else : ?>
+                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                  <?php endif; ?>
+                </strong>
               </td>
-              <td><?php echo esc_html($pattern->post_name); ?></td>
-              <td><?php echo esc_html($pattern->post_date); ?></td>
-              <td><?php echo esc_html(ucfirst($pattern->post_status)); ?></td>
+              <td><?php echo esc_html($pattern['slug']); ?></td>
+              <td>
+                <?php if (!empty($pattern['categories'])) : ?>
+                  <?php foreach ($pattern['categories'] as $index => $cat) : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_category=' . $cat['slug'])); ?>"><?php echo esc_html($cat['name']); ?></a><?php echo ($index < count($pattern['categories']) - 1) ? ', ' : ''; ?>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </td>
+              <td>
+                <span style="font-size: 0.85em; background: <?php echo $pattern['source'] === 'database' ? '#d5e9ff' : '#e8f5e9'; ?>; padding: 2px 8px; border-radius: 3px;">
+                  <?php echo esc_html(ucfirst($pattern['source'])); ?>
+                </span>
+              </td>
             </tr>
           <?php endforeach; ?>
-        <?php else : ?>
-          <tr>
-            <td colspan="4">No unsynced patterns found.</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    <?php endforeach; ?>
   </div>
 <?php
 }
@@ -282,12 +440,62 @@ function chance_render_patterns_page()
 // render template parts page
 function chance_render_template_parts_page()
 {
-  $template_parts = get_posts([
+  // Get template part files from the theme
+  $theme = wp_get_theme();
+  $theme_root = $theme->get_theme_root();
+  $theme_slug = $theme->get_stylesheet();
+  $parts_dir = $theme_root . '/' . $theme_slug . '/parts';
+
+  $part_files = [];
+  if (is_dir($parts_dir)) {
+    $files = scandir($parts_dir);
+    foreach ($files as $file) {
+      if (strpos($file, '.html') !== false) {
+        $part_files[] = [
+          'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
+          'slug' => str_replace('.html', '', $file),
+          'source' => 'theme',
+          'date' => date('Y-m-d H:i:s', filemtime($parts_dir . '/' . $file)),
+        ];
+      }
+    }
+  }
+
+  // Get template parts from database
+  $db_parts = get_posts([
     'post_type' => 'wp_template_part',
     'posts_per_page' => -1,
     'orderby' => 'title',
     'order' => 'ASC',
   ]);
+
+  // Merge template parts, database takes precedence
+  $template_parts = [];
+  $processed_slugs = [];
+
+  // Add database template parts first
+  foreach ($db_parts as $part) {
+    $template_parts[] = [
+      'title' => $part->post_title,
+      'slug' => $part->post_name,
+      'source' => 'database',
+      'date' => $part->post_date,
+      'id' => $part->ID,
+    ];
+    $processed_slugs[] = $part->post_name;
+  }
+
+  // Add theme template part files (skip if already in database)
+  foreach ($part_files as $file) {
+    if (!in_array($file['slug'], $processed_slugs)) {
+      $template_parts[] = $file;
+    }
+  }
+
+  // Sort by title
+  usort($template_parts, function ($a, $b) {
+    return strcmp($a['title'], $b['title']);
+  });
 ?>
   <div class="wrap">
     <h1>Parts</h1>
@@ -297,21 +505,23 @@ function chance_render_template_parts_page()
           <th>Title</th>
           <th>Slug</th>
           <th>Created</th>
-          <th>Status</th>
+          <th>Source</th>
         </tr>
       </thead>
       <tbody>
         <?php if (! empty($template_parts)) : ?>
-          <?php foreach ($template_parts as $part) :
-            $part_path = urlencode('/wp_template_part/chance-ollie//' . $part->post_name);
-          ?>
+          <?php foreach ($template_parts as $part) : ?>
             <tr>
               <td>
-                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . $part_path . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($part->post_title); ?></a></strong>
+                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_template_part/chance-ollie//' . $part['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($part['title']); ?></a></strong>
               </td>
-              <td><?php echo esc_html($part->post_name); ?></td>
-              <td><?php echo esc_html($part->post_date); ?></td>
-              <td><?php echo esc_html(ucfirst($part->post_status)); ?></td>
+              <td><?php echo esc_html($part['slug']); ?></td>
+              <td><?php echo esc_html($part['date']); ?></td>
+              <td>
+                <span style="font-size: 0.85em; background: <?php echo $part['source'] === 'database' ? '#d5e9ff' : '#e8f5e9'; ?>; padding: 2px 8px; border-radius: 3px;">
+                  <?php echo esc_html(ucfirst($part['source'])); ?>
+                </span>
+              </td>
             </tr>
           <?php endforeach; ?>
         <?php else : ?>
