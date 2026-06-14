@@ -6,7 +6,7 @@
  */
 
 // @ts-ignore
-import "./sr-only.scss"
+import "./scss/sr-only.scss"
 import { createElement as el, Fragment } from "@wordpress/element"
 import { addFilter } from "@wordpress/hooks"
 // @ts-ignore

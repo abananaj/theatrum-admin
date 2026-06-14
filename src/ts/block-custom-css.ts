@@ -10,4 +10,6 @@
  */
 
 // Placeholder for future custom CSS functionality
-console.log('Block custom CSS support is available for future implementation.');
+export const blockCustomCSS = () => {
+	console.log('Block custom CSS support is available for future implementation.');
+};

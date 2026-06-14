@@ -6,8 +6,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        "block-custom-css": "src/block-custom-css.ts",
-        "block-row-customization": "src/block-row-customization.ts",
+        "index": "src/index.ts",
         "sr-only-blocks": "src/sr-only-blocks.tsx",
       },
       output: {

@@ -6,7 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"deploy": "vite build",
-    "build": "vite build && vite build --watch"
+    "build:watch": "vite build --watch",
+    "build": "vite build"
 	},
 	"dependencies": {
 		"@wordpress/block-editor": "^12.0.0",
