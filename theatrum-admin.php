@@ -27,47 +27,39 @@ require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
 
 /**
- * Enqueue SR-Only blocks editor script and styles
+ * Enqueue SR-Only block editor script (outer editor UI — block filters)
  */
-function chance_enqueue_sr_only_assets()
+function chance_enqueue_sr_only_editor_script()
 {
   $script_dist_path = plugin_dir_path(__FILE__) . 'dist/sr-only-blocks.js';
-  $style_dist_path = plugin_dir_path(__FILE__) . 'dist/sr-only-blocks.css';
 
-  // Only enqueue in editor context
-  if (!is_admin()) {
-    return;
-  }
-
-  // Enqueue JS for block editor
   if (file_exists($script_dist_path)) {
-    wp_register_script(
+    wp_enqueue_script(
       'chance-sr-only-blocks',
       plugin_dir_url(__FILE__) . 'dist/sr-only-blocks.js',
-      [
-        'wp-blocks',
-        'wp-block-editor',
-        'wp-components',
-        'wp-data',
-        'wp-hooks',
-      ],
+      ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks'],
       filemtime($script_dist_path),
       true
     );
-
-    wp_enqueue_script('chance-sr-only-blocks');
   }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_sr_only_editor_script');
 
-  // Enqueue CSS for editor and frontend
+/**
+ * Enqueue SR-Only styles into the block editor iFrame and on the frontend
+ */
+function chance_enqueue_sr_only_styles()
+{
+  $style_dist_path = plugin_dir_path(__FILE__) . 'dist/sr-only-blocks.css';
+
   if (file_exists($style_dist_path)) {
-    wp_register_style(
+    wp_enqueue_style(
       'chance-sr-only-styles',
       plugin_dir_url(__FILE__) . 'dist/sr-only-blocks.css',
       [],
       filemtime($style_dist_path)
     );
-
-    wp_enqueue_style('chance-sr-only-styles');
   }
 }
-add_action('enqueue_block_editor_assets', 'chance_enqueue_sr_only_assets');
+add_action('enqueue_block_assets', 'chance_enqueue_sr_only_styles');
+add_action('wp_enqueue_scripts', 'chance_enqueue_sr_only_styles');

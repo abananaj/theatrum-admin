@@ -7,16 +7,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         "index": "src/index.ts",
-        "sr-only-blocks": "src/sr-only-blocks.tsx",
       },
       output: {
         entryFileNames: "[name].js",
         assetFileNames: "[name].[ext]",
+        format: "iife",
+        name: "TheatrumAdmin",
       },
-      external: [
-        // WordPress packages are loaded via wp_enqueue_script dependencies
-        /^@wordpress\//,
-      ],
     },
   },
 });
