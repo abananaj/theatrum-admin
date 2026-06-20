@@ -171,8 +171,9 @@ function chance_render_templates_page()
 // render patterns page
 function chance_render_patterns_page()
 {
-  // Check for category filter
+  // Check for category / tag filters
   $filter_category = isset($_GET['pattern_category']) ? sanitize_text_field($_GET['pattern_category']) : '';
+  $filter_tag      = isset($_GET['pattern_tag']) ? sanitize_text_field($_GET['pattern_tag']) : '';
 
   // Get registered patterns from WordPress registry
   $registry = WP_Block_Patterns_Registry::get_instance();
@@ -254,13 +255,26 @@ function chance_render_patterns_page()
       }
     }
 
+    // Get tags (post_tag taxonomy, registered for wp_block by patterns-admin.php)
+    $raw_tags = wp_get_post_terms($pattern->ID, 'post_tag');
+    $tag_list = [];
+    if (!is_wp_error($raw_tags)) {
+      foreach ($raw_tags as $tag) {
+        $tag_list[] = ['name' => $tag->name, 'slug' => $tag->slug];
+      }
+    }
+
+    $usage_count = function_exists('ct_count_pattern_usage') ? ct_count_pattern_usage($pattern->ID) : 0;
+
     $patterns[] = [
-      'title' => $pattern->post_title,
-      'slug' => $pattern->post_name,
-      'source' => 'database',
-      'id' => $pattern->ID,
-      'synced' => $is_synced,
-      'categories' => $category_list,
+      'title'       => $pattern->post_title,
+      'slug'        => $pattern->post_name,
+      'source'      => 'database',
+      'id'          => $pattern->ID,
+      'synced'      => $is_synced,
+      'categories'  => $category_list,
+      'tags'        => $tag_list,
+      'usage_count' => $usage_count,
     ];
     $processed_slugs[] = $pattern->post_name;
   }
@@ -276,12 +290,14 @@ function chance_render_patterns_page()
         ];
       }
       $patterns[] = [
-        'title' => $file['title'],
-        'slug' => $file['slug'],
-        'source' => $file['source'],
-        'id' => $file['id'],
-        'categories' => $category_list,
-        'synced' => $file['synced'],
+        'title'       => $file['title'],
+        'slug'        => $file['slug'],
+        'source'      => $file['source'],
+        'id'          => $file['id'],
+        'categories'  => $category_list,
+        'synced'      => $file['synced'],
+        'tags'        => [],
+        'usage_count' => 0,
       ];
     }
   }
@@ -296,6 +312,18 @@ function chance_render_patterns_page()
     $patterns = array_filter($patterns, function ($p) use ($filter_category) {
       foreach ($p['categories'] as $cat) {
         if ($cat['slug'] === $filter_category) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  // Filter by tag if specified
+  if (!empty($filter_tag)) {
+    $patterns = array_filter($patterns, function ($p) use ($filter_tag) {
+      foreach ($p['tags'] as $tag) {
+        if ($tag['slug'] === $filter_tag) {
           return true;
         }
       }
@@ -340,10 +368,16 @@ function chance_render_patterns_page()
   $unsynced_grouped = $group_patterns_by_category($unsynced_patterns);
 ?>
   <div class="wrap">
-    <h1>Patterns</h1>
+    <h1>Patterns <a href="<?php echo esc_url(admin_url('edit-tags.php?taxonomy=wp_pattern_category&post_type=wp_block')); ?>" class="page-title-action">Manage Categories</a></h1>
     <?php if (!empty($filter_category)) : ?>
       <p>
         Filtering by category: <strong><?php echo esc_html(ucfirst(str_replace('-', ' ', $filter_category))); ?></strong>
+        <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns')); ?>">Clear filter</a>
+      </p>
+    <?php endif; ?>
+    <?php if (!empty($filter_tag)) : ?>
+      <p>
+        Filtering by tag: <strong><?php echo esc_html($filter_tag); ?></strong>
         <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns')); ?>">Clear filter</a>
       </p>
     <?php endif; ?>
@@ -357,6 +391,8 @@ function chance_render_patterns_page()
             <th>Title</th>
             <th>Slug</th>
             <th>Categories</th>
+            <th>Tags</th>
+            <th>Used In</th>
             <th>Source</th>
           </tr>
         </thead>
@@ -381,6 +417,24 @@ function chance_render_patterns_page()
                 <?php endif; ?>
               </td>
               <td>
+                <?php if (!empty($pattern['tags'])) : ?>
+                  <?php foreach ($pattern['tags'] as $index => $tag) : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
+                  <?php endforeach; ?>
+                <?php else : ?>
+                  <span style="color:#aaa">—</span>
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($pattern['source'] === 'database' && !empty($pattern['usage_count'])) : ?>
+                  <a href="<?php echo esc_url(admin_url('admin.php?page=ct-pattern-usage&id=' . $pattern['id'])); ?>"><?php echo (int) $pattern['usage_count']; ?></a>
+                <?php elseif ($pattern['source'] === 'database') : ?>
+                  <span style="color:#aaa">0</span>
+                <?php else : ?>
+                  <span style="color:#aaa">n/a</span>
+                <?php endif; ?>
+              </td>
+              <td>
                 <span style="font-size: 0.85em; background: <?php echo $pattern['source'] === 'database' ? '#d5e9ff' : '#e8f5e9'; ?>; padding: 2px 8px; border-radius: 3px;">
                   <?php echo esc_html(ucfirst($pattern['source'])); ?>
                 </span>
@@ -400,6 +454,8 @@ function chance_render_patterns_page()
             <th>Title</th>
             <th>Slug</th>
             <th>Categories</th>
+            <th>Tags</th>
+            <th>Used In</th>
             <th>Source</th>
           </tr>
         </thead>
@@ -421,6 +477,24 @@ function chance_render_patterns_page()
                   <?php foreach ($pattern['categories'] as $index => $cat) : ?>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_category=' . $cat['slug'])); ?>"><?php echo esc_html($cat['name']); ?></a><?php echo ($index < count($pattern['categories']) - 1) ? ', ' : ''; ?>
                   <?php endforeach; ?>
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if (!empty($pattern['tags'])) : ?>
+                  <?php foreach ($pattern['tags'] as $index => $tag) : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
+                  <?php endforeach; ?>
+                <?php else : ?>
+                  <span style="color:#aaa">—</span>
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($pattern['source'] === 'database' && !empty($pattern['usage_count'])) : ?>
+                  <a href="<?php echo esc_url(admin_url('admin.php?page=ct-pattern-usage&id=' . $pattern['id'])); ?>"><?php echo (int) $pattern['usage_count']; ?></a>
+                <?php elseif ($pattern['source'] === 'database') : ?>
+                  <span style="color:#aaa">0</span>
+                <?php else : ?>
+                  <span style="color:#aaa">n/a</span>
                 <?php endif; ?>
               </td>
               <td>

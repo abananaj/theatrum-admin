@@ -23,6 +23,7 @@ define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 // require_once THEATRUM_ADMIN_DIR . 'block-custom-css.php';
 require_once THEATRUM_ADMIN_DIR . 'block-row-customization.php';
+require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
 require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
 
