@@ -7,3 +7,5 @@
 
 3. A function that adds a small CSS indicator next to a block's name in the list & outline view that indicates the block instance has custom css.npm install
 npm run build
+
+4. Create popup from button under Custom CSS in Block Inspector panel in the BBlock Editor that opens a popup with a better coding interface than the plain text of the default textarea. It should have syntax highlighting and a way to save the custom css to the block instance.
