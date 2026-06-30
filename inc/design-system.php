@@ -14,16 +14,36 @@ function chance_add_templates_submenu_page()
 }
 add_action('admin_menu', 'chance_add_templates_submenu_page');
 
-//  add submenu page for Patterns, grouped by synced and unsynced patterns
+//  Patterns submenu.
+//
+//  The Appearance > Patterns link now points at the native wp_block list table
+//  (edit.php?post_type=wp_block). That screen supports Quick Edit and Bulk Edit
+//  for the wp_pattern_category and post_tag taxonomies out of the box, and the
+//  Category / Tags / Used In columns are already added to it in patterns-admin.php.
+//
+//  The original grouped (Synced/Unsynced -> Category) overview is archived to a
+//  hidden page: it stays reachable at admin.php?page=chance-patterns (existing
+//  back-links keep working) but no longer appears in the menu, since its custom
+//  echo'd table cannot support inline/bulk editing.
 function chance_add_patterns_submenu_page()
 {
+  // Visible menu item -> native list table with full Quick Edit / Bulk Edit.
   add_submenu_page(
-    'themes.php', // parent slug (Appearance menu)
-    'Patterns', // page title
-    'Patterns', // menu title
-    'manage_options', // capability
-    'chance-patterns', // menu slug
-    'chance_render_patterns_page' // callback function
+    'themes.php',                 // parent slug (Appearance menu)
+    'Patterns',                   // page title
+    'Patterns',                   // menu title
+    'edit_posts',                 // capability (matches the native wp_block list)
+    'edit.php?post_type=wp_block' // link directly to the native list table
+  );
+
+  // Archived grouped overview — hidden (parent null), still reachable by URL.
+  add_submenu_page(
+    null,                          // hidden: no menu item rendered
+    'Patterns (Grouped Overview)', // page title
+    'Patterns (Grouped Overview)', // menu title
+    'manage_options',              // capability
+    'chance-patterns',             // menu slug (unchanged: existing links still work)
+    'chance_render_patterns_page'  // callback function
   );
 }
 add_action('admin_menu', 'chance_add_patterns_submenu_page');
@@ -80,7 +100,7 @@ function chance_render_templates_page()
   if (is_dir($templates_dir)) {
     $files = scandir($templates_dir);
     foreach ($files as $file) {
-      if (strpos($file, '.html') !== false) {
+      if (str_ends_with($file, '.html')) {
         $template_files[] = [
           'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
           'slug' => str_replace('.html', '', $file),
@@ -200,7 +220,7 @@ function chance_render_patterns_page()
   if (is_dir($patterns_dir)) {
     $files = scandir($patterns_dir);
     foreach ($files as $file) {
-      if (strpos($file, '.html') !== false) {
+      if (str_ends_with($file, '.html')) {
         $file_slug = str_replace('.html', '', $file);
         $categories = isset($registered_map[$file_slug]) ? $registered_map[$file_slug]['categories'] : [];
         $pattern_files[] = [
@@ -368,7 +388,11 @@ function chance_render_patterns_page()
   $unsynced_grouped = $group_patterns_by_category($unsynced_patterns);
 ?>
   <div class="wrap">
-    <h1>Patterns <a href="<?php echo esc_url(admin_url('edit-tags.php?taxonomy=wp_pattern_category&post_type=wp_block')); ?>" class="page-title-action">Manage Categories</a></h1>
+    <h1>Patterns &mdash; Grouped Overview
+      <a href="<?php echo esc_url(admin_url('edit.php?post_type=wp_block')); ?>" class="page-title-action">All Patterns (editable list)</a>
+      <a href="<?php echo esc_url(admin_url('edit-tags.php?taxonomy=wp_pattern_category&post_type=wp_block')); ?>" class="page-title-action">Manage Categories</a>
+    </h1>
+    <p class="description">Read-only overview grouped by sync status and category. To edit categories or tags (including Quick Edit and Bulk Edit), use <a href="<?php echo esc_url(admin_url('edit.php?post_type=wp_block')); ?>">All Patterns</a>.</p>
     <?php if (!empty($filter_category)) : ?>
       <p>
         Filtering by category: <strong><?php echo esc_html(ucfirst(str_replace('-', ' ', $filter_category))); ?></strong>
@@ -524,7 +548,7 @@ function chance_render_template_parts_page()
   if (is_dir($parts_dir)) {
     $files = scandir($parts_dir);
     foreach ($files as $file) {
-      if (strpos($file, '.html') !== false) {
+      if (str_ends_with($file, '.html')) {
         $part_files[] = [
           'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
           'slug' => str_replace('.html', '', $file),

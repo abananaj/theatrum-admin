@@ -41,10 +41,22 @@ add_action('admin_menu', function () {
   );
 }, 999);
 
+// ── Link from the native list back to the archived grouped overview ───────────
+
+add_filter('views_edit-wp_block', function ($views) {
+  if (!current_user_can('manage_options')) return $views;
+  $url = admin_url('admin.php?page=chance-patterns');
+  $views['ct_grouped_overview'] =
+    '<a href="' . esc_url($url) . '">' . esc_html__('Grouped Overview', 'chance-theater') . '</a>';
+  return $views;
+});
+
 // ── Filter native wp_block list by wp_pattern_category query param ────────────
 
 add_action('pre_get_posts', function ($query) {
+  global $pagenow;
   if (!is_admin() || !$query->is_main_query()) return;
+  if ($pagenow !== 'edit.php') return;
   if ($query->get('post_type') !== 'wp_block') return;
 
   $cat_slug = isset($_GET['wp_pattern_category']) ? sanitize_text_field($_GET['wp_pattern_category']) : '';
@@ -202,7 +214,12 @@ function ct_render_pattern_usage_page(): void
     $type_obj = get_post_type_object($post->post_type);
     $label    = $type_obj ? $type_obj->labels->singular_name : $post->post_type;
     echo '<tr>';
-    echo '<td><a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html($post->post_title ?: '(no title)') . '</a></td>';
+    $edit_link = get_edit_post_link($post->ID);
+    if ($edit_link) {
+      echo '<td><a href="' . esc_url($edit_link) . '">' . esc_html($post->post_title ?: '(no title)') . '</a></td>';
+    } else {
+      echo '<td>' . esc_html($post->post_title ?: '(no title)') . '</td>';
+    }
     echo '<td>' . esc_html($label) . '</td>';
     echo '<td>' . esc_html($post->post_status) . '</td>';
     echo '</tr>';

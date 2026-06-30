@@ -78,18 +78,13 @@ function chance_apply_sr_only_class($block_content, $block)
       $attributes = $matches[2] ?? '';
 
       // Check if class attribute exists
-      if (preg_match('/class=["\']([^"\']*)["\']/', $attributes, $class_match)) {
-        // Add sr-only to existing classes
-        $existing_classes = $class_match[1];
-        $new_classes = $existing_classes . ' sr-only';
+      if (preg_match('/class=(["\'])([^"\']*)\1/', $attributes, $class_match)) {
+        $quote           = $class_match[1];
+        $existing_classes = $class_match[2];
+        $new_classes      = $existing_classes . ' sr-only';
         $attributes = str_replace(
-          'class="' . $existing_classes . '"',
-          'class="' . $new_classes . '"',
-          $attributes
-        );
-        $attributes = str_replace(
-          "class='" . $existing_classes . "'",
-          "class='" . $new_classes . "'",
+          'class=' . $quote . $existing_classes . $quote,
+          'class=' . $quote . $new_classes . $quote,
           $attributes
         );
       } else {
