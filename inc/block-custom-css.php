@@ -2,9 +2,14 @@
 
 /**
  * Custom CSS Support for All Blocks
- * 
+ *
  * Adds a custom CSS field to the styles panel for all WordPress blocks
  * in the Site Editor and block editor. Allows per-block custom styling.
+ *
+ * Parked: not currently required (see the commented require_once in
+ * theatrum-admin.php) pending a decision on whether to expose free-form CSS
+ * input to editors. The implementation below is complete and its CSS
+ * sanitization (ct_sanitize_block_custom_css) is safe to enable as-is.
  */
 
 // Enqueue custom CSS editor script and styles
@@ -72,9 +77,11 @@ add_filter('register_block_type_args', 'chance_register_custom_css_attribute', 1
 
 /**
  * Output custom CSS for blocks on the frontend
- * 
+ *
  * Loops through post content and extracts custom CSS from block attributes,
- * outputting it in a style tag
+ * outputting it in a style tag. Result is cached (keyed on post ID + a hash
+ * of post_content) so parse_blocks() doesn't re-run on every request — the
+ * cache self-invalidates whenever the post content changes.
  */
 function chance_output_block_custom_css()
 {
@@ -90,13 +97,18 @@ function chance_output_block_custom_css()
     return;
   }
 
-  // Parse blocks and collect custom CSS
-  $blocks = parse_blocks($content);
-  $custom_css = chance_collect_custom_css_from_blocks($blocks);
+  $cache_key = $post->ID . '_' . md5($content);
+  $custom_css = wp_cache_get($cache_key, 'chance_block_custom_css');
+
+  if (false === $custom_css) {
+    $blocks = parse_blocks($content);
+    $custom_css = chance_collect_custom_css_from_blocks($blocks);
+    wp_cache_set($cache_key, $custom_css, 'chance_block_custom_css', HOUR_IN_SECONDS);
+  }
 
   if (!empty($custom_css)) {
     echo '<style id="chance-block-custom-css">';
-    echo wp_kses_post($custom_css);
+    echo $custom_css; // Already sanitized in chance_sanitize_block_custom_css().
     echo '</style>';
   }
 }
@@ -116,20 +128,15 @@ function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
       // Generate a unique class for this block based on position
       $block_class = 'wp-block-' . sanitize_html_class(str_replace('/', '-', $block['blockName'] ?? 'unknown')) . '-' . $block_counter;
 
-      // Create CSS with the block's unique class
       $custom_css_content = $block['attrs']['customCSS'];
+      $has_selector = preg_match('/^[\s\n]*[.#\[]/', $custom_css_content);
 
-      // If the CSS doesn't have a selector, wrap it with the block's class
-      if (!preg_match('/^[\s\n]*[.#\[]/', $custom_css_content)) {
-        $css .= sprintf(
-          '.%s { %s }',
-          esc_attr($block_class),
-          wp_kses_post($custom_css_content)
-        );
-      } else {
-        // If the CSS already has selectors, use it as-is
-        $css .= wp_kses_post($custom_css_content);
-      }
+      $css .= $has_selector
+        // Already has selectors — sanitize as a full ruleset.
+        ? chance_sanitize_block_custom_css($custom_css_content)
+        // Bare declarations — sanitize as a declaration list, then wrap with
+        // the block's generated class as the selector.
+        : sprintf('.%s { %s }', esc_attr($block_class), safecss_filter_attr($custom_css_content));
 
       $css .= "\n";
     }
@@ -144,6 +151,33 @@ function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
   }
 
   return $css;
+}
+
+/**
+ * Sanitize a full CSS ruleset (selectors + declarations) for safe output.
+ *
+ * wp_kses_post() is an HTML sanitizer and isn't appropriate here — it mangles
+ * valid CSS syntax (child combinators, attribute selectors, bare `<`/`>` in
+ * content values) while doing nothing to stop CSS-specific injection vectors
+ * like `expression()` or `@import`. This strips literal HTML tags plus a
+ * denylist of CSS constructs capable of executing script or loading remote
+ * resources, and leaves ordinary CSS syntax untouched.
+ */
+function chance_sanitize_block_custom_css($css)
+{
+  $css = wp_strip_all_tags($css, true);
+
+  // Denylist of CSS constructs that can execute script or exfiltrate data.
+  $denylist = array(
+    '/@import/i',
+    '/expression\s*\(/i',
+    '/javascript\s*:/i',
+    '/vbscript\s*:/i',
+    '/-moz-binding/i',
+    '/behavior\s*:/i',
+  );
+
+  return preg_replace($denylist, '', $css);
 }
 add_action('wp_head', 'chance_output_block_custom_css', 15);
 
