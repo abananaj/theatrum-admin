@@ -123,7 +123,7 @@ add_action('manage_wp_block_posts_custom_column', function ($column, $post_id) {
       break;
 
     case 'pattern_usage':
-      $count = ct_count_pattern_usage((int) $post_id);
+      $count = ct_get_all_pattern_usage_counts()[(int) $post_id] ?? 0;
       if ($count === 0) {
         echo '—';
       } else {
@@ -160,6 +160,63 @@ function ct_count_pattern_usage(int $pattern_id): int
     )
   );
 }
+
+/**
+ * Usage counts for every pattern in one pass, instead of one query per pattern.
+ *
+ * The Patterns list column and the Grouped Overview page both used to call
+ * ct_count_pattern_usage() once per row, each doing its own unindexed
+ * full-table LIKE scan of wp_posts — with 150+ patterns that's 150+ full
+ * scans per page load. This does a single scan for all "ref":ID occurrences
+ * and tallies them in PHP, cached in a transient since post content only
+ * changes on save.
+ *
+ * @return array<int,int> pattern_id => count of distinct posts referencing it
+ */
+function ct_get_all_pattern_usage_counts(): array
+{
+  static $counts = null;
+  if ($counts !== null) {
+    return $counts;
+  }
+
+  $cached = get_transient('ct_pattern_usage_counts');
+  if (is_array($cached)) {
+    $counts = $cached;
+    return $counts;
+  }
+
+  global $wpdb;
+  $rows = $wpdb->get_results(
+    "SELECT post_content FROM {$wpdb->posts}
+     WHERE post_status NOT IN ('auto-draft', 'trash', 'inherit')
+     AND post_type NOT IN ('wp_block', 'revision')
+     AND post_content LIKE '%\"ref\":%'"
+  );
+
+  $counts = [];
+  foreach ($rows as $row) {
+    if (!preg_match_all('/"ref":(\d+)/', $row->post_content, $matches)) {
+      continue;
+    }
+    // Count each pattern once per post, matching the old per-post COUNT(*) semantics
+    foreach (array_unique($matches[1]) as $ref_id) {
+      $ref_id = (int) $ref_id;
+      $counts[$ref_id] = ($counts[$ref_id] ?? 0) + 1;
+    }
+  }
+
+  set_transient('ct_pattern_usage_counts', $counts, 12 * HOUR_IN_SECONDS);
+  return $counts;
+}
+
+add_action('save_post', function ($post_id) {
+  if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) return;
+  delete_transient('ct_pattern_usage_counts');
+});
+add_action('before_delete_post', function () {
+  delete_transient('ct_pattern_usage_counts');
+});
 
 // ── Usage detail page ─────────────────────────────────────────────────────────
 

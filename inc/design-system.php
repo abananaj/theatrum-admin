@@ -284,7 +284,9 @@ function chance_render_patterns_page()
       }
     }
 
-    $usage_count = function_exists('ct_count_pattern_usage') ? ct_count_pattern_usage($pattern->ID) : 0;
+    $usage_count = function_exists('ct_get_all_pattern_usage_counts')
+      ? (ct_get_all_pattern_usage_counts()[$pattern->ID] ?? 0)
+      : 0;
 
     $patterns[] = [
       'title'       => $pattern->post_title,
