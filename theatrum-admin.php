@@ -16,6 +16,7 @@ if (! defined('ABSPATH')) {
 define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
 
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
+require_once THEATRUM_ADMIN_DIR . 'media-library-assistant.php';
 // block-custom-css.php: per-block custom CSS field, parked pending a product
 // decision on whether to expose it to editors. Implementation is complete and
 // its CSS sanitization is safe to use — see the file header for details.
