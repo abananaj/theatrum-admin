@@ -5,9 +5,9 @@
 	"license": "ISC",
 	"type": "module",
 	"scripts": {
-		"deploy": "vite build && vite build --config vite.config.editor.js",
+		"deploy": "vite build && vite build --config vite.config.editor.js && vite build --config vite.config.position.js && vite build --config vite.config.formats.js && vite build --config vite.config.hgroup.js",
     "build:watch": "vite build --watch",
-    "build": "vite build && vite build --config vite.config.editor.js"
+    "build": "vite build && vite build --config vite.config.editor.js && vite build --config vite.config.position.js && vite build --config vite.config.formats.js && vite build --config vite.config.hgroup.js"
 	},
 	"dependencies": {
 		"@wordpress/block-editor": "^12.0.0",

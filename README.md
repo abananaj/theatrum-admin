@@ -10,7 +10,7 @@ WordPress **admin-customization plugin** for Chance Theater. Reshapes the wp-adm
 |---|---|
 | Type | Site-specific must-have plugin (git submodule) |
 | Stack | PHP · Vite 8 · TypeScript · SCSS · `@wordpress/*` editor packages |
-| Loads | `submenus` · `block-row-customization` · `patterns-admin` · `design-system` · `sr-only-blocks` |
+| Loads | `submenus` · `block-row-customization` · `patterns-admin` · `design-system` · `sr-only-blocks` · `position-controls` |
 | Version | `1.0.0` (plugin header + `package.json` agree ✅) |
 | Text Domain | `chance-theater` (declared; no `/languages` loaded) |
 
@@ -32,17 +32,20 @@ theatrum-admin/
 │   ├── patterns-admin.php      # ✅ wp_block tag support, usage count, list columns
 │   ├── design-system.php       # ✅ Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php      # ✅ srOnly attribute + render_block class injection
+│   ├── position-controls.php   # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
 │   ├── block-row-customization.php  # ⚠️ enqueues a file the build never emits (dead)
 │   ├── block-custom-css.php    # ⚠️ NOT loaded (require commented out); incomplete
 │   └── disable-links-editor.php # ⚠️ empty file, not loaded
 ├── src/
 │   ├── index.ts                # bundles row-customization + custom-css + SCSS
 │   ├── sr-only-blocks.tsx      # editor toggle + outline badge (editor build)
+│   ├── position-controls.tsx   # Position panel (Static/Relative/Absolute/Fixed/Sticky + UnitControl offsets)
 │   ├── ts/                     # block-row-customization.ts (no-op), block-custom-css.ts (stub)
 │   └── scss/                   # sr-only.scss, svg-media-library.scss
 ├── dist/                       # build output (gitignored) — currently only index.js
 ├── vite.config.js              # builds src/index.ts → dist/index.js (IIFE, self-injects CSS)
-└── vite.config.editor.js       # builds src/sr-only-blocks.tsx → dist/sr-only-blocks.js
+├── vite.config.editor.js       # builds src/sr-only-blocks.tsx → dist/sr-only-blocks.js
+└── vite.config.position.js     # builds src/position-controls.tsx → dist/position-controls.js
 ```
 
 > ⚠️ The build/enqueue wiring is **out of sync** — see [Next Steps #1](#-high). The dependable, working surface of this plugin is the PHP in `submenus.php`, `patterns-admin.php`, and `design-system.php`.
@@ -68,6 +71,10 @@ theatrum-admin/
 - Adds a **"Screen Reader Only"** toggle (Accessibility panel) to `core/heading` and `core/paragraph`, plus an **SR-ONLY** badge on the block outline.
 - Registers the `srOnly` attribute via `register_block_type_args` and injects the `.sr-only` class at `render_block`. Full notes: [SR-ONLY-FEATURE.md](SR-ONLY-FEATURE.md).
 
+### 📐 Position controls — `position-controls.php` + `position-controls.tsx`
+- Adds a **"Position"** panel to `chance/cover-card` and `chance/chance-card` with a **Static / Relative / Absolute / Fixed / Sticky** select, plus four `UnitControl` offset inputs (**Top, Right, Bottom, Left**) laid out in a 2×2 grid once a non-static type is chosen.
+- Replaces core's native `supports.position` (which only offered Sticky/Fixed and a single Top offset — removed from both blocks' `block.json`). Registers `positionType`/`positionTop`/`positionRight`/`positionBottom`/`positionLeft` attributes via `register_block_type_args`, previews live in the editor canvas via an `editor.BlockListBlock` wrapper-style filter, and injects the computed `position`/offset CSS into the wrapper's `style` attribute at `render_block` (offset values are validated against a CSS-length pattern before being written out).
+
 CPTs this plugin touches (defined in the [theme](../../themes/chance-ollie/README.md)): 🎬 `production` · 🎟️ `event` · 👤 `artist` · 🎓 `class` · 🏛️ `venue` · 💛 `supporter` · 📄 `page`.
 
 ---
@@ -76,12 +83,12 @@ CPTs this plugin touches (defined in the [theme](../../themes/chance-ollie/READM
 
 ```bash
 npm install
-npm run build        # vite build (index.js) + vite build --config vite.config.editor.js (sr-only-blocks.js)
+npm run build        # vite build (index.js) + vite.config.editor.js (sr-only-blocks.js) + vite.config.position.js (position-controls.js)
 npm run build:watch  # watch index build only
 npm run deploy       # same as build
 ```
 
-`dist/` is **gitignored** — assets must be rebuilt in each environment. `npm run build` runs **both** configs; a partial build (only the first) leaves the SR-Only feature without its script. See Next Steps #1.
+`dist/` is **gitignored** — assets must be rebuilt in each environment. `npm run build` runs **all three** configs; a partial build (only the first) leaves the SR-Only and/or Position features without their scripts. See Next Steps #1.
 
 ---
 

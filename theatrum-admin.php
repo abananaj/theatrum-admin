@@ -25,6 +25,7 @@ require_once THEATRUM_ADMIN_DIR . 'block-row-customization.php';
 require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
 require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
+require_once THEATRUM_ADMIN_DIR . 'position-controls.php';
 
 /**
  * Enqueue SR-Only block editor script (outer editor UI — block filters)
@@ -44,6 +45,63 @@ function chance_enqueue_sr_only_editor_script()
   }
 }
 add_action('enqueue_block_editor_assets', 'chance_enqueue_sr_only_editor_script');
+
+/**
+ * Enqueue Position block editor script (outer editor UI — block filters)
+ */
+function chance_enqueue_position_editor_script()
+{
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/position-controls.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+      'chance-position-controls',
+      plugin_dir_url(__FILE__) . 'dist/position-controls.js',
+      ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks'],
+      filemtime($script_dist_path),
+      true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_position_editor_script');
+
+/**
+ * Enqueue custom RichText format editor script (Inline Quote, Small Text, Span)
+ */
+function chance_enqueue_custom_formats_editor_script()
+{
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/custom-formats.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+      'chance-custom-formats',
+      plugin_dir_url(__FILE__) . 'dist/custom-formats.js',
+      ['wp-block-editor', 'wp-rich-text', 'wp-element', 'wp-components', 'wp-icons'],
+      filemtime($script_dist_path),
+      true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_custom_formats_editor_script');
+
+/**
+ * Enqueue the Group block <hgroup> toggle editor script
+ */
+function chance_enqueue_hgroup_control_editor_script()
+{
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/hgroup-control.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+      'chance-hgroup-control',
+      plugin_dir_url(__FILE__) . 'dist/hgroup-control.js',
+      ['wp-block-editor', 'wp-components', 'wp-element', 'wp-hooks'],
+      filemtime($script_dist_path),
+      true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_hgroup_control_editor_script');
 
 /**
  * Enqueue SR-Only styles into the block editor iFrame and on the frontend
