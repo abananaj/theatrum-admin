@@ -257,6 +257,14 @@ function ct_render_pattern_usage_page(): void
     )
   );
 
+  // Drop posts the current user isn't allowed to see — the raw query above
+  // has no capability gate, so without this a Contributor (who only needs
+  // edit_posts to reach this page) could see other authors' private/draft
+  // post titles and statuses.
+  $posts = array_values(array_filter($posts, function ($post) {
+    return current_user_can('read_post', $post->ID);
+  }));
+
   if (empty($posts)) {
     echo '<p>This pattern is not used in any posts or pages.</p></div>';
     return;

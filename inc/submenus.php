@@ -309,6 +309,14 @@ function ct_render_tagged_posts_page()
     'order'          => 'ASC',
   ]);
 
+  // Drop posts the current user isn't allowed to see — get_posts() above has
+  // no capability gate, so without this a Contributor (who only needs
+  // edit_posts to reach this page) could see other authors' private/draft
+  // post titles and statuses.
+  $posts = array_values(array_filter($posts, function ($post) {
+    return current_user_can('read_post', $post->ID);
+  }));
+
   if (empty($posts)) {
     echo '<p>No posts found with this tag.</p></div>';
     return;
@@ -318,10 +326,12 @@ function ct_render_tagged_posts_page()
   echo '<thead><tr><th>Title</th><th>Type</th><th>Status</th></tr></thead><tbody>';
 
   foreach ($posts as $post) {
-    $type_obj = get_post_type_object($post->post_type);
-    $label    = $type_obj ? $type_obj->labels->singular_name : $post->post_type;
+    $type_obj  = get_post_type_object($post->post_type);
+    $label     = $type_obj ? $type_obj->labels->singular_name : $post->post_type;
+    $edit_link = get_edit_post_link($post->ID);
+    $title     = esc_html($post->post_title ?: '(no title)');
     echo '<tr>';
-    echo '<td><a href="' . esc_url(get_edit_post_link($post->ID)) . '">' . esc_html($post->post_title ?: '(no title)') . '</a></td>';
+    echo '<td>' . ($edit_link ? '<a href="' . esc_url($edit_link) . '">' . $title . '</a>' : $title) . '</td>';
     echo '<td>' . esc_html($label) . '</td>';
     echo '<td>' . esc_html($post->post_status) . '</td>';
     echo '</tr>';
