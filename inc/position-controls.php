@@ -121,9 +121,12 @@ function chance_apply_position_style($block_content, $block)
     }
   }
 
-  // Merge the position CSS into the wrapper's existing style attribute (or add one)
+  // Merge the position CSS into the wrapper's existing style attribute (or add one).
+  // Attributes are matched as repeated name/name=value pairs (value quoted or
+  // bare) rather than [^>]* up to the first literal `>` — a quoted attribute
+  // value containing `>` would otherwise truncate the match and corrupt the tag.
   $block_content = preg_replace_callback(
-    '/(<[a-zA-Z][a-zA-Z0-9-]*)(\s[^>]*)?(>)/',
+    '/(<[a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*(>)/',
     function ($matches) use ($css) {
       $tag = $matches[1];
       $attributes = $matches[2] ?? '';

@@ -170,23 +170,23 @@ add_action('admin_menu', function () {
 
   // ── Move Themes from Appearance to Settings submenu ────────────────────────
   // Remove Themes from Appearance
-  if (isset($submenu['themes'])) {
-    foreach ($submenu['themes'] as $index => $item) {
-      if (isset($item[2]) && $item[2] === 'themes') {
-        unset($submenu['themes'][$index]);
+  if (isset($submenu['themes.php'])) {
+    foreach ($submenu['themes.php'] as $index => $item) {
+      if (isset($item[2]) && $item[2] === 'themes.php') {
+        unset($submenu['themes.php'][$index]);
         break;
       }
     }
   }
 
   // Add Themes to Settings
-  if (!isset($submenu['options-general'])) {
-    $submenu['options-general'] = [];
+  if (!isset($submenu['options-general.php'])) {
+    $submenu['options-general.php'] = [];
   }
-  $submenu['options-general'][] = [
+  $submenu['options-general.php'][] = [
     'Themes',
     'switch_themes',
-    'themes',
+    'themes.php',
     'Themes',
   ];
 

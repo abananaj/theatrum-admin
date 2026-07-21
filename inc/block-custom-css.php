@@ -8,8 +8,13 @@
  *
  * Parked: not currently required (see the commented require_once in
  * theatrum-admin.php) pending a decision on whether to expose free-form CSS
- * input to editors. The implementation below is complete and its CSS
- * sanitization (ct_sanitize_block_custom_css) is safe to enable as-is.
+ * input to editors. The implementation below is complete, but
+ * chance_sanitize_block_custom_css() is a denylist over raw CSS text, not a
+ * parser — it strips the known-dangerous constructs listed there and CSS
+ * comments (to close comment-splitting bypasses like `exp/**\/ression(...)`),
+ * but a denylist can't guarantee it covers every future CSS injection vector.
+ * Re-review that function before enabling this for any role below
+ * manage_options.
  */
 
 // Enqueue custom CSS editor script and styles
@@ -166,6 +171,10 @@ function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
 function chance_sanitize_block_custom_css($css)
 {
   $css = wp_strip_all_tags($css, true);
+
+  // Strip CSS comments first so a denylisted construct can't be split across
+  // a comment to dodge the checks below (e.g. `exp/**/ression(...)`).
+  $css = preg_replace('#/\*.*?\*/#s', '', $css);
 
   // Denylist of CSS constructs that can execute script or exfiltrate data.
   $denylist = array(

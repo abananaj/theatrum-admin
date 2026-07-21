@@ -62,30 +62,9 @@ function chance_add_template_parts_submenu_page()
 }
 add_action('admin_menu', 'chance_add_template_parts_submenu_page');
 
-// Add Themes submenu to Settings
-function chance_add_themes_to_settings()
-{
-  add_submenu_page(
-    'options', // parent slug (Settings menu)
-    'Themes', // page title
-    'Themes', // menu title
-    'switch_themes', // capability
-    'chance-themes', // menu slug (unique)
-    '__return_null' // no callback needed since we use a direct link below
-  );
-
-  // Override the menu link to point directly to themes.php
-  global $submenu;
-  if (isset($submenu['options'])) {
-    foreach ($submenu['options'] as $key => $item) {
-      if ($item[2] === 'chance-themes') {
-        $submenu['options'][$key][2] = 'themes.php';
-        break;
-      }
-    }
-  }
-}
-add_action('admin_menu', 'chance_add_themes_to_settings');
+// Moving Themes from Appearance to Settings is handled in inc/submenus.php
+// (this file previously had a second, independently-broken implementation
+// of the same feature — removed to avoid two competing copies).
 
 // render templates page
 function chance_render_templates_page()

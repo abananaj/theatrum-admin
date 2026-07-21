@@ -71,8 +71,12 @@ function chance_apply_sr_only_class($block_content, $block)
 
   // Add sr-only class to the block's wrapper
   // Find the opening tag and add the class
+  // Attributes are matched as repeated name/name=value pairs (value quoted or
+  // bare) rather than [^>]* up to the first literal `>` — a quoted attribute
+  // value containing `>` (e.g. an aria-label) would otherwise truncate the
+  // match and corrupt the tag.
   $block_content = preg_replace_callback(
-    '/<(h[1-6]|p)(\s[^>]*)?>/',
+    '/<(h[1-6]|p)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*>/',
     function ($matches) {
       $tag = $matches[1];
       $attributes = $matches[2] ?? '';
