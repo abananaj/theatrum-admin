@@ -121,13 +121,21 @@ function chance_apply_position_style($block_content, $block)
     }
   }
 
-  // Merge the position CSS into the wrapper's existing style attribute (or add one).
-  // Attributes are matched as repeated name/name=value pairs (value quoted or
-  // bare) rather than [^>]* up to the first literal `>` — a quoted attribute
-  // value containing `>` would otherwise truncate the match and corrupt the tag.
+  // `is-position-{type}` mirrors the class core's native position support
+  // would have added. Themes (this one included — see .is-position-sticky in
+  // header.scss) hook their own offset overrides off that class, so without
+  // it a sticky block sticks at the literal positionTop value (usually 0px)
+  // and ends up underneath the fixed header instead of below it.
+  $position_class = 'is-position-' . $type;
+
+  // Merge the position CSS/class into the wrapper's existing style/class
+  // attributes (or add them). Attributes are matched as repeated name/
+  // name=value pairs (value quoted or bare) rather than [^>]* up to the
+  // first literal `>` — a quoted attribute value containing `>` would
+  // otherwise truncate the match and corrupt the tag.
   $block_content = preg_replace_callback(
     '/(<[a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*(>)/',
-    function ($matches) use ($css) {
+    function ($matches) use ($css, $position_class) {
       $tag = $matches[1];
       $attributes = $matches[2] ?? '';
       $close = $matches[3];
@@ -143,6 +151,19 @@ function chance_apply_position_style($block_content, $block)
         );
       } else {
         $attributes .= ' style="' . esc_attr($css) . '"';
+      }
+
+      if (preg_match('/class=(["\'])(.*?)\1/s', $attributes, $class_match)) {
+        $quote = $class_match[1];
+        $existing_class = trim($class_match[2]);
+        $new_class = ('' !== $existing_class ? $existing_class . ' ' : '') . esc_attr($position_class);
+        $attributes = str_replace(
+          'class=' . $quote . $class_match[2] . $quote,
+          'class=' . $quote . $new_class . $quote,
+          $attributes
+        );
+      } else {
+        $attributes .= ' class="' . esc_attr($position_class) . '"';
       }
 
       return $tag . $attributes . $close;
