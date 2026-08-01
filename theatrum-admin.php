@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Theatrum Admin
  * Plugin URI:  https://chancetheatre.com
- * Description: WP admin interface customizations for Chance Theater — custom columns, submenus, block CSS, and design system pages.
+ * Description: WP admin interface customizations for Chance Theater — custom columns, submenus, and design system pages.
  * Version:     1.0.0
  * Author:      Chance Theater
  * Text Domain: chance-theater
@@ -17,11 +17,6 @@ define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
 
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 require_once THEATRUM_ADMIN_DIR . 'media-library-assistant.php';
-// block-custom-css.php: per-block custom CSS field, parked pending a product
-// decision on whether to expose it to editors. Implementation is complete and
-// its CSS sanitization is safe to use — see the file header for details.
-// require_once THEATRUM_ADMIN_DIR . 'block-custom-css.php';
-require_once THEATRUM_ADMIN_DIR . 'block-row-customization.php';
 require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
 require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';

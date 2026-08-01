@@ -10,7 +10,7 @@ WordPress **admin-customization plugin** for Chance Theater. Reshapes the wp-adm
 |---|---|
 | Type | Site-specific must-have plugin (git submodule) |
 | Stack | PHP · Vite 8 · TypeScript · SCSS · `@wordpress/*` editor packages |
-| Loads | `submenus` · `block-row-customization` · `patterns-admin` · `design-system` · `sr-only-blocks` · `position-controls` |
+| Loads | `submenus` · `patterns-admin` · `design-system` · `sr-only-blocks` · `position-controls` |
 | Version | `1.0.0` (plugin header + `package.json` agree ✅) |
 | Text Domain | `chance-theater` (declared; no `/languages` loaded) |
 
@@ -32,15 +32,11 @@ theatrum-admin/
 │   ├── patterns-admin.php      # ✅ wp_block tag support, usage count, list columns
 │   ├── design-system.php       # ✅ Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php      # ✅ srOnly attribute + render_block class injection
-│   ├── position-controls.php   # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
-│   ├── block-row-customization.php  # ⚠️ enqueues a file the build never emits (dead)
-│   ├── block-custom-css.php    # ⚠️ NOT loaded (require commented out); incomplete
-│   └── disable-links-editor.php # ⚠️ empty file, not loaded
+│   └── position-controls.php   # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
 ├── src/
-│   ├── index.ts                # bundles row-customization + custom-css + SCSS
+│   ├── index.ts                # bundles SCSS
 │   ├── sr-only-blocks.tsx      # editor toggle + outline badge (editor build)
 │   ├── position-controls.tsx   # Position panel (Static/Relative/Absolute/Fixed/Sticky + UnitControl offsets)
-│   ├── ts/                     # block-row-customization.ts (no-op), block-custom-css.ts (stub)
 │   └── scss/                   # sr-only.scss, svg-media-library.scss
 ├── dist/                       # build output (gitignored) — currently only index.js
 ├── vite.config.js              # builds src/index.ts → dist/index.js (IIFE, self-injects CSS)
@@ -108,23 +104,19 @@ The remaining issues are concentrated in the **JS/build layer**, which has drift
 
 ### 🔴 High
 1. **`dist/` currently holds only `index.js`** — the editor build (`sr-only-blocks.js`) is absent, so the SR-Only **editor toggle + badge don't render** and the `srOnly` attribute can't be authored. Run the **full** `npm run build` (both configs) in every environment before relying on it. *(Note: srOnly content that's already set still hides correctly on the frontend — the theme defines `.sr-only` in `dist/main.css`, so this is not an accessibility regression, only an authoring breakage.)*
-2. **Build output ↔ enqueue mismatch across the JS/CSS layer.** Three loose wires:
+2. **Build output ↔ enqueue mismatch across the JS/CSS layer.** Two loose wires:
    - `theatrum-admin.php` enqueues `dist/sr-only-blocks.css`, but **no build step emits it** — the SCSS is self-injected by `index.js` instead. Only impact today is the editor-only SR-ONLY **badge** cosmetics (the frontend `.sr-only` rule comes from the theme).
-   - `block-row-customization.php` enqueues `dist/block-row-customization.js`, which **is never built** (it's bundled into `index.js`). `file_exists()` fails silently → feature never loads.
    - `dist/index.js` **is built but never enqueued** by any PHP.
    → Decide one strategy: emit named files per feature, *or* enqueue `index.js` + its CSS. Then make the PHP paths match the build outputs.
 
 ### 🟠 Medium
-3. **`block-row-customization` is a complete no-op.** The JS filter body is empty (comments only) and the PHP enqueues a missing file. → Implement the `p` tagName option properly, or remove the module and its `require`.
-4. **`block-custom-css.php` is unfinished and unloaded.** Its `require` is commented out, the TS (`block-custom-css.ts`) is a `console.log` stub, and the PHP would sanitize CSS with `wp_kses_post()` (an HTML sanitizer, wrong for CSS). → Finish it (see Backlog) or delete it to stop the confusion.
-5. **Dead files.** `inc/disable-links-editor.php` is empty and never required. → Delete.
-6. **Fragile hardcoded menu positions.** `submenus.php` swaps menu slots by literal index (`5/10/20/30/31/32/58`). Another plugin adding menu items can collide. → Look items up by slug instead of assuming positions.
+3. **Fragile hardcoded menu positions.** `submenus.php` swaps menu slots by literal index (`5/10/20/30/31/32/58`). Another plugin adding menu items can collide. → Look items up by slug instead of assuming positions.
 
 ### 🟡 Low
-7. **`date()` instead of `wp_date()`/`gmdate()`** for the "Created" column in `design-system.php` — timezone-naive. → Use `wp_date()`.
-8. **i18n incomplete.** Text Domain `chance-theater` is declared and strings use `__()`, but there's no `load_plugin_textdomain()` and no `/languages`. → Wire it up or drop the domain noise.
-9. **Anonymous closures** on `admin_menu` / `pre_get_posts` / `admin_head` can't be unhooked or unit-tested. → Prefer named functions if this grows.
-10. **Inline `<style>` echoed in `admin_head`** (submenu separator). → Minor; could move to an enqueued stylesheet.
+4. **`date()` instead of `wp_date()`/`gmdate()`** for the "Created" column in `design-system.php` — timezone-naive. → Use `wp_date()`.
+5. **i18n incomplete.** Text Domain `chance-theater` is declared and strings use `__()`, but there's no `load_plugin_textdomain()` and no `/languages`. → Wire it up or drop the domain noise.
+6. **Anonymous closures** on `admin_menu` / `pre_get_posts` / `admin_head` can't be unhooked or unit-tested. → Prefer named functions if this grows.
+7. **Inline `<style>` echoed in `admin_head`** (submenu separator). → Minor; could move to an enqueued stylesheet.
 
 ---
 
@@ -137,16 +129,9 @@ The remaining issues are concentrated in the **JS/build layer**, which has drift
 
 ---
 
-## Backlog — planned editor features
+## Backlog
 
-Carried over from the prior README notes (Custom-CSS-per-block UX):
-
-1. **Reset all custom styles** button in the block inspector — clears inline custom CSS for the block instance without removing user-added utility classes.
-2. **List-view tooltip** showing a block's custom CSS classes on hover.
-3. **List-view indicator** marking blocks that have custom CSS.
-4. **Custom CSS popup editor** with syntax highlighting (replacing the plain textarea).
-
-> These depend on first resolving the `block-custom-css` feature (Next Steps #4).
+Per-block custom CSS UX (reset button, list-view indicators, popup editor with syntax highlighting) was previously planned here but depended on the `block-custom-css` feature, which was removed — WordPress 7 now provides this natively.
 
 ---
 
