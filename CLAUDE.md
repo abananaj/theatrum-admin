@@ -21,9 +21,9 @@ full review; treat it as more current than README's own "Next Steps" list where 
 
 ```bash
 npm install
-npm run build        # runs all 5 Vite configs (index, sr-only editor, position, formats, hgroup)
+npm run build        # runs all 6 Vite configs (index, sr-only editor, position, formats, hgroup, list-view-css)
 npm run build:watch  # ⚠️ watch mode only rebuilds the DEFAULT config and empties dist/ each run —
-                      # do not rely on this alone; it silently strips the other 4 built files
+                      # do not rely on this alone; it silently strips the other 5 built files
 npm run deploy        # identical to build
 ```
 
@@ -52,6 +52,7 @@ theatrum-admin/
 │   ├── position-controls.tsx         # Position panel (theatrum/cover-card, theatrum/chance-card)
 │   ├── custom-formats.tsx            # RichText formats: Inline Quote, Small Text, Span
 │   ├── hgroup-control.tsx            # Group block <hgroup> toggle
+│   ├── list-view-css-indicator.ts    # List View "CSS" badge for blocks with Additional CSS set
 │   └── scss/                         # sr-only.scss, svg-media-library.scss
 ├── dist/                             # build output (gitignored)
 └── vite.config*.js                   # one config per feature — see README's directory map

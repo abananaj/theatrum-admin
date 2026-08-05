@@ -99,6 +99,25 @@ function chance_enqueue_hgroup_control_editor_script()
 add_action('enqueue_block_editor_assets', 'chance_enqueue_hgroup_control_editor_script');
 
 /**
+ * Enqueue List View Custom CSS Indicator editor script (outer editor UI — List View badge)
+ */
+function chance_enqueue_list_view_css_indicator_script()
+{
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/list-view-css-indicator.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+      'chance-list-view-css-indicator',
+      plugin_dir_url(__FILE__) . 'dist/list-view-css-indicator.js',
+      ['wp-data'],
+      filemtime($script_dist_path),
+      true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_list_view_css_indicator_script');
+
+/**
  * Enqueue SR-Only styles into the block editor iFrame and on the frontend
  */
 function chance_enqueue_sr_only_styles()
