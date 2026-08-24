@@ -15,10 +15,10 @@ export default defineConfig({
           "@wordpress/element": "wp.element",
           "@wordpress/block-editor": "wp.blockEditor",
           "@wordpress/rich-text": "wp.richText",
-          "@wordpress/icons": "wp.icons",
+          "@wordpress/primitives": "wp.primitives",
         },
       },
-      external: [/^@wordpress\//],
+      external: (id) => /^@wordpress\//.test(id) && id !== "@wordpress/icons",
     },
   },
 });

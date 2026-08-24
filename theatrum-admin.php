@@ -71,7 +71,7 @@ function chance_enqueue_custom_formats_editor_script()
     wp_enqueue_script(
       'chance-custom-formats',
       plugin_dir_url(__FILE__) . 'dist/custom-formats.js',
-      ['wp-block-editor', 'wp-rich-text', 'wp-element', 'wp-components', 'wp-icons'],
+      ['wp-block-editor', 'wp-rich-text', 'wp-element', 'wp-components'],
       filemtime($script_dist_path),
       true
     );
