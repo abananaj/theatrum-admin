@@ -99,6 +99,7 @@ add_action('manage_wp_block_posts_custom_column', function ($column, $post_id) {
           );
           $links[] = '<a href="' . esc_url($url) . '">' . esc_html($term->name) . '</a>';
         }
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $links entries built above from esc_url()/esc_html() output.
         echo implode(', ', $links);
       } else {
         echo '—';
@@ -116,6 +117,7 @@ add_action('manage_wp_block_posts_custom_column', function ($column, $post_id) {
           );
           $links[] = '<a href="' . esc_url($url) . '">' . esc_html($term->name) . '</a>';
         }
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $links entries built above from esc_url()/esc_html() output.
         echo implode(', ', $links);
       } else {
         echo '—';
@@ -128,7 +130,7 @@ add_action('manage_wp_block_posts_custom_column', function ($column, $post_id) {
         echo '—';
       } else {
         $url = admin_url('admin.php?page=ct-pattern-usage&id=' . (int) $post_id);
-        echo '<a href="' . esc_url($url) . '">' . $count . '</a>';
+        echo '<a href="' . esc_url($url) . '">' . esc_html($count) . '</a>';
       }
       break;
   }
@@ -271,7 +273,7 @@ function ct_render_pattern_usage_page(): void
   }
 
   $n = count($posts);
-  echo '<p><strong>' . $n . '</strong> ' . ($n === 1 ? 'location' : 'locations') . '</p>';
+  echo '<p><strong>' . esc_html($n) . '</strong> ' . ($n === 1 ? 'location' : 'locations') . '</p>';
   echo '<table class="wp-list-table widefat fixed striped">';
   echo '<thead><tr><th>Title</th><th>Type</th><th>Status</th></tr></thead><tbody>';
 

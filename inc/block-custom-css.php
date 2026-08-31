@@ -113,7 +113,8 @@ function chance_output_block_custom_css()
 
   if (!empty($custom_css)) {
     echo '<style id="chance-block-custom-css">';
-    echo $custom_css; // Already sanitized in chance_sanitize_block_custom_css().
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS already sanitized in chance_sanitize_block_custom_css() (wp_strip_all_tags + dangerous-construct denylist); esc_html() would corrupt valid CSS.
+    echo $custom_css;
     echo '</style>';
   }
 }

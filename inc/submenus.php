@@ -331,6 +331,7 @@ function ct_render_tagged_posts_page()
     $edit_link = get_edit_post_link($post->ID);
     $title     = esc_html($post->post_title ?: '(no title)');
     echo '<tr>';
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title is esc_html()'d above; $edit_link is esc_url()'d inline.
     echo '<td>' . ($edit_link ? '<a href="' . esc_url($edit_link) . '">' . $title . '</a>' : $title) . '</td>';
     echo '<td>' . esc_html($label) . '</td>';
     echo '<td>' . esc_html($post->post_status) . '</td>';
