@@ -15,11 +15,14 @@ if (! defined('ABSPATH')) {
 
 define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
 
-add_action('init', 'theatrum_admin_load_textdomain');
+/**
+ * Load this plugin's translation files.
+ */
 function theatrum_admin_load_textdomain()
 {
   load_plugin_textdomain('theatrum-admin', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }
+add_action('init', 'theatrum_admin_load_textdomain');
 
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 require_once THEATRUM_ADMIN_DIR . 'media-library-assistant.php';
