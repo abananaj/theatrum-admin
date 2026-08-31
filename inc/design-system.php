@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 //  add submenu page for Templates
 function chance_add_templates_submenu_page()
 {

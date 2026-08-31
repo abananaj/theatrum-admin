@@ -11,6 +11,10 @@
  * - pre_get_posts filter so the native list respects ?wp_pattern_category=slug
  */
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 // ── Tag support ───────────────────────────────────────────────────────────────
 
 add_action('init', function () {

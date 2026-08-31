@@ -17,6 +17,10 @@
  * manage_options.
  */
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 // Enqueue custom CSS editor script and styles
 function chance_enqueue_block_custom_css_assets()
 {

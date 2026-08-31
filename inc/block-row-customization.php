@@ -7,6 +7,10 @@
  * in the block editor.
  */
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 function chance_enqueue_row_block_customization()
 {
   $script_dist_path = plugin_dir_path(dirname(__FILE__)) . 'dist/block-row-customization.js';

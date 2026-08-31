@@ -8,6 +8,10 @@
  *   term in an MLA taxonomy column).
  */
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 const CT_MLA_ICON_TAXONOMY = 'attachment_category';
 const CT_MLA_ICON_TERM_NAME = 'Icon';
 

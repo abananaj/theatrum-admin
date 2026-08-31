@@ -4,6 +4,10 @@
  * Customize admin sidebar submenus for custom post types.
  */
 
+if (! defined('ABSPATH')) {
+  exit;
+}
+
 add_action('admin_menu', function () {
 
   global $menu, $submenu;
