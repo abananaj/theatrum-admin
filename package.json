@@ -14,10 +14,10 @@
 		"@wordpress/components": "^24.0.0",
 		"@wordpress/data": "^9.0.0",
 		"@wordpress/element": "^5.0.0",
-		"@wordpress/eslint-plugin": "^25.10.0",
 		"@wordpress/hooks": "^4.0.0"
 	},
 	"devDependencies": {
+		"@wordpress/eslint-plugin": "^25.10.0",
 		"sass": "^1.69.0",
 		"typescript": "^5.0.0",
 		"vite": "^8.0.1"
