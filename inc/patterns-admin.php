@@ -63,7 +63,7 @@ add_action('pre_get_posts', function ($query) {
   if ($pagenow !== 'edit.php') return;
   if ($query->get('post_type') !== 'wp_block') return;
 
-  $cat_slug = isset($_GET['wp_pattern_category']) ? sanitize_text_field($_GET['wp_pattern_category']) : '';
+  $cat_slug = isset($_GET['wp_pattern_category']) ? sanitize_text_field($_GET['wp_pattern_category']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
   if (!$cat_slug) return;
 
   $tax_query   = $query->get('tax_query') ?: [];
@@ -228,7 +228,7 @@ add_action('before_delete_post', function () {
 
 function ct_render_pattern_usage_page(): void
 {
-  $pattern_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+  $pattern_id = isset($_GET['id']) ? (int) $_GET['id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
 
   echo '<div class="wrap">';
 

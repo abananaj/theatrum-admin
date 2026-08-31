@@ -210,7 +210,7 @@ add_action('pre_get_posts', function ($query) {
   }
 
   // Only filter when viewing the main Chance Productions list (no series filter)
-  if (isset($_GET['series'])) {
+  if (isset($_GET['series'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
     return;
   }
 
@@ -250,7 +250,7 @@ add_action('admin_head', function () {
 
 add_filter('manage_edit-post_tag_columns', function ($columns) {
   // Only on the generic tags list — not when scoped to a specific post type
-  if (!empty($_GET['post_type'])) {
+  if (!empty($_GET['post_type'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
     return $columns;
   }
   unset($columns['posts']);
@@ -274,7 +274,7 @@ add_filter('manage_post_tag_custom_column', function ($string, $column_name, $te
 
 function ct_render_tagged_posts_page()
 {
-  $tag_slug = isset($_GET['tag']) ? sanitize_text_field($_GET['tag']) : '';
+  $tag_slug = isset($_GET['tag']) ? sanitize_text_field($_GET['tag']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
 
   echo '<div class="wrap">';
 
