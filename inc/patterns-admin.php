@@ -47,7 +47,7 @@ add_filter('views_edit-wp_block', function ($views) {
   if (!current_user_can('manage_options')) return $views;
   $url = admin_url('admin.php?page=chance-patterns');
   $views['ct_grouped_overview'] =
-    '<a href="' . esc_url($url) . '">' . esc_html__('Grouped Overview', 'chance-theater') . '</a>';
+    '<a href="' . esc_url($url) . '">' . esc_html__('Grouped Overview', 'theatrum-admin') . '</a>';
   return $views;
 });
 
@@ -78,9 +78,9 @@ add_filter('manage_wp_block_posts_columns', function ($columns) {
   foreach ($columns as $key => $label) {
     $new[$key] = $label;
     if ($key === 'title') {
-      $new['pattern_category'] = __('Category', 'chance-theater');
-      $new['pattern_tags']     = __('Tags', 'chance-theater');
-      $new['pattern_usage']    = __('Used In', 'chance-theater');
+      $new['pattern_category'] = __('Category', 'theatrum-admin');
+      $new['pattern_tags']     = __('Tags', 'theatrum-admin');
+      $new['pattern_usage']    = __('Used In', 'theatrum-admin');
     }
   }
   return $new;

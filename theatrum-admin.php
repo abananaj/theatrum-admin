@@ -6,7 +6,7 @@
  * Description: WP admin interface customizations for Chance Theater — custom columns, submenus, and design system pages.
  * Version:     1.0.0
  * Author:      Chance Theater
- * Text Domain: chance-theater
+ * Text Domain: theatrum-admin
  */
 
 if (! defined('ABSPATH')) {
@@ -14,6 +14,12 @@ if (! defined('ABSPATH')) {
 }
 
 define('THEATRUM_ADMIN_DIR', plugin_dir_path(__FILE__) . 'inc/');
+
+add_action('init', 'theatrum_admin_load_textdomain');
+function theatrum_admin_load_textdomain()
+{
+  load_plugin_textdomain('theatrum-admin', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
 
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 require_once THEATRUM_ADMIN_DIR . 'media-library-assistant.php';

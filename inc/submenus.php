@@ -250,7 +250,7 @@ add_filter('manage_edit-post_tag_columns', function ($columns) {
     return $columns;
   }
   unset($columns['posts']);
-  $columns['ct_all_posts'] = __('Posts', 'chance-theater');
+  $columns['ct_all_posts'] = __('Posts', 'theatrum-admin');
   return $columns;
 });
 

@@ -67,8 +67,8 @@ add_filter('mla_list_table_query_final_terms', function ($request) {
 add_action('admin_menu', function () {
   add_submenu_page(
     'upload.php',
-    __('Icons', 'chance-theater'),
-    __('Icons', 'chance-theater'),
+    __('Icons', 'theatrum-admin'),
+    __('Icons', 'theatrum-admin'),
     'upload_files',
     'ct-media-icons',
     'ct_mla_render_icons_redirect'
