@@ -1,12 +1,21 @@
+// Kept byte-identical to chance-ollie's src/index.scss on purpose — same
+// selector, same accessibility-critical utility, defined in both submodules
+// (theme frontend + this plugin's editor). Previously the two disagreed (the
+// theme's used only the legacy `clip: rect(0, 0, 0, 0)`, missing this file's
+// `clip-path: inset(50%)` fallback), so which rule won depended on
+// stylesheet load order. Un-ambiguated by making both identical instead of
+// picking a side — GLOBAL_REVIEW.md §3a#5. If you change one, change the other.
 .sr-only {
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
+	position: absolute;
 	width: 1px;
+	height: 1px;
+	padding: 0;
 	margin: -1px;
 	overflow: hidden;
-	padding: 0;
-	position: absolute;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
 }
 
 /**
