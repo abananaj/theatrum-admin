@@ -34,7 +34,6 @@ return [
       'your-account' => [
         'title'   => __('Your account and what you can do', 'theatrum-admin'),
         'summary' => __('Administrators and Editors, what each can see, and keeping your login safe.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
       'admin-menu-tour' => [
         'title'   => __('A tour of the admin menu', 'theatrum-admin'),
@@ -69,7 +68,6 @@ return [
       'classes-venues-supporters' => [
         'title'   => __('Classes, venues and supporters', 'theatrum-admin'),
         'summary' => __('The three smaller content types and the fields each one needs.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
       'blog-posts' => [
         'title'   => __('Blog posts and news', 'theatrum-admin'),
@@ -94,7 +92,6 @@ return [
       'seasons-and-series' => [
         'title'   => __('Seasons and series', 'theatrum-admin'),
         'summary' => __('How a season page is assembled and how to move the site on to a new season.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
     ],
   ],
