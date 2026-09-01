@@ -109,7 +109,6 @@ return [
       'images-and-media' => [
         'title'   => __('Images and the media library', 'theatrum-admin'),
         'summary' => __('Uploading, alt text, choosing the right size, and finding an image again later.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
     ],
   ],
