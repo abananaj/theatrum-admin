@@ -30,6 +30,7 @@ require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
 require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
 require_once THEATRUM_ADMIN_DIR . 'position-controls.php';
+require_once THEATRUM_ADMIN_DIR . 'copy-caption.php';
 
 /**
  * Enqueue SR-Only block editor script (outer editor UI — block filters)
@@ -144,3 +145,51 @@ function chance_enqueue_sr_only_styles()
 }
 add_action('enqueue_block_assets', 'chance_enqueue_sr_only_styles');
 add_action('wp_enqueue_scripts', 'chance_enqueue_sr_only_styles');
+
+/**
+ * Enqueue Caption Copy-On-Click block editor script (Inspector toggle)
+ */
+function chance_enqueue_copy_caption_editor_script()
+{
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/copy-caption.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+      'chance-copy-caption',
+      plugin_dir_url(__FILE__) . 'dist/copy-caption.js',
+      ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks'],
+      filemtime($script_dist_path),
+      true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_copy_caption_editor_script');
+
+/**
+ * Enqueue Caption Copy-On-Click frontend behavior (plain JS/CSS, no build step)
+ */
+function chance_enqueue_copy_caption_frontend_assets()
+{
+  $script_path = plugin_dir_path(__FILE__) . 'assets/copy-caption.js';
+  $style_path  = plugin_dir_path(__FILE__) . 'assets/copy-caption.css';
+
+  if (file_exists($script_path)) {
+    wp_enqueue_script(
+      'chance-copy-caption-frontend',
+      plugin_dir_url(__FILE__) . 'assets/copy-caption.js',
+      [],
+      filemtime($script_path),
+      true
+    );
+  }
+
+  if (file_exists($style_path)) {
+    wp_enqueue_style(
+      'chance-copy-caption-frontend',
+      plugin_dir_url(__FILE__) . 'assets/copy-caption.css',
+      [],
+      filemtime($style_path)
+    );
+  }
+}
+add_action('wp_enqueue_scripts', 'chance_enqueue_copy_caption_frontend_assets');
