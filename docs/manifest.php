@@ -39,7 +39,6 @@ return [
       'admin-menu-tour' => [
         'title'   => __('A tour of the admin menu', 'theatrum-admin'),
         'summary' => __('The sidebar is customised for this site — what each item is and where the surprises are.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
     ],
   ],
@@ -67,7 +66,6 @@ return [
       'adding-an-artist' => [
         'title'   => __('Adding an artist', 'theatrum-admin'),
         'summary' => __('Headshots, bios, the links list, and how artist tags work.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
       'classes-venues-supporters' => [
         'title'   => __('Classes, venues and supporters', 'theatrum-admin'),
@@ -77,7 +75,6 @@ return [
       'blog-posts' => [
         'title'   => __('Blog posts and news', 'theatrum-admin'),
         'summary' => __('Writing a post, and linking it to a production or event.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
     ],
   ],
@@ -125,7 +122,6 @@ return [
       'forms' => [
         'title'   => __('Forms and form entries', 'theatrum-admin'),
         'summary' => __('Finding submissions, and making small changes to an existing form.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
     ],
   ],
@@ -145,8 +141,7 @@ return [
       ],
       'accessibility' => [
         'title'   => __('Accessibility', 'theatrum-admin'),
-        'summary' => __('Using the accessibility checker, writing alt text, and keeping headings in order.', 'theatrum-admin'),
-        'status'  => 'stub',
+        'summary' => __('Alt text, heading order, link text, and two checks you can run yourself.', 'theatrum-admin'),
       ],
     ],
   ],
