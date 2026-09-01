@@ -88,7 +88,6 @@ return [
       'editing-a-page' => [
         'title'   => __('Editing a page', 'theatrum-admin'),
         'summary' => __('Working with blocks, and the blocks that were built specifically for this site.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
       'patterns' => [
         'title'   => __('Patterns — read this before you edit one', 'theatrum-admin'),
