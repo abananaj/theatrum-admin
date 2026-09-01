@@ -61,7 +61,6 @@ return [
       'adding-events' => [
         'title'   => __('Events and performance dates', 'theatrum-admin'),
         'summary' => __('Creating events, linking them to a production, and handling two-date events.', 'theatrum-admin'),
-        'status'  => 'stub',
       ],
       'adding-an-artist' => [
         'title'   => __('Adding an artist', 'theatrum-admin'),
@@ -116,7 +115,6 @@ return [
       'site-options' => [
         'title'   => __('Site Options', 'theatrum-admin'),
         'summary' => __('Current and next season, the staff and board listings, and fallback images.', 'theatrum-admin'),
-        'status'  => 'stub',
         'screens' => ['toplevel_page_site-options'],
       ],
       'forms' => [
