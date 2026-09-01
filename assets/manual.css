@@ -1,0 +1,250 @@
+/**
+ * Site Manual — admin documentation styles.
+ *
+ * Plain CSS on purpose: this file must not depend on the Vite build, so the
+ * manual keeps working wherever the plugin is deployed. Leans on core admin
+ * styles rather than introducing a design system.
+ */
+
+.ct-manual__crumb {
+  margin: 20px 0 -8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #646970;
+}
+
+.ct-manual {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+/* Sidebar */
+
+.ct-manual__nav {
+  position: sticky;
+  top: 46px;
+  padding-top: 8px;
+  font-size: 13px;
+}
+
+.ct-manual__nav .ct-manual__group:first-of-type {
+  margin-top: 12px;
+}
+
+.ct-manual__contents {
+  display: block;
+  padding-bottom: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ct-manual__group {
+  margin: 18px 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #646970;
+}
+
+.ct-manual__nav ul {
+  margin: 0;
+  list-style: none;
+}
+
+.ct-manual__nav li {
+  margin: 0 0 2px;
+}
+
+.ct-manual__nav li a {
+  display: block;
+  padding: 3px 8px;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+}
+
+.ct-manual__nav li a:hover {
+  background: #f0f0f1;
+}
+
+.ct-manual__nav li a.is-current {
+  border-left-color: #2271b1;
+  background: #f0f0f1;
+  font-weight: 600;
+}
+
+.ct-manual__nav li a.is-stub {
+  color: #8c8f94;
+}
+
+/* Body */
+
+.ct-manual__main {
+  max-width: 44rem;
+  padding: 4px 32px 32px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+}
+
+.ct-manual__main h2 {
+  margin: 2em 0 0.5em;
+  padding-top: 0.8em;
+  border-top: 1px solid #f0f0f1;
+  font-size: 17px;
+}
+
+.ct-manual__main h3 {
+  margin: 1.6em 0 0.4em;
+  font-size: 14px;
+}
+
+.ct-manual__main p,
+.ct-manual__main li {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.ct-manual__lead,
+.ct-manual__intro {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: #3c434a;
+}
+
+/* Core admin CSS strips list markers; put them back for prose. */
+.ct-manual__main ul {
+  margin-left: 1.6em;
+  list-style: disc outside;
+}
+
+.ct-manual__main ol {
+  margin-left: 1.6em;
+  list-style: decimal outside;
+}
+
+.ct-manual__main li {
+  margin-bottom: 0.5em;
+}
+
+.ct-manual__rules > li {
+  margin-bottom: 0.9em;
+}
+
+/* Index listing */
+
+.ct-manual__index {
+  margin: 0 0 1.5em;
+}
+
+.ct-manual__index dt {
+  margin-top: 0.9em;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ct-manual__index dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #646970;
+}
+
+.ct-manual__badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 7px;
+  border-radius: 9px;
+  background: #f0f0f1;
+  font-size: 11px;
+  font-weight: 400;
+  color: #646970;
+  vertical-align: middle;
+}
+
+.ct-manual__badge--key {
+  background: #d5e5f3;
+  color: #0a4b78;
+}
+
+/* Callouts */
+
+.ct-manual__stub,
+.ct-manual__warning {
+  margin: 0 0 20px;
+}
+
+.ct-manual__figure {
+  margin: 1.5em 0;
+}
+
+.ct-manual__figure img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #dcdcde;
+}
+
+.ct-manual__figure figcaption {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #646970;
+}
+
+/* Footer */
+
+.ct-manual__updated {
+  margin-top: 2.5em;
+  font-size: 12px !important;
+  color: #8c8f94;
+}
+
+.ct-manual__pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f1;
+  font-size: 13px;
+}
+
+/* Narrow screens */
+
+@media screen and (max-width: 782px) {
+  .ct-manual {
+    grid-template-columns: 1fr;
+  }
+
+  .ct-manual__nav {
+    position: static;
+  }
+
+  .ct-manual__main {
+    padding: 4px 16px 24px;
+  }
+}
+
+/* Staff will print these */
+
+@media print {
+  #adminmenumain,
+  #wpadminbar,
+  #wpfooter,
+  .ct-manual__nav,
+  .ct-manual__pager {
+    display: none !important;
+  }
+
+  .ct-manual {
+    display: block;
+  }
+
+  .ct-manual__main {
+    max-width: none;
+    border: 0;
+    padding: 0;
+  }
+}

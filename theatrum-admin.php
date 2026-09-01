@@ -24,6 +24,7 @@ function theatrum_admin_load_textdomain()
 }
 add_action('init', 'theatrum_admin_load_textdomain');
 
+require_once THEATRUM_ADMIN_DIR . 'manual.php';
 require_once THEATRUM_ADMIN_DIR . 'submenus.php';
 require_once THEATRUM_ADMIN_DIR . 'media-library-assistant.php';
 require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
