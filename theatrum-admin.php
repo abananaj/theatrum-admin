@@ -167,29 +167,20 @@ function chance_enqueue_copy_caption_editor_script()
 add_action('enqueue_block_editor_assets', 'chance_enqueue_copy_caption_editor_script');
 
 /**
- * Enqueue Caption Copy-On-Click frontend behavior (plain JS/CSS, no build step)
+ * Enqueue Caption Copy-On-Click frontend behavior (click handling + styles,
+ * bundled together — the SCSS self-injects a <style> tag when this script runs)
  */
 function chance_enqueue_copy_caption_frontend_assets()
 {
-  $script_path = plugin_dir_path(__FILE__) . 'assets/copy-caption.js';
-  $style_path  = plugin_dir_path(__FILE__) . 'assets/copy-caption.css';
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/copy-caption-frontend.js';
 
-  if (file_exists($script_path)) {
+  if (file_exists($script_dist_path)) {
     wp_enqueue_script(
       'chance-copy-caption-frontend',
-      plugin_dir_url(__FILE__) . 'assets/copy-caption.js',
+      plugin_dir_url(__FILE__) . 'dist/copy-caption-frontend.js',
       [],
-      filemtime($script_path),
+      filemtime($script_dist_path),
       true
-    );
-  }
-
-  if (file_exists($style_path)) {
-    wp_enqueue_style(
-      'chance-copy-caption-frontend',
-      plugin_dir_url(__FILE__) . 'assets/copy-caption.css',
-      [],
-      filemtime($style_path)
     );
   }
 }

@@ -1,0 +1,54 @@
+/**
+ * Caption Copy-On-Click — frontend styles
+ *
+ * Two tooltips share one bubble look: a hover hint ("Click to copy caption",
+ * pure CSS, centered above the caption) and a "Copied!" confirmation
+ * (positioned by JS at the exact click point — see copy-caption-frontend.ts).
+ */
+
+%chance-caption-tooltip-bubble {
+	position: absolute;
+	z-index: 100;
+	padding: 4px 10px;
+	background: #1e1e1e;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.4;
+	white-space: nowrap;
+	border-radius: 4px;
+	pointer-events: none;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+figcaption.has-caption-copy {
+	position: relative;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline dotted;
+	}
+
+	&:hover::before {
+		@extend %chance-caption-tooltip-bubble;
+		content: "Click to copy caption";
+		left: 50%;
+		bottom: 100%;
+		margin-bottom: 6px;
+		transform: translateX(-50%);
+	}
+}
+
+// Positioned by JS via inline left/top (fixed, at the click point) — see
+// showCopiedTooltip() in copy-caption-frontend.ts.
+.chance-caption-copied-tooltip {
+	@extend %chance-caption-tooltip-bubble;
+	position: fixed;
+	transform: translate(-50%, -100%);
+	opacity: 0;
+	transition: opacity 0.15s ease;
+
+	&.is-visible {
+		opacity: 1;
+	}
+}
