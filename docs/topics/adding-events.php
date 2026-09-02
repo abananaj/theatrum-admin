@@ -89,16 +89,29 @@ if (! defined('ABSPATH')) {
 
 <p>
   A production page runs a list of every event pointed at it, so <strong>Related Production is
-  what puts an event on the show's page</strong>. There is no second step and no way to add it
-  from the production side.
+  what puts an event on the show's page</strong>. There is no second step — set that field and the
+  event appears.
+</p>
+
+<p>
+  You will also see the connection from the other end: the production has an <strong>Events</strong>
+  field on its <strong>Calendar&nbsp;📆</strong> tab, and it fills itself in as events are linked to
+  the show. Treat it as something to read, not something to fill in.
 </p>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    <strong>The link only runs one way.</strong> Nothing on the production tells you which
-    events point at it, and unpublishing a production does not warn you that events still do.
+    <strong>Always make the link from the event, never from the production.</strong> Adding an event
+    to the production's Events field by hand does not tell the event about the production, so the
+    connection is only half made — it looks right on the production and the event still behaves as
+    though it belongs to nothing.
   </p>
 </div>
+
+<p>
+  Nothing cleans up after you either: unpublishing a production does not warn you that events still
+  point at it.
+</p>
 
 <h2>Events can have sub-events</h2>
 

@@ -24,7 +24,8 @@
 <h2>2. Fill in the details panel</h2>
 
 <p>
-  Below the content area is the <strong>Details</strong> panel, split into tabs.
+  Below the content area is the <strong>Details</strong> panel, split into eight tabs. Most shows
+  need the first three; the rest are there when you need them and can be left empty.
 </p>
 
 <h3>Basic</h3>
@@ -56,6 +57,53 @@
 <p>
   Poster and key art images, plus the <strong>video trailer URL</strong> if there is one —
   paste the ordinary YouTube or Vimeo address, not embed code.
+</p>
+
+<h3>Tickets 🎟️</h3>
+
+<p>
+  Three link fields — <strong>Choose Your Seats</strong>, <strong>SaverTIX</strong> and
+  <strong>Pay What You Choose</strong>. Paste the full ticketing address into whichever apply; each
+  one that has a link gets a button, and the ones you leave empty simply do not appear.
+</p>
+
+<h3>Calendar 📆</h3>
+
+<p>
+  <strong>Performances</strong> is the repeating list of dates and times for the run — a row per
+  performance, each with a date, a time and an optional note for things like “opening night” or
+  “ASL interpreted”.
+</p>
+
+<p>
+  <strong>Events</strong> below it is a read-out, not something to fill in. It lists the galas,
+  talkbacks and auditions that have been pointed at this show, and it fills itself in as those events
+  are created. <?php chance_manual_see('adding-events', 'Events are made from the event side'); ?>.
+</p>
+
+<h3>Advisory ⚠️</h3>
+
+<p>
+  Content advisories, and a separate <strong>Spoilers</strong> box for anything that gives the show
+  away. The spoilers section is hidden behind a click on the page, so it is safe to be specific in
+  there.
+</p>
+
+<h3>Buzz 🗨️</h3>
+
+<p>
+  Reviews and press. <strong>Quotes 💬</strong> and <strong>Awards 🏆</strong> are repeating lists,
+  and <strong>Press Release</strong> takes the PDF —
+  <?php chance_manual_see('workflow-press-release-production', 'how to attach one'); ?>.
+</p>
+
+<h3>Photos 📸</h3>
+
+<p>
+  <strong>Production Photos</strong> and <strong>Rehearsal Photos</strong> are the two galleries that
+  appear on the show's page, plus a <strong>Playbill</strong> file field. Photos have to be added
+  here to be shown — uploading them is not enough on its own.
+  <?php chance_manual_see('workflow-production-photos', 'Adding production photos'); ?>.
 </p>
 
 <h2>3. Set the featured image</h2>

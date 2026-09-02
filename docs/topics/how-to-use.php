@@ -15,6 +15,12 @@
 </p>
 
 <p>
+  <strong>Common workflows</strong> is the place to start when you know the job but not the order —
+  putting a whole season up, adding production photos, getting a press release onto a show. Those
+  pages are short and tell you what to do first; the groups below them explain one screen at a time.
+</p>
+
+<p>
   Some topics are marked <span class="ct-manual__badge">not written yet</span>. That is
   honest rather than broken — they are planned and will be filled in. Ask in the meantime,
   and the answer will end up on that page.

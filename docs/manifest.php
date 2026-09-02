@@ -42,6 +42,45 @@ return [
     ],
   ],
 
+  'workflows' => [
+    'label'  => __('Common workflows', 'theatrum-admin'),
+    'topics' => [
+      'workflow-new-season' => [
+        'title'   => __('Putting a whole season up', 'theatrum-admin'),
+        'summary' => __('Season, then productions, then credits, then events — in the order that causes the least trouble.', 'theatrum-admin'),
+        'key'     => true,
+      ],
+      'workflow-production-photos' => [
+        'title'   => __('Adding production photos', 'theatrum-admin'),
+        'summary' => __('Uploading a batch of photos, and the second step that actually puts them on the show page.', 'theatrum-admin'),
+      ],
+      'workflow-production-post' => [
+        'title'   => __('Putting a blog post on a show\'s page', 'theatrum-admin'),
+        'summary' => __('Write the post, then link it to the production with one field.', 'theatrum-admin'),
+      ],
+      'workflow-gallery-post' => [
+        'title'   => __('A photo gallery post', 'theatrum-admin'),
+        'summary' => __('A post made of production photos, and the category that unlocks the gallery field.', 'theatrum-admin'),
+      ],
+      'workflow-auditions' => [
+        'title'   => __('Putting an audition up', 'theatrum-admin'),
+        'summary' => __('Creating the event, pointing it at the show it is casting, and adding the signup form.', 'theatrum-admin'),
+      ],
+      'workflow-press-release-production' => [
+        'title'   => __('A press release on a show', 'theatrum-admin'),
+        'summary' => __('What counts as a press release here, and how to attach one to a production.', 'theatrum-admin'),
+      ],
+      'workflow-press-release-season' => [
+        'title'   => __('A season press release', 'theatrum-admin'),
+        'summary' => __('The same job on a season rather than a single show.', 'theatrum-admin'),
+      ],
+      'workflow-event-form-page' => [
+        'title'   => __('A form page for an event', 'theatrum-admin'),
+        'summary' => __('Event sub-pages, and getting a WPForms form onto one.', 'theatrum-admin'),
+      ],
+    ],
+  ],
+
   'content' => [
     'label'  => __('Putting content on the site', 'theatrum-admin'),
     'topics' => [
