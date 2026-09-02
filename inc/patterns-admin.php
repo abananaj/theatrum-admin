@@ -2,13 +2,7 @@
 
 /**
  * Patterns admin: tag support, category management, and accurate usage count.
- *
- * Provides:
- * - post_tag taxonomy registered for wp_block
- * - ct_count_pattern_usage() for querying actual post_content references
- * - "Categories" submenu link + hidden usage detail page
- * - Extra columns (Category, Tags, Used In) on the native wp_block list table
- * - pre_get_posts filter so the native list respects ?wp_pattern_category=slug
+ * Adds post_tag to wp_block, a Categories submenu + hidden usage detail page, Category/Tags/Used In list columns, and a pre_get_posts filter for ?wp_pattern_category=slug.
  */
 
 if (! defined('ABSPATH')) {
@@ -143,10 +137,7 @@ add_action('manage_wp_block_posts_custom_column', function ($column, $post_id) {
 // ── Usage count ───────────────────────────────────────────────────────────────
 
 /**
- * Count how many published/drafted posts embed a synced pattern by ref ID.
- *
- * Searches post_content for the block comment attribute "ref":ID which is
- * written by Gutenberg as {"ref":123} or {"ref":123,"syncBehavior":"..."}.
+ * Count how many published/drafted posts embed a synced pattern by ref ID — searches post_content for "ref":ID as written by Gutenberg ({"ref":123} or {"ref":123,"syncBehavior":"..."}).
  */
 function ct_count_pattern_usage(int $pattern_id): int
 {
@@ -168,14 +159,7 @@ function ct_count_pattern_usage(int $pattern_id): int
 }
 
 /**
- * Usage counts for every pattern in one pass, instead of one query per pattern.
- *
- * The Patterns list column and the Grouped Overview page both used to call
- * ct_count_pattern_usage() once per row, each doing its own unindexed
- * full-table LIKE scan of wp_posts — with 150+ patterns that's 150+ full
- * scans per page load. This does a single scan for all "ref":ID occurrences
- * and tallies them in PHP, cached in a transient since post content only
- * changes on save.
+ * Usage counts for every pattern in one pass, instead of one query per pattern — the list column and Grouped Overview page used to call ct_count_pattern_usage() once per row (150+ full unindexed LIKE scans per page load). This does one scan and tallies in PHP, cached in a transient since post content only changes on save.
  *
  * @return array<int,int> pattern_id => count of distinct posts referencing it
  */
@@ -263,10 +247,7 @@ function ct_render_pattern_usage_page(): void
     )
   );
 
-  // Drop posts the current user isn't allowed to see — the raw query above
-  // has no capability gate, so without this a Contributor (who only needs
-  // edit_posts to reach this page) could see other authors' private/draft
-  // post titles and statuses.
+  // Drop posts the user can't see — the raw query above has no capability gate, so a Contributor (edit_posts is enough to reach this page) could otherwise see other authors' private/draft posts.
   $posts = array_values(array_filter($posts, function ($post) {
     return current_user_can('read_post', $post->ID);
   }));

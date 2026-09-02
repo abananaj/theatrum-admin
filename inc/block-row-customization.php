@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Row Block HTML Element Customization
- * 
- * Adds <p> (paragraph) as an HTML element option for the Row block
- * in the block editor.
+ * Row Block HTML Element Customization — adds <p> as an HTML element option for the Row block in the block editor.
  */
 
 if (! defined('ABSPATH')) {

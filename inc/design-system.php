@@ -18,17 +18,8 @@ function chance_add_templates_submenu_page()
 }
 add_action('admin_menu', 'chance_add_templates_submenu_page');
 
-//  Patterns submenu.
-//
-//  The Appearance > Patterns link now points at the native wp_block list table
-//  (edit.php?post_type=wp_block). That screen supports Quick Edit and Bulk Edit
-//  for the wp_pattern_category and post_tag taxonomies out of the box, and the
-//  Category / Tags / Used In columns are already added to it in patterns-admin.php.
-//
-//  The original grouped (Synced/Unsynced -> Category) overview is archived to a
-//  hidden page: it stays reachable at admin.php?page=chance-patterns (existing
-//  back-links keep working) but no longer appears in the menu, since its custom
-//  echo'd table cannot support inline/bulk editing.
+//  Patterns submenu: Appearance > Patterns now points at the native wp_block list table (Quick/Bulk Edit + Category/Tags/Used In columns from patterns-admin.php).
+//  The old grouped Synced/Unsynced overview is archived to a hidden page (admin.php?page=chance-patterns, back-links still work) — no menu entry since its echo'd table can't support inline/bulk editing.
 function chance_add_patterns_submenu_page()
 {
   // Visible menu item -> native list table with full Quick Edit / Bulk Edit.
@@ -66,9 +57,7 @@ function chance_add_template_parts_submenu_page()
 }
 add_action('admin_menu', 'chance_add_template_parts_submenu_page');
 
-// Moving Themes from Appearance to Settings is handled in inc/submenus.php
-// (this file previously had a second, independently-broken implementation
-// of the same feature — removed to avoid two competing copies).
+// Moving Themes from Appearance to Settings is handled in inc/submenus.php (a second, independently-broken copy of this feature lived here — removed).
 
 // render templates page
 function chance_render_templates_page()

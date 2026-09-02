@@ -1,10 +1,4 @@
-// Kept byte-identical to chance-ollie's src/index.scss on purpose — same
-// selector, same accessibility-critical utility, defined in both submodules
-// (theme frontend + this plugin's editor). Previously the two disagreed (the
-// theme's used only the legacy `clip: rect(0, 0, 0, 0)`, missing this file's
-// `clip-path: inset(50%)` fallback), so which rule won depended on
-// stylesheet load order. Un-ambiguated by making both identical instead of
-// picking a side — GLOBAL_REVIEW.md §3a#5. If you change one, change the other.
+// Kept byte-identical to chance-ollie's src/index.scss on purpose (defined in both submodules) — the two used to disagree (theme lacked this file's clip-path fallback), causing load-order-dependent bugs; fixed by making both identical — GLOBAL_REVIEW.md §3a#5. If you change one, change the other.
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -18,9 +12,7 @@
 	border: 0;
 }
 
-/**
- * Block Editor Indicators for Screen Reader Only Blocks
- */
+/** Block Editor Indicators for Screen Reader Only Blocks */
 
 .wp-block-sr-only-wrapper {
 	position: relative;

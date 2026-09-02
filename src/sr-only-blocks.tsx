@@ -1,8 +1,5 @@
 /**
- * Screen Reader Only Block Editor Control
- *
- * Adds a toggle control to heading and paragraph blocks
- * Shows visual indicator when SR-Only is enabled
+ * Screen Reader Only Block Editor Control — toggle on heading/paragraph blocks, with a visual indicator when SR-Only is enabled.
  */
 
 // @ts-ignore

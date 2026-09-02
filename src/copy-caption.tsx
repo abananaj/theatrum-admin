@@ -1,8 +1,5 @@
 /**
- * Caption Copy-On-Click Block Editor Control
- *
- * Adds a toggle control to image-caption blocks that lets visitors click a
- * caption on the frontend to copy its text.
+ * Caption Copy-On-Click Block Editor Control — toggle lets visitors click a caption on the frontend to copy its text.
  */
 
 import { createElement as el, Fragment } from "@wordpress/element"

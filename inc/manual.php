@@ -2,16 +2,8 @@
 
 /**
  * Site Manual — in-admin documentation for Chance Theater staff.
- *
- * Topics are HTML-mode PHP partials in docs/topics/, declared in
- * docs/manifest.php. Adding a topic is one manifest entry plus one file;
- * nothing in here changes. A declared topic with no file on disk renders a
- * "not written yet" notice, so the whole outline is browsable from day one.
- *
- * PHP and plain CSS only, on purpose: dist/ is gitignored and its deploy is
- * unreliable, so the manual must never depend on the build step. Partials are
- * written in HTML mode rather than parsed from markdown so they can emit real
- * admin_url() deep links into the screen being described.
+ * Topics are HTML-mode PHP partials in docs/topics/, declared in docs/manifest.php; a declared topic with no file renders a "not written yet" notice.
+ * PHP and plain CSS only on purpose — dist/'s deploy is unreliable so the manual must never depend on the build step; HTML mode (not markdown) lets partials emit real admin_url() deep links.
  */
 
 if (! defined('ABSPATH')) {
@@ -40,10 +32,7 @@ function chance_manual_manifest()
 }
 
 /**
- * Look a topic up by slug.
- *
- * This is the only route from request input to a file path — the manifest is
- * the allowlist, so an undeclared slug can never reach an include().
+ * Look a topic up by slug. Only route from request input to a file path — the manifest is the allowlist, so an undeclared slug can never reach an include().
  *
  * @param string $slug Topic slug.
  * @return array|null Topic data with slug/group added, or null if undeclared.
@@ -118,12 +107,8 @@ function chance_manual_is_written($topic)
 
 /**
  * Register the top-level menu item.
- *
- * Position 3.5 sits between Dashboard (2) and the first separator (4), so the
- * manual is the first thing under Dashboard. The position is a float on
- * purpose: integer positions collide silently, and inc/submenus.php rewrites
- * integer keys 5/10/20/30/31/32 wholesale at priority 999. Registering at
- * priority 9 means this menu already exists when that code runs.
+ * Position 3.5 (float, on purpose — integer positions collide silently) sits between Dashboard (2) and the first separator (4).
+ * inc/submenus.php rewrites integer keys 5/10/20/30/31/32 wholesale at priority 999; registering here at priority 9 means this menu already exists when that runs.
  */
 function chance_manual_menu()
 {
@@ -164,9 +149,7 @@ function chance_manual_enqueue($hook_suffix)
 add_action('admin_enqueue_scripts', 'chance_manual_enqueue');
 
 /**
- * Screenshot helper for topic partials.
- *
- * Keeps alt text mandatory and markup consistent. Images live in docs/images/.
+ * Screenshot helper for topic partials — keeps alt text mandatory and markup consistent. Images live in docs/images/.
  *
  * @param string $file    Filename inside docs/images/.
  * @param string $alt     Alt text describing the screenshot.
@@ -191,10 +174,7 @@ function chance_manual_img($file, $alt, $caption = '')
 }
 
 /**
- * How many published patterns exist, and how many of those are shared.
- *
- * Used by the patterns topic so its warning cannot go stale as the library
- * grows. Cached for a day — this is a docs page, not a dashboard.
+ * How many published patterns exist, and how many are shared — keeps the patterns topic's warning from going stale. Cached for a day (docs page, not a dashboard).
  *
  * @return array {
  *   @type int $total  Published patterns.
@@ -238,11 +218,7 @@ function chance_manual_pattern_counts()
 }
 
 /**
- * A button linking into the admin screen a topic is describing.
- *
- * Always build these from admin_url() rather than hardcoding paths — the
- * Patterns screen has already moved once, from a custom page to the native
- * wp_block list.
+ * A button linking into the admin screen a topic is describing. Always build from admin_url(), not hardcoded paths — the Patterns screen has already moved once.
  *
  * @param string $admin_path Path relative to wp-admin, e.g. 'edit.php?post_type=production'.
  * @param string $label      Button text.
@@ -447,9 +423,7 @@ function chance_render_manual_page()
     echo '<h1 class="wp-heading-inline">' . esc_html__('Site Manual', 'theatrum-admin') . '</h1>';
   }
 
-  // Core's common.js relocates admin notices to this marker. Without it, it
-  // falls back to the first heading it finds — which would be a group heading
-  // inside the sidebar, dropping unrelated plugin notices into the nav.
+  // Core's common.js relocates admin notices to this marker — without it, it falls back to the first heading, dropping notices into the sidebar nav.
   echo '<hr class="wp-header-end">';
 
   echo '<div class="ct-manual">';

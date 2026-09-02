@@ -1,12 +1,5 @@
 /**
- * <hgroup> Toggle for the Group Block
- *
- * WordPress core hardcodes the Group block's "HTML element" dropdown
- * options (div/header/main/section/article/aside/footer) directly in its
- * own edit component, with no filter exposed to extend that list. This adds
- * a parallel "Mark as <hgroup>" toggle to the same Advanced panel that
- * writes straight to the existing `tagName` attribute, and disables the
- * native select while active so the two controls can't fight over the value.
+ * <hgroup> Toggle for the Group Block — core hardcodes the "HTML element" dropdown options with no filter to extend it, so this adds a parallel toggle in the same Advanced panel that writes straight to `tagName`, disabling the native select while active so the two controls can't fight over the value.
  */
 import { createElement as el, Fragment, useEffect, useRef } from "@wordpress/element"
 import { addFilter } from "@wordpress/hooks"
@@ -30,8 +23,7 @@ addFilter("editor.BlockEdit", "chance/add-hgroup-toggle", (BlockEdit: any) => {
 		const { tagName = DEFAULT_TAG_NAME } = attributes
 		const isHgroup = tagName === "hgroup"
 
-		// Remember the last non-hgroup tag so unchecking restores it
-		// instead of always falling back to <div>.
+		// Remember the last non-hgroup tag so unchecking restores it instead of always falling back to <div>.
 		const previousTagName = useRef(isHgroup ? DEFAULT_TAG_NAME : tagName)
 		useEffect(() => {
 			if (tagName !== "hgroup") {
@@ -39,8 +31,7 @@ addFilter("editor.BlockEdit", "chance/add-hgroup-toggle", (BlockEdit: any) => {
 			}
 		}, [tagName])
 
-		// The native "HTML element" select has no prop we can pass to
-		// disable it from here, so reach into the DOM once it's mounted.
+		// The native "HTML element" select has no prop to disable it from here, so reach into the DOM once it's mounted.
 		useEffect(() => {
 			if (!isSelected) return
 

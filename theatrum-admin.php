@@ -167,8 +167,7 @@ function chance_enqueue_copy_caption_editor_script()
 add_action('enqueue_block_editor_assets', 'chance_enqueue_copy_caption_editor_script');
 
 /**
- * Enqueue Caption Copy-On-Click frontend behavior (click handling + styles,
- * bundled together — the SCSS self-injects a <style> tag when this script runs)
+ * Enqueue Caption Copy-On-Click frontend behavior (click handling + styles; SCSS self-injects a <style> tag when this script runs)
  */
 function chance_enqueue_copy_caption_frontend_assets()
 {

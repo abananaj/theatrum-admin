@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Screen Reader Only Block Support
- * 
- * Adds a "Screen Reader Only" toggle to heading and paragraph blocks
- * Applies sr-only class when the option is enabled
+ * Screen Reader Only Block Support — adds a toggle to heading/paragraph blocks that applies an sr-only class when enabled.
  */
 
 if (!defined('ABSPATH')) {
@@ -13,8 +10,6 @@ if (!defined('ABSPATH')) {
 
 /**
  * Register srOnly attribute on core heading and paragraph blocks
- * 
- * This hook modifies block settings to include the srOnly attribute
  */
 function chance_register_sr_only_attribute($settings, $name)
 {
@@ -52,8 +47,6 @@ add_filter('register_block_type_args', 'chance_register_sr_only_attribute', 10, 
 
 /**
  * Apply sr-only class to block wrapper when srOnly attribute is true
- * 
- * This runs during block rendering and adds the sr-only class to the outer wrapper
  */
 function chance_apply_sr_only_class($block_content, $block)
 {
@@ -69,12 +62,7 @@ function chance_apply_sr_only_class($block_content, $block)
     return $block_content;
   }
 
-  // Add sr-only class to the block's wrapper
-  // Find the opening tag and add the class
-  // Attributes are matched as repeated name/name=value pairs (value quoted or
-  // bare) rather than [^>]* up to the first literal `>` — a quoted attribute
-  // value containing `>` (e.g. an aria-label) would otherwise truncate the
-  // match and corrupt the tag.
+  // Attributes matched as repeated name/name=value pairs, not [^>]* up to the first `>` — a quoted value containing `>` (e.g. an aria-label) would otherwise truncate the match and corrupt the tag.
   $block_content = preg_replace_callback(
     '/<(h[1-6]|p)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*>/',
     function ($matches) {

@@ -1,12 +1,7 @@
 <?php
 
 /**
- * Custom Block Position Support
- *
- * For any block — core or custom — that declares `supports.position.sticky`,
- * replaces WordPress core's sticky-only Position panel with one that offers
- * Relative, Absolute, Fixed, and Sticky, plus independent Top/Right/Bottom/Left
- * offsets.
+ * Custom Block Position Support — for any block declaring `supports.position.sticky`, replaces core's sticky-only Position panel with Relative/Absolute/Fixed/Sticky plus independent Top/Right/Bottom/Left offsets.
  */
 
 if (!defined('ABSPATH')) {
@@ -14,8 +9,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Register position attributes on any block that supports position sticky,
- * and disable core's native position support so its panel doesn't also render.
+ * Register position attributes on any block that supports position sticky, and disable core's native position support so its panel doesn't also render.
  */
 function chance_register_position_attributes($settings, $name)
 {
@@ -47,17 +41,8 @@ function chance_register_position_attributes($settings, $name)
 add_filter('register_block_type_args', 'chance_register_position_attributes', 10, 2);
 
 /**
- * Mirror chance_register_position_attributes() on the client — but as inline
- * JS attached directly to the 'wp-blocks' handle rather than a normally
- * enqueued script.
- *
- * A regular wp_enqueue_script() has no dependency relationship forcing it to
- * run before any given block's own registerBlockType() call — including
- * core's (registered inside wp-block-library) or another plugin's. If our
- * filter registers after a block has already called registerBlockType(), it
- * never sees that block and the Position panel silently never appears for
- * it. Every block script depends on 'wp-blocks', so code attached here is
- * guaranteed to run before all of them.
+ * Mirror chance_register_position_attributes() on the client, as inline JS attached to the 'wp-blocks' handle rather than a normally enqueued script.
+ * A regular wp_enqueue_script() has no dependency edge forcing it to run before a block's own registerBlockType() — if our filter registers late, the Position panel silently never appears for that block. Every block script depends on 'wp-blocks', so code attached here always runs first.
  */
 function chance_inline_position_attribute_filter()
 {
@@ -92,10 +77,7 @@ function chance_is_valid_css_length($value)
 }
 
 /**
- * Apply the position styles to the block wrapper on render.
- *
- * Gated on the `positionType` attribute value alone (not a block name list) —
- * only blocks chance_register_position_attributes() opted in ever have it set.
+ * Apply the position styles to the block wrapper on render. Gated on the `positionType` attribute alone (not a block name list) — only opted-in blocks ever have it set.
  */
 function chance_apply_position_style($block_content, $block)
 {
@@ -121,18 +103,10 @@ function chance_apply_position_style($block_content, $block)
     }
   }
 
-  // `is-position-{type}` mirrors the class core's native position support
-  // would have added. Themes (this one included — see .is-position-sticky in
-  // header.scss) hook their own offset overrides off that class, so without
-  // it a sticky block sticks at the literal positionTop value (usually 0px)
-  // and ends up underneath the fixed header instead of below it.
+  // `is-position-{type}` mirrors the class core's native position support would add — themes (see .is-position-sticky in header.scss) hook offset overrides off it; without it a sticky block sticks at the literal positionTop (usually 0px), ending up underneath the fixed header instead of below it.
   $position_class = 'is-position-' . $type;
 
-  // Merge the position CSS/class into the wrapper's existing style/class
-  // attributes (or add them). Attributes are matched as repeated name/
-  // name=value pairs (value quoted or bare) rather than [^>]* up to the
-  // first literal `>` — a quoted attribute value containing `>` would
-  // otherwise truncate the match and corrupt the tag.
+  // Merge the position CSS/class into the wrapper's existing style/class attributes (or add them). Attributes matched as repeated name/name=value pairs, not [^>]* up to the first `>` — a quoted value containing `>` would otherwise truncate the match and corrupt the tag.
   $block_content = preg_replace_callback(
     '/(<[a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*(>)/',
     function ($matches) use ($css, $position_class) {

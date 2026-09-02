@@ -1,11 +1,7 @@
 <?php
 
 /**
- * Caption Copy-On-Click Block Support
- *
- * Adds an "Allow caption copy on click?" toggle to image-caption blocks.
- * Applies a has-caption-copy class to rendered figcaptions when enabled;
- * the click-to-copy behavior itself lives in assets/copy-caption.js.
+ * Caption Copy-On-Click Block Support — toggle adds has-caption-copy class to rendered figcaptions; click behavior lives in assets/copy-caption.js.
  */
 
 if (!defined('ABSPATH')) {
@@ -41,13 +37,8 @@ function chance_register_copy_caption_attribute($settings, $name)
 add_filter('register_block_type_args', 'chance_register_copy_caption_attribute', 10, 2);
 
 /**
- * Apply has-caption-copy class to every figcaption rendered by the block
- * when allowCaptionCopy is true.
- *
- * No replacement-count limit (unlike sr-only's single-tag match): a
- * theatrum/meta-gallery block can render several per-item figcaptions plus
- * its own gallery-level figcaption in one render_block call, and all of
- * them should pick up the class together.
+ * Apply has-caption-copy class to every figcaption rendered by the block when allowCaptionCopy is true.
+ * No replacement-count limit (unlike sr-only's single-tag match) — a meta-gallery block can render several figcaptions per render_block call, and all should pick up the class.
  */
 function chance_apply_copy_caption_class($block_content, $block)
 {
@@ -55,10 +46,7 @@ function chance_apply_copy_caption_class($block_content, $block)
     return $block_content;
   }
 
-  // Attributes are matched as repeated name/name=value pairs (value quoted
-  // or bare) rather than [^>]* up to the first literal `>` — a quoted
-  // attribute value containing `>` would otherwise truncate the match and
-  // corrupt the tag.
+  // Attributes matched as repeated name/name=value pairs, not [^>]* up to the first `>` — a quoted value containing `>` would otherwise truncate the match and corrupt the tag.
   $block_content = preg_replace_callback(
     '/<figcaption((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*>/',
     function ($matches) {

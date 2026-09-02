@@ -1,9 +1,5 @@
 /**
- * Caption Copy-On-Click — frontend behavior
- *
- * Delegated on document so it works for captions added dynamically (e.g.
- * sliders, AJAX-loaded content). Styling (hover hint + "Copied!" bubble)
- * lives in scss/copy-caption.scss, bundled into this same entry.
+ * Caption Copy-On-Click — frontend behavior. Delegated on document so it works for dynamically-added captions (sliders, AJAX). Styling lives in scss/copy-caption.scss, bundled into this same entry.
  */
 import "./scss/copy-caption.scss"
 

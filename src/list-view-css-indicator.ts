@@ -1,17 +1,6 @@
 /**
- * List View Custom CSS Indicator
- *
- * Flags blocks that have "Additional CSS" set (core's built-in per-block
- * custom CSS support, stored at attributes.style.css) with a small "CSS"
- * badge next to their title in the editor List View.
- *
- * The List View block tree has no public filter hook — unlike
- * editor.BlockListBlock for the canvas, core renders it from a private
- * component tree with no addFilter extension point. Every row's link does
- * reliably carry `href="#block-<clientId>"` though, so this targets rows
- * with plain CSS attribute selectors injected via a <style> tag instead of
- * DOM injection, which keeps it immune to React re-render wipe-outs and
- * working regardless of whether the List View panel is open yet.
+ * List View Custom CSS Indicator — flags blocks with "Additional CSS" set (attributes.style.css) with a "CSS" badge next to their title in the editor List View.
+ * The List View block tree has no public filter hook (unlike editor.BlockListBlock), but every row reliably carries `href="#block-<clientId>"`, so this targets rows with CSS attribute selectors injected via a <style> tag rather than DOM injection — immune to React re-render wipe-outs and works whether or not the List View panel is open yet.
  */
 import { select, subscribe } from "@wordpress/data"
 
@@ -63,17 +52,12 @@ function updateIndicators(): void {
 		return
 	}
 
-	// `::after` only attaches to the last selector in a comma-joined string, not
-	// to each one — so build it into every selector individually, or every row
-	// but the last ends up styling its real title element instead of a pseudo.
+	// `::after` only attaches to the last selector in a comma-joined string — build it into every selector individually, or every row but the last styles its real title element instead of a pseudo.
 	const badgeSelectors = clientIds
 		.map((clientId) => `a[href="#block-${clientId}"] .block-editor-list-view-block-select-button__label-wrapper::after`)
 		.join(", ")
 
-	// Same pill shape/family as core's own List View badges (e.g. the anchor
-	// badge — components-badge), but using the site's admin theme color instead
-	// of their gray, so a custom-CSS block reads as distinct from an anchored
-	// one at a glance.
+	// Same pill shape/family as core's List View badges (e.g. the anchor badge), but the admin theme color instead of gray, so a custom-CSS block reads as distinct at a glance.
 	styleTag.textContent = `
 		${badgeSelectors} {
 			content: "CSS";

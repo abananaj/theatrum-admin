@@ -1,8 +1,5 @@
 /**
- * Custom Rich Text Formats
- *
- * Adds extra inline formatting options to the RichText "more" toolbar
- * dropdown (the chevron shown when editing text in the block editor).
+ * Custom Rich Text Formats — adds extra inline formatting options to the RichText "more" toolbar dropdown.
  */
 import { createElement as el } from "@wordpress/element"
 // @ts-ignore

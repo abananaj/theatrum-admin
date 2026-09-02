@@ -1,14 +1,6 @@
 /**
- * Custom Block Position Control
- *
- * For any block — core or custom — that declares `supports.position.sticky`,
- * replaces WordPress core's sticky-only Position panel (Sticky/Fixed + a
- * single Top offset) with one that offers Relative, Absolute, Fixed, and
- * Sticky, plus independent Top/Right/Bottom/Left offsets laid out in the
- * same plus-shaped grid as core's BorderBoxControl (top centered, left/right
- * side by side, bottom centered) — built from plain UnitControl fields since
- * BorderBoxControl itself expects {color,style,width} border values, not
- * plain offset lengths.
+ * Custom Block Position Control — for any block declaring `supports.position.sticky`, replaces core's sticky-only Position panel (Sticky/Fixed + one Top offset) with Relative/Absolute/Fixed/Sticky plus independent Top/Right/Bottom/Left offsets.
+ * Laid out in the same plus-shaped grid as core's BorderBoxControl, but built from plain UnitControl fields since BorderBoxControl expects {color,style,width} border values, not plain offset lengths.
  */
 import { createElement as el, Fragment } from "@wordpress/element"
 import { addFilter } from "@wordpress/hooks"
@@ -28,12 +20,7 @@ const POSITION_TYPE_OPTIONS = [
 ]
 
 /**
- * A block is eligible for our Position panel once it carries the
- * `positionType` attribute. That attribute is injected by an inline script
- * attached to the 'wp-blocks' handle (see chance_inline_position_attribute_filter()
- * in inc/position-controls.php) rather than here, so it's guaranteed to run
- * before every block's own registerBlockType() call — a normally enqueued
- * script has no dependency edge forcing that order.
+ * A block is eligible for our Position panel once it carries the `positionType` attribute, injected by an inline script on the 'wp-blocks' handle (see chance_inline_position_attribute_filter() in inc/position-controls.php) so it always runs before registerBlockType() — a normally enqueued script has no dependency edge forcing that order.
  */
 function isPositionEligible(name: string): boolean {
 	const blockType = getBlockType(name)
@@ -112,8 +99,7 @@ addFilter("editor.BlockEdit", "chance/add-position-control", (BlockEdit: any) =>
 })
 
 /**
- * Reflect the chosen position styles on the block's outer wrapper in the
- * editor canvas, so the live preview matches the frontend render.
+ * Reflect the chosen position styles on the block's outer wrapper in the editor canvas, so the live preview matches the frontend render.
  */
 addFilter("editor.BlockListBlock", "chance/add-position-preview", (BlockListBlock: any) => {
 	return (props: any) => {

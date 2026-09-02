@@ -313,10 +313,7 @@ function ct_render_tagged_posts_page()
     'order'          => 'ASC',
   ]);
 
-  // Drop posts the current user isn't allowed to see — get_posts() above has
-  // no capability gate, so without this a Contributor (who only needs
-  // edit_posts to reach this page) could see other authors' private/draft
-  // post titles and statuses.
+  // Drop posts the user can't see — get_posts() above has no capability gate, so a Contributor (edit_posts is enough to reach this page) could otherwise see other authors' private/draft posts.
   $posts = array_values(array_filter($posts, function ($post) {
     return current_user_can('read_post', $post->ID);
   }));
