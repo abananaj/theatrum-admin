@@ -4,6 +4,10 @@ Claude Code agent workflows specific to the **theatrum-admin** plugin. For site-
 workflows, see [wp_root AGENTS.md](../../../AGENTS.md). For plugin architecture, see
 [CLAUDE.md](CLAUDE.md).
 
+## Code Comments
+
+One line, essential info only. No multi-line/wrapped comment blocks, no restating what the code does — if a comment needs more than one line, cut it down or drop it.
+
 ## Working in this plugin
 
 This plugin has no automated `CHANGELOG.md` — the root `/changelog` skill derives its entries
