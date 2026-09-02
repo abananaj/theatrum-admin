@@ -28,10 +28,22 @@ if (! defined('ABSPATH')) {
 </p>
 
 <p>
-  That link is the <strong>Related Page</strong> column on the Seasons list. Use
-  <strong>Quick Edit</strong> on the row to set or change it. The same mechanism exists on
-  Series, Sessions, Programs, Event Types and Support Levels, though only Season actually
-  redirects.
+  That link is the <strong>Related Page</strong> field, and there are three places to set it: on the
+  <strong>Add New Season</strong> form when you first create the season, on the season's own edit
+  screen afterwards, and — quickest for an existing season — via <strong>Quick Edit</strong> on its
+  row in the Seasons list, where a <strong>Related Page</strong> column also shows what is currently
+  linked.
+</p>
+
+<p>
+  The picker has an <strong>Add New</strong> button, so the page can be created from there rather
+  than made first. It opens a full editor in a window on top; save or publish, close it, and the new
+  page drops into the field.
+</p>
+
+<p>
+  The same Related Page mechanism exists on Series, Sessions, Programs, Event Types and Support
+  Levels, though only Season actually redirects.
 </p>
 
 <div class="notice notice-info inline ct-manual__warning">
@@ -73,7 +85,7 @@ if (! defined('ABSPATH')) {
 <ul>
   <li><strong>Hide Season?</strong> — takes the season out of the lists without deleting anything.</li>
   <li><strong>Season Press Release</strong> — a file attached to the season.</li>
-  <li><strong>Resident Playwright</strong>, <strong>Season Producers</strong>, <strong>Associate Season Producers</strong>, <strong>OTR Sponsors</strong> — each points at Artist or Supporter records, so those must exist first.</li>
+  <li><strong>Resident Playwright</strong>, <strong>Season Producers</strong>, <strong>Associate Season Producers</strong>, <strong>OTR Sponsors</strong> — each points at Artist or Supporter records. Each has an <strong>Add New</strong> button, so a name that is not in the system yet can be created without leaving the season.</li>
 </ul>
 
 <h2>Moving the site on to a new season</h2>

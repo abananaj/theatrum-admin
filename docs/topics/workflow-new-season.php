@@ -18,9 +18,10 @@ if (! defined('ABSPATH')) {
 
 <div class="notice notice-info inline ct-manual__warning">
   <p>
-    <strong>Before you start, know which artists are new.</strong> Nothing in the production editor
-    can create an artist for you — see step 4. If you can list the new names up front and add them
-    first, the rest of this runs without interruption.
+    <strong>Before you start, know which artists are new.</strong> The credits panel in step 4
+    cannot create an artist for you — it is the one place in this whole job with no “add new”
+    button. If you can list the new names up front and add them first, the rest runs without
+    interruption.
   </p>
 </div>
 
@@ -29,33 +30,54 @@ if (! defined('ABSPATH')) {
 <?php chance_manual_go('edit-tags.php?taxonomy=season&post_type=production', 'Open the Seasons list'); ?>
 
 <p>
-  Add the season on the left-hand form. The fields on a season — <strong>Hide Season?</strong>,
-  <strong>Season Press Release</strong>, <strong>Resident Playwright</strong>,
-  <strong>Season Producers</strong>, <strong>Associate Season Producers</strong> and
-  <strong>OTR Sponsors</strong> — sit on the term itself, so you can fill them in now or come back.
-  The producer and sponsor fields point at existing Artist and Supporter records, so those need to
-  exist first.
+  Click <strong>Add New Season</strong> at the top of that page. The form holds everything a season
+  needs, so this is a single pass rather than a create-then-come-back:
 </p>
 
-<div class="notice notice-warning inline ct-manual__warning">
+<ul>
+  <li><strong>Name</strong> — the year. Slug and Description can be left to look after themselves.</li>
+  <li><strong>Hide Season?</strong> — leave unticked for a season you are announcing.</li>
+  <li><strong>Season Press Release</strong> — see <?php chance_manual_see('workflow-press-release-season'); ?> if you have one.</li>
+  <li>
+    <strong>Resident Playwright</strong>, <strong>Season Producers</strong>,
+    <strong>Associate Season Producers</strong> and <strong>OTR Sponsors</strong> — Artist and
+    Supporter records.
+  </li>
+  <li><strong>Related Page</strong> — the season's page on the site. Step 2 explains what it does.</li>
+</ul>
+
+<p>
+  Every one of those pickers has an <strong>Add New</strong> button beside it, so a playwright,
+  sponsor or page that does not exist yet can be made from here without abandoning the form.
+</p>
+
+<div class="notice notice-info inline ct-manual__warning">
   <p>
-    <strong>The Related Page field is not on this form.</strong> It only appears in
-    <strong>Quick Edit</strong> on the Seasons list, which is step 2. Do not go looking for it while
-    creating the season — it is not there.
+    <strong>Add New opens a full editor in a window on top of the form.</strong> It is the real
+    thing — publish or save a draft in there, close it, and what you made drops into the field
+    behind it. If you change your mind, close the window without saving and nothing is kept.
   </p>
 </div>
 
 <h2>2. Give the season a page</h2>
 
 <p>
-  Build the season's page as an ordinary Page, then go back to the Seasons list, hover the season's
-  row, and click <strong>Quick Edit</strong>. Set <strong>Related Page</strong> to the page you just
-  made. That is what sends anyone visiting the season's own address to a real page.
+  A season is a label, not a page. But visitors expect <em>/2026-season</em> to show them something,
+  so <strong>Related Page</strong> points the season at a real page, and anyone landing on the
+  season's own address is sent straight there.
 </p>
 
 <p>
-  You do not add shows to that page by hand — it finds them itself once the shows are filed under
-  the season. <?php chance_manual_see('seasons-and-series', 'How season pages are assembled'); ?>.
+  Either pick an existing page, or use <strong>Add New</strong> to build it now. Whichever you do,
+  remember what a season page is: an ordinary Page carrying a query that pulls in every production
+  filed under that season. <strong>You do not list the shows on it by hand</strong> — step 3 files
+  them, and the page finds them.
+  <?php chance_manual_see('seasons-and-series', 'How season pages are assembled'); ?>.
+</p>
+
+<p>
+  To change the link later you do not have to reopen the season: the Seasons list has a
+  <strong>Related Page</strong> column, and <strong>Quick Edit</strong> on the row sets it.
 </p>
 
 <h2>3. Add the productions</h2>
@@ -82,10 +104,11 @@ if (! defined('ABSPATH')) {
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    <strong>The credits panel only finds artists who already exist.</strong> There is no “add new”
-    button in it. If someone is not in the system, open <strong>Artists</strong> in a second browser
-    tab, create and save them there, then come back and search again. The same is true of the
-    Producers tab, which searches Supporters rather than Artists.
+    <strong>The credits panel only finds artists who already exist.</strong> Unlike the season form
+    in step 1, there is no “add new” button here. If someone is not in the system, open
+    <strong>Artists</strong> in a second browser tab, create and save them there, then come back and
+    search again. The same is true of the Producers tab, which searches Supporters rather than
+    Artists.
   </p>
 </div>
 
