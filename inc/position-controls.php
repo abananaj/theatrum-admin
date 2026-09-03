@@ -102,46 +102,20 @@ function chance_apply_position_style($block_content, $block) {
   // `is-position-{type}` mirrors the class core's native position support would add — themes (see .is-position-sticky in header.scss) hook offset overrides off it; without it a sticky block sticks at the literal positionTop (usually 0px), ending up underneath the fixed header instead of below it.
   $position_class = 'is-position-' . $type;
 
-  // Merge the position CSS/class into the wrapper's existing style/class attributes (or add them). Attributes matched as repeated name/name=value pairs, not [^>]* up to the first `>` — a quoted value containing `>` would otherwise truncate the match and corrupt the tag.
-$block_content = preg_replace_callback(
-    '/(<[a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*(>)/',
-    function ($matches) use ($css, $position_class) {
-      $tag        = $matches[1];
-      $attributes = $matches[2] ?? '';
-      $close      = $matches[3];
+  // Merge the position CSS/class into the wrapper's existing style/class attributes (or add them).
+  // WP_HTML_Tag_Processor is a real HTML parser, so it handles what the previous regex had to guard
+  // by hand: a quoted value containing `>`, single vs double quotes, and existing style/class values.
+  $processor = new WP_HTML_Tag_Processor($block_content);
 
-      if (preg_match('/style=(["\'])(.*?)\1/s', $attributes, $style_match)) {
-        $quote          = $style_match[1];
-        $existing_style = rtrim(trim($style_match[2]), ';');
-        $new_style      = ('' !== $existing_style ? $existing_style . '; ' : '') . esc_attr($css);
-        $attributes     = str_replace(
-            'style=' . $quote . $style_match[2] . $quote,
-            'style=' . $quote . $new_style . $quote,
-            $attributes
-        );
-      } else {
-        $attributes .= ' style="' . esc_attr($css) . '"';
-      }
+  if ($processor->next_tag()) {
+    $existing_style = $processor->get_attribute('style');
+    $existing_style = is_string($existing_style) ? rtrim(trim($existing_style), ';') : '';
 
-      if (preg_match('/class=(["\'])(.*?)\1/s', $attributes, $class_match)) {
-        $quote          = $class_match[1];
-        $existing_class = trim($class_match[2]);
-        $new_class      = ('' !== $existing_class ? $existing_class . ' ' : '') . esc_attr($position_class);
-        $attributes     = str_replace(
-            'class=' . $quote . $class_match[2] . $quote,
-            'class=' . $quote . $new_class . $quote,
-            $attributes
-        );
-      } else {
-        $attributes .= ' class="' . esc_attr($position_class) . '"';
-      }
+    // set_attribute() escapes the value itself, so no esc_attr() here.
+    $processor->set_attribute('style', ('' !== $existing_style ? $existing_style . '; ' : '') . $css);
+    $processor->add_class($position_class);
+  }
 
-      return $tag . $attributes . $close;
-    },
-    $block_content,
-    1
-);
-
-  return $block_content;
+  return $processor->get_updated_html();
 }
 add_filter('render_block', 'chance_apply_position_style', 10, 2);

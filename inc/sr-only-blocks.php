@@ -60,34 +60,17 @@ function chance_apply_sr_only_class($block_content, $block) {
     return $block_content;
   }
 
-  // Attributes matched as repeated name/name=value pairs, not [^>]* up to the first `>` — a quoted value containing `>` (e.g. an aria-label) would otherwise truncate the match and corrupt the tag.
-$block_content = preg_replace_callback(
-    '/<(h[1-6]|p)((?:\s+[^\s"\'>]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?)*)\s*>/',
-    function ($matches) {
-      $tag        = $matches[1];
-      $attributes = $matches[2] ?? '';
+  // WP_HTML_Tag_Processor is a real HTML parser, so it handles the cases the previous regex had to
+  // guard by hand: quoted values containing `>`, single vs double quotes, and an existing class list.
+  $processor = new WP_HTML_Tag_Processor($block_content);
 
-      // Check if class attribute exists
-      if (preg_match('/class=(["\'])([^"\']*)\1/', $attributes, $class_match)) {
-        $quote            = $class_match[1];
-        $existing_classes = $class_match[2];
-        $new_classes      = $existing_classes . ' sr-only';
-        $attributes       = str_replace(
-            'class=' . $quote . $existing_classes . $quote,
-            'class=' . $quote . $new_classes . $quote,
-            $attributes
-        );
-      } else {
-        // Add class attribute
-        $attributes = $attributes . ' class="sr-only"';
-      }
+  while ($processor->next_tag()) {
+    if (in_array($processor->get_tag(), ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P'], true)) {
+      $processor->add_class('sr-only');
+      break;
+    }
+  }
 
-      return '<' . $tag . $attributes . '>';
-    },
-    $block_content,
-    1
-);
-
-  return $block_content;
+  return $processor->get_updated_html();
 }
 add_filter('render_block', 'chance_apply_sr_only_class', 10, 2);

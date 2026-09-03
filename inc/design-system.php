@@ -8,8 +8,8 @@ if ( ! defined('ABSPATH')) {
 function chance_add_templates_submenu_page() {
 add_submenu_page(
     'themes.php', // parent slug (Appearance menu)
-    'Templates', // page title
-    'Templates', // menu title
+    __('Templates', 'theatrum-admin'), // page title
+    __('Templates', 'theatrum-admin'), // menu title
     'manage_options', // capability
     'chance-templates', // menu slug
     'chance_render_templates_page' // callback function
@@ -23,8 +23,8 @@ function chance_add_patterns_submenu_page() {
   // Visible menu item -> native list table with full Quick Edit / Bulk Edit.
 add_submenu_page(
     'themes.php',                 // parent slug (Appearance menu)
-    'Patterns',                   // page title
-    'Patterns',                   // menu title
+    __('Patterns', 'theatrum-admin'),                   // page title
+    __('Patterns', 'theatrum-admin'),                   // menu title
     'edit_posts',                 // capability (matches the native wp_block list)
     'edit.php?post_type=wp_block' // link directly to the native list table
 );
@@ -32,8 +32,8 @@ add_submenu_page(
   // Archived grouped overview — hidden (parent null), still reachable by URL.
 add_submenu_page(
     null,                          // hidden: no menu item rendered
-    'Patterns (Grouped Overview)', // page title
-    'Patterns (Grouped Overview)', // menu title
+    __('Patterns (Grouped Overview)', 'theatrum-admin'), // page title
+    __('Patterns (Grouped Overview)', 'theatrum-admin'), // menu title
     'manage_options',              // capability
     'chance-patterns',             // menu slug (unchanged: existing links still work)
     'chance_render_patterns_page'  // callback function
@@ -45,8 +45,8 @@ add_action('admin_menu', 'chance_add_patterns_submenu_page');
 function chance_add_template_parts_submenu_page() {
 add_submenu_page(
     'themes.php', // parent slug (Appearance menu)
-    'Parts', // page title
-    'Parts', // menu title
+    __('Parts', 'theatrum-admin'), // page title
+    __('Parts', 'theatrum-admin'), // menu title
     'manage_options', // capability
     'chance-parts', // menu slug
     'chance_render_template_parts_page' // callback function

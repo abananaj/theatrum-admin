@@ -332,6 +332,7 @@ $posts = get_posts(
     'post_type'      => $tagged_post_types,
     'posts_per_page' => -1,
     'post_status'    => ['publish', 'draft', 'pending', 'private'],
+    // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, builds one admin submenu.
     'tax_query'      => [[
       'taxonomy' => 'post_tag',
       'field'    => 'slug',

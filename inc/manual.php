@@ -197,7 +197,9 @@ $unsynced = new WP_Query(
     array_merge(
         $args,
         [
+        // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, one lookup per site-manual screen render.
         'meta_key'   => 'wp_pattern_sync_status',
+        // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, one lookup per site-manual screen render.
         'meta_value' => 'unsynced',
         ]
     )

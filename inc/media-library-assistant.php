@@ -68,6 +68,7 @@ function ct_mla_exclude_icon_tax_query($tax_query) {
 add_filter(
     'mla_list_table_query_final_terms',
     function ($request) {
+    // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, runs on Media Library screens.
     $request['tax_query'] = ct_mla_exclude_icon_tax_query($request['tax_query'] ?? []);
     return $request;
     }
@@ -83,6 +84,7 @@ add_filter(
       return $query;
     }
 
+    // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, runs on Media Library screens.
     $query['tax_query'] = ct_mla_exclude_icon_tax_query($query['tax_query'] ?? []);
     return $query;
     }
@@ -115,6 +117,7 @@ add_filter(
       return $args;
     }
 
+    // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, runs on Media Library screens.
     $args['tax_query'] = ct_mla_exclude_icon_tax_query($args['tax_query'] ?? []);
     return $args;
     },
