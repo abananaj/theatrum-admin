@@ -4,6 +4,8 @@
  * Customize admin sidebar submenus for custom post types.
  */
 
+// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- $menu/$submenu ARE the admin menu API; reordering and extending it means writing to them.
+
 if (! defined('ABSPATH')) {
   exit;
 }

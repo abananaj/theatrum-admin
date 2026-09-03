@@ -21,6 +21,7 @@ add_action('admin_menu', function () {
   global $submenu;
 
   // "Categories" link alongside the existing Appearance > Patterns submenu
+  // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- $submenu IS the admin menu API.
   $submenu['themes.php'][] = [
     'Pattern Categories',
     'manage_categories',
