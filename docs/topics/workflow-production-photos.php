@@ -4,7 +4,7 @@
  * Site Manual workflow: adding production photos.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

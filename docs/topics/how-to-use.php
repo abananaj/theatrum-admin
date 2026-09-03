@@ -1,4 +1,4 @@
-<?php if (! defined('ABSPATH')) { exit; } ?>
+<?php if ( ! defined('ABSPATH')) { exit; } ?>
 
 <p class="ct-manual__intro">
   This manual lives inside the website itself, so it is always here when you need it and

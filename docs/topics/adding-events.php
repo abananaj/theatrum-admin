@@ -4,7 +4,7 @@
  * Site Manual topic: events and performance dates.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

@@ -1,4 +1,4 @@
-<?php if (! defined('ABSPATH')) { exit; } ?>
+<?php if ( ! defined('ABSPATH')) { exit; } ?>
 
 <p class="ct-manual__intro">
   A production is a show. It is the biggest thing you will create on this site and it touches

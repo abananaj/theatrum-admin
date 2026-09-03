@@ -1,4 +1,4 @@
-<?php if (! defined('ABSPATH')) { exit; } ?>
+<?php if ( ! defined('ABSPATH')) { exit; } ?>
 
 <p class="ct-manual__intro">
   Credits are managed in the <strong>Production Credits</strong> panel on a production's edit

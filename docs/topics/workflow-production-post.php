@@ -4,7 +4,7 @@
  * Site Manual workflow: putting a blog post on a production's page.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

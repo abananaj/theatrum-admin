@@ -17,7 +17,7 @@
  * is how the full outline stays browsable while it is being filled in.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 
@@ -26,12 +26,12 @@ return [
   'start-here' => [
     'label'  => __('Start here', 'theatrum-admin'),
     'topics' => [
-      'how-to-use' => [
+      'how-to-use'      => [
         'title'   => __('How to use this manual', 'theatrum-admin'),
         'summary' => __('What is in here, the five rules that matter most, and who to ask when you are stuck.', 'theatrum-admin'),
         'key'     => true,
       ],
-      'your-account' => [
+      'your-account'    => [
         'title'   => __('Your account and what you can do', 'theatrum-admin'),
         'summary' => __('Administrators and Editors, what each can see, and keeping your login safe.', 'theatrum-admin'),
       ],
@@ -42,27 +42,27 @@ return [
     ],
   ],
 
-  'workflows' => [
+  'workflows'  => [
     'label'  => __('Common workflows', 'theatrum-admin'),
     'topics' => [
-      'workflow-new-season' => [
+      'workflow-new-season'               => [
         'title'   => __('Putting a whole season up', 'theatrum-admin'),
         'summary' => __('Season, then productions, then credits, then events — in the order that causes the least trouble.', 'theatrum-admin'),
         'key'     => true,
       ],
-      'workflow-production-photos' => [
+      'workflow-production-photos'        => [
         'title'   => __('Adding production photos', 'theatrum-admin'),
         'summary' => __('Uploading a batch of photos, and the second step that actually puts them on the show page.', 'theatrum-admin'),
       ],
-      'workflow-production-post' => [
+      'workflow-production-post'          => [
         'title'   => __('Putting a blog post on a show\'s page', 'theatrum-admin'),
         'summary' => __('Write the post, then link it to the production with one field.', 'theatrum-admin'),
       ],
-      'workflow-gallery-post' => [
+      'workflow-gallery-post'             => [
         'title'   => __('A photo gallery post', 'theatrum-admin'),
         'summary' => __('A post made of production photos, and the category that unlocks the gallery field.', 'theatrum-admin'),
       ],
-      'workflow-auditions' => [
+      'workflow-auditions'                => [
         'title'   => __('Putting an audition up', 'theatrum-admin'),
         'summary' => __('Creating the event, pointing it at the show it is casting, and adding the signup form.', 'theatrum-admin'),
       ],
@@ -70,37 +70,37 @@ return [
         'title'   => __('A press release on a show', 'theatrum-admin'),
         'summary' => __('What counts as a press release here, and how to attach one to a production.', 'theatrum-admin'),
       ],
-      'workflow-press-release-season' => [
+      'workflow-press-release-season'     => [
         'title'   => __('A season press release', 'theatrum-admin'),
         'summary' => __('The same job on a season rather than a single show.', 'theatrum-admin'),
       ],
-      'workflow-event-form-page' => [
+      'workflow-event-form-page'          => [
         'title'   => __('A form page for an event', 'theatrum-admin'),
         'summary' => __('Event sub-pages, and getting a WPForms form onto one.', 'theatrum-admin'),
       ],
     ],
   ],
 
-  'content' => [
+  'content'    => [
     'label'  => __('Putting content on the site', 'theatrum-admin'),
     'topics' => [
-      'adding-a-production' => [
+      'adding-a-production'       => [
         'title'   => __('Adding a production', 'theatrum-admin'),
         'summary' => __('The full walkthrough for putting a show on the site, start to finish.', 'theatrum-admin'),
         'key'     => true,
         'screens' => ['production'],
       ],
-      'production-credits' => [
+      'production-credits'        => [
         'title'   => __('Cast and creative credits', 'theatrum-admin'),
         'summary' => __('Using the Credits Manager on a production: Cast, Creative Team and Producers.', 'theatrum-admin'),
         'key'     => true,
         'screens' => ['production'],
       ],
-      'adding-events' => [
+      'adding-events'             => [
         'title'   => __('Events and performance dates', 'theatrum-admin'),
         'summary' => __('Creating events, linking them to a production, and handling two-date events.', 'theatrum-admin'),
       ],
-      'adding-an-artist' => [
+      'adding-an-artist'          => [
         'title'   => __('Adding an artist', 'theatrum-admin'),
         'summary' => __('Headshots, bios, the links list, and how artist tags work.', 'theatrum-admin'),
       ],
@@ -108,21 +108,21 @@ return [
         'title'   => __('Classes, venues and supporters', 'theatrum-admin'),
         'summary' => __('The three smaller content types and the fields each one needs.', 'theatrum-admin'),
       ],
-      'blog-posts' => [
+      'blog-posts'                => [
         'title'   => __('Blog posts and news', 'theatrum-admin'),
         'summary' => __('Writing a post, and linking it to a production or event.', 'theatrum-admin'),
       ],
     ],
   ],
 
-  'pages' => [
+  'pages'      => [
     'label'  => __('Pages and layout', 'theatrum-admin'),
     'topics' => [
-      'editing-a-page' => [
+      'editing-a-page'     => [
         'title'   => __('Editing a page', 'theatrum-admin'),
         'summary' => __('Working with blocks, and the blocks that were built specifically for this site.', 'theatrum-admin'),
       ],
-      'patterns' => [
+      'patterns'           => [
         'title'   => __('Patterns — read this before you edit one', 'theatrum-admin'),
         'summary' => __('Most patterns on this site are shared. Editing one changes every page that uses it.', 'theatrum-admin'),
         'key'     => true,
@@ -135,7 +135,7 @@ return [
     ],
   ],
 
-  'media' => [
+  'media'      => [
     'label'  => __('Images and media', 'theatrum-admin'),
     'topics' => [
       'images-and-media' => [
@@ -145,7 +145,7 @@ return [
     ],
   ],
 
-  'settings' => [
+  'settings'   => [
     'label'  => __('Sitewide settings', 'theatrum-admin'),
     'topics' => [
       'site-options' => [
@@ -153,14 +153,14 @@ return [
         'summary' => __('Current and next season, the staff and board listings, and fallback images.', 'theatrum-admin'),
         'screens' => ['toplevel_page_site-options'],
       ],
-      'forms' => [
+      'forms'        => [
         'title'   => __('Forms and form entries', 'theatrum-admin'),
         'summary' => __('Finding submissions, and making small changes to an existing form.', 'theatrum-admin'),
       ],
     ],
   ],
 
-  'trouble' => [
+  'trouble'    => [
     'label'  => __('When something looks wrong', 'theatrum-admin'),
     'topics' => [
       'why-isnt-my-change-showing' => [
@@ -168,12 +168,12 @@ return [
         'summary' => __('The four things that cause this, in the order they are worth checking.', 'theatrum-admin'),
         'key'     => true,
       ],
-      'things-not-to-touch' => [
+      'things-not-to-touch'        => [
         'title'   => __('Things not to touch', 'theatrum-admin'),
         'summary' => __('A short list of buttons that cause damage which is slow to undo.', 'theatrum-admin'),
         'key'     => true,
       ],
-      'accessibility' => [
+      'accessibility'              => [
         'title'   => __('Accessibility', 'theatrum-admin'),
         'summary' => __('Alt text, heading order, link text, and two checks you can run yourself.', 'theatrum-admin'),
       ],

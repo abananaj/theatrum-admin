@@ -4,7 +4,7 @@
  * Site Manual workflow: a form page for an event.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

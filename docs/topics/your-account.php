@@ -4,7 +4,7 @@
  * Site Manual topic: your account and what you can do.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

@@ -1,4 +1,4 @@
-<?php if (! defined('ABSPATH')) { exit; } ?>
+<?php if ( ! defined('ABSPATH')) { exit; } ?>
 
 <p class="ct-manual__intro">
   Work through these in order. The first three explain almost every case, and none of them

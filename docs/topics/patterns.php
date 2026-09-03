@@ -4,7 +4,7 @@
  * Site Manual topic: shared patterns and their blast radius.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 
@@ -16,14 +16,14 @@ if (! defined('ABSPATH')) {
       <?php
       $chance_manual_counts = chance_manual_pattern_counts();
 
-      echo esc_html(
+    echo esc_html(
         sprintf(
           /* translators: 1: number of shared patterns, 2: total patterns. */
-          __('%1$s of the %2$s patterns on this site are shared.', 'theatrum-admin'),
-          number_format_i18n($chance_manual_counts['shared']),
-          number_format_i18n($chance_manual_counts['total'])
+            __('%1$s of the %2$s patterns on this site are shared.', 'theatrum-admin'),
+            number_format_i18n($chance_manual_counts['shared']),
+            number_format_i18n($chance_manual_counts['total'])
         )
-      );
+    );
       ?>
     </strong>
     <?php esc_html_e('Editing a shared pattern changes every page that uses it, immediately, with no warning and no undo across those pages.', 'theatrum-admin'); ?>

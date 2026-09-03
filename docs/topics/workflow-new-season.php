@@ -4,7 +4,7 @@
  * Site Manual workflow: putting a whole season up.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

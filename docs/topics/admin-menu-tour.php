@@ -4,7 +4,7 @@
  * Site Manual topic: a tour of the admin menu.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

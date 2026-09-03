@@ -5,15 +5,14 @@
  * The Add Media modal has its own way back in (MLA's category filter dropdown), which the exclusion below defers to whenever it's in use.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 
-const CT_MLA_ICON_TAXONOMY = 'attachment_category';
+const CT_MLA_ICON_TAXONOMY  = 'attachment_category';
 const CT_MLA_ICON_TERM_NAME = 'Icon';
 
-function ct_mla_get_icon_term()
-{
+function ct_mla_get_icon_term() {
   static $term = null;
 
   if (null === $term) {
@@ -30,14 +29,13 @@ function ct_mla_get_icon_term()
  * @param array $tax_query
  * @return array
  */
-function ct_mla_exclude_icon_tax_query($tax_query)
-{
+function ct_mla_exclude_icon_tax_query($tax_query) {
   $term = ct_mla_get_icon_term();
-  if (!$term) {
+  if ( ! $term) {
     return $tax_query;
   }
 
-  if (!empty($tax_query)) {
+  if ( ! empty($tax_query)) {
     foreach ($tax_query as $clause) {
       if (is_array($clause) && isset($clause['taxonomy']) && CT_MLA_ICON_TAXONOMY === $clause['taxonomy']) {
         return $tax_query;
@@ -67,74 +65,91 @@ function ct_mla_exclude_icon_tax_query($tax_query)
 // ── Exclude "Icon" from the default Media > Assistant list ───────────────────
 // Runs after MLA has merged any user-chosen taxonomy filter into $request['tax_query'], so an explicit attachment_category filter (incl. via the Icons submenu) is left alone.
 
-add_filter('mla_list_table_query_final_terms', function ($request) {
-  $request['tax_query'] = ct_mla_exclude_icon_tax_query($request['tax_query'] ?? []);
-  return $request;
-});
+add_filter(
+    'mla_list_table_query_final_terms',
+    function ($request) {
+    $request['tax_query'] = ct_mla_exclude_icon_tax_query($request['tax_query'] ?? []);
+    return $request;
+    }
+);
 
 // ── Exclude "Icon" from the "Add Media" modal (insertion, featured image, ACF fields) ────
 // Fires for both core's wp_ajax_query_attachments() and MLA's modal query path (class-mla-media-modal-ajax.php), which applies this same filter. Leave alone when the admin already picked a category via MLA's modal dropdown (query['mla_filter_term'], "-1" = "All") — that's the way back in to Icons from the modal.
 
-add_filter('ajax_query_attachments_args', function ($query) {
-  if (isset($query['mla_filter_term']) && '-1' !== (string) $query['mla_filter_term']) {
-    return $query;
-  }
+add_filter(
+    'ajax_query_attachments_args',
+    function ($query) {
+    if (isset($query['mla_filter_term']) && '-1' !== (string) $query['mla_filter_term']) {
+      return $query;
+    }
 
-  $query['tax_query'] = ct_mla_exclude_icon_tax_query($query['tax_query'] ?? []);
-  return $query;
-});
+    $query['tax_query'] = ct_mla_exclude_icon_tax_query($query['tax_query'] ?? []);
+    return $query;
+    }
+);
 
 // ── Exclude "Icon" from the native Media > Library grid/list ─────────────────
 // Guard: skip if already explicitly filtering by attachment_category (tax_query clause or query var, e.g. upload.php?attachment_category=icon), so it isn't double-excluded.
 
-add_action('pre_get_posts', function ($query) {
-  if (!is_admin() || 'attachment' !== $query->get('post_type')) {
-    return;
-  }
+add_action(
+    'pre_get_posts',
+    function ($query) {
+    if ( ! is_admin() || 'attachment' !== $query->get('post_type')) {
+      return;
+    }
 
-  if ($query->get(CT_MLA_ICON_TAXONOMY)) {
-    return;
-  }
+    if ($query->get(CT_MLA_ICON_TAXONOMY)) {
+      return;
+    }
 
-  $query->set('tax_query', ct_mla_exclude_icon_tax_query($query->get('tax_query') ?: []));
-});
+    $query->set('tax_query', ct_mla_exclude_icon_tax_query($query->get('tax_query') ?: []));
+    }
+);
 
 // ── Exclude "Icon" from REST attachment queries (wp/v2/media) ────────────────
 
-add_filter('rest_attachment_query', function ($args, $request) {
-  if ($request->get_param(CT_MLA_ICON_TAXONOMY)) {
-    return $args;
-  }
+add_filter(
+    'rest_attachment_query',
+    function ($args, $request) {
+    if ($request->get_param(CT_MLA_ICON_TAXONOMY)) {
+      return $args;
+    }
 
-  $args['tax_query'] = ct_mla_exclude_icon_tax_query($args['tax_query'] ?? []);
-  return $args;
-}, 10, 2);
+    $args['tax_query'] = ct_mla_exclude_icon_tax_query($args['tax_query'] ?? []);
+    return $args;
+    },
+    10,
+    2
+);
 
 // ── "Icons" submenu under Media ───────────────────────────────────────────────
 
-add_action('admin_menu', function () {
-  add_submenu_page(
-    'upload.php',
-    __('Icons', 'theatrum-admin'),
-    __('Icons', 'theatrum-admin'),
-    'upload_files',
-    'ct-media-icons',
-    'ct_mla_render_icons_redirect'
-  );
-}, 20);
+add_action(
+    'admin_menu',
+    function () {
+    add_submenu_page(
+        'upload.php',
+        __('Icons', 'theatrum-admin'),
+        __('Icons', 'theatrum-admin'),
+        'upload_files',
+        'ct-media-icons',
+        'ct_mla_render_icons_redirect'
+    );
+    },
+    20
+);
 
-function ct_mla_render_icons_redirect()
-{
+function ct_mla_render_icons_redirect() {
   $term = ct_mla_get_icon_term();
 
   $url = $term
     ? add_query_arg(
-      [
+        [
         'page'     => 'mla-menu',
         'mla-tax'  => CT_MLA_ICON_TAXONOMY,
         'mla-term' => $term->slug,
-      ],
-      admin_url('upload.php')
+        ],
+        admin_url('upload.php')
     )
     : admin_url('upload.php?page=mla-menu');
 

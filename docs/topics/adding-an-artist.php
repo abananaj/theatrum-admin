@@ -4,7 +4,7 @@
  * Site Manual topic: adding an artist.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

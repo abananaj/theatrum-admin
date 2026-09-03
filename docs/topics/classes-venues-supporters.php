@@ -4,7 +4,7 @@
  * Site Manual topic: classes, venues and supporters.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

@@ -4,7 +4,7 @@
  * Site Manual topic: images and the media library.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

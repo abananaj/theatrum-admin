@@ -4,7 +4,7 @@
  * Site Manual topic: accessibility.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

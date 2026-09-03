@@ -4,7 +4,7 @@
  * Site Manual workflow: a press release on a production.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

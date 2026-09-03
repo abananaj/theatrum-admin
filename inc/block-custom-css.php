@@ -5,32 +5,31 @@
  * Parked (see commented require_once in theatrum-admin.php): chance_sanitize_block_custom_css() is a denylist, not a parser, so it can't guarantee it covers every CSS injection vector — re-review before enabling for any role below manage_options.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 
 // Enqueue custom CSS editor script and styles
-function chance_enqueue_block_custom_css_assets()
-{
+function chance_enqueue_block_custom_css_assets() {
   $script_dist_path = plugin_dir_path(dirname(__FILE__)) . 'dist/block-custom-css.js';
 
   // Only enqueue in editor context
-  if (!is_admin() && !did_action('enqueue_block_editor_assets')) {
+  if ( ! is_admin() && ! did_action('enqueue_block_editor_assets')) {
     return;
   }
 
-  if (! file_exists($script_dist_path)) {
+  if ( ! file_exists($script_dist_path)) {
     return;
   }
 
   // Register and enqueue the block custom CSS editor script
-  wp_register_script(
+wp_register_script(
     'chance-block-custom-css',
     plugin_dir_url(dirname(__FILE__)) . 'dist/block-custom-css.js',
     ['wp-blocks', 'wp-dom-ready', 'wp-edit-post', 'wp-edit-site'],
     filemtime($script_dist_path),
     false
-  );
+);
 
   wp_enqueue_script('chance-block-custom-css');
 }
@@ -39,8 +38,7 @@ add_action('enqueue_block_editor_assets', 'chance_enqueue_block_custom_css_asset
 /**
  * Register custom CSS attribute on all blocks
  */
-function chance_register_custom_css_attribute($settings, $name)
-{
+function chance_register_custom_css_attribute($settings, $name) {
   // Skip certain blocks that don't support custom CSS well
   $excluded_blocks = ['core/freeform', 'core/html'];
 
@@ -49,17 +47,17 @@ function chance_register_custom_css_attribute($settings, $name)
   }
 
   // Add customCSS to block attributes
-  if (!isset($settings['attributes'])) {
+  if ( ! isset($settings['attributes'])) {
     $settings['attributes'] = [];
   }
 
   $settings['attributes']['customCSS'] = [
-    'type' => 'string',
+    'type'    => 'string',
     'default' => '',
   ];
 
   // Ensure block supports the attribute
-  if (!isset($settings['supports'])) {
+  if ( ! isset($settings['supports'])) {
     $settings['supports'] = [];
   }
 
@@ -73,11 +71,10 @@ add_filter('register_block_type_args', 'chance_register_custom_css_attribute', 1
 /**
  * Output custom CSS for blocks on the frontend, cached (keyed on post ID + a hash of post_content) so parse_blocks() doesn't re-run every request.
  */
-function chance_output_block_custom_css()
-{
+function chance_output_block_custom_css() {
   global $post;
 
-  if (!is_singular() || !$post) {
+  if ( ! is_singular() || ! $post) {
     return;
   }
 
@@ -87,16 +84,16 @@ function chance_output_block_custom_css()
     return;
   }
 
-  $cache_key = $post->ID . '_' . md5($content);
+  $cache_key  = $post->ID . '_' . md5($content);
   $custom_css = wp_cache_get($cache_key, 'chance_block_custom_css');
 
   if (false === $custom_css) {
-    $blocks = parse_blocks($content);
+    $blocks     = parse_blocks($content);
     $custom_css = chance_collect_custom_css_from_blocks($blocks);
     wp_cache_set($cache_key, $custom_css, 'chance_block_custom_css', HOUR_IN_SECONDS);
   }
 
-  if (!empty($custom_css)) {
+  if ( ! empty($custom_css)) {
     echo '<style id="chance-block-custom-css">';
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS already sanitized in chance_sanitize_block_custom_css() (wp_strip_all_tags + dangerous-construct denylist); esc_html() would corrupt valid CSS.
     echo $custom_css;
@@ -107,20 +104,19 @@ function chance_output_block_custom_css()
 /**
  * Recursively collect custom CSS from blocks
  */
-function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
-{
-  $css = '';
+function chance_collect_custom_css_from_blocks($blocks, $prefix = '') {
+  $css           = '';
   $block_counter = 0;
 
   foreach ($blocks as $block) {
     $block_counter++;
 
-    if (isset($block['attrs']['customCSS']) && !empty($block['attrs']['customCSS'])) {
+    if (isset($block['attrs']['customCSS']) && ! empty($block['attrs']['customCSS'])) {
       // Generate a unique class for this block based on position
       $block_class = 'wp-block-' . sanitize_html_class(str_replace('/', '-', $block['blockName'] ?? 'unknown')) . '-' . $block_counter;
 
       $custom_css_content = $block['attrs']['customCSS'];
-      $has_selector = preg_match('/^[\s\n]*[.#\[]/', $custom_css_content);
+      $has_selector       = preg_match('/^[\s\n]*[.#\[]/', $custom_css_content);
 
       $css .= $has_selector
         // Already has selectors — sanitize as a full ruleset.
@@ -132,11 +128,11 @@ function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
     }
 
     // Recursively process inner blocks
-    if (!empty($block['innerBlocks'])) {
-      $css .= chance_collect_custom_css_from_blocks(
+    if ( ! empty($block['innerBlocks'])) {
+    $css .= chance_collect_custom_css_from_blocks(
         $block['innerBlocks'],
         $prefix . $block_counter . '-'
-      );
+    );
     }
   }
 
@@ -146,8 +142,7 @@ function chance_collect_custom_css_from_blocks($blocks, $prefix = '')
 /**
  * Sanitize a full CSS ruleset (selectors + declarations) for safe output. wp_kses_post() is unsuitable — it mangles valid CSS syntax while doing nothing to stop CSS-specific injection like expression()/@import.
  */
-function chance_sanitize_block_custom_css($css)
-{
+function chance_sanitize_block_custom_css($css) {
   $css = wp_strip_all_tags($css, true);
 
   // Strip CSS comments first so a denylisted construct can't dodge the checks below via comment-splitting (e.g. `exp/**/ression(...)`).
@@ -170,7 +165,6 @@ add_action('wp_head', 'chance_output_block_custom_css', 15);
 /**
  * Also handle Site Editor (Full Site Editing) custom CSS
  */
-function chance_handle_site_editor_custom_css()
-{
+function chance_handle_site_editor_custom_css() {
   // Handled by the frontend CSS collection hook above when Site Editor styles apply.
 }

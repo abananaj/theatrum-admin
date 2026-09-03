@@ -4,7 +4,7 @@
  * Site Manual topic: editing a page with blocks.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

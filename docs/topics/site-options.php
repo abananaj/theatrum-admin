@@ -4,7 +4,7 @@
  * Site Manual topic: Site Options.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

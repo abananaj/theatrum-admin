@@ -4,7 +4,7 @@
  * Site Manual workflow: a photo gallery blog post.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

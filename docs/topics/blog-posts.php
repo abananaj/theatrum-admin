@@ -4,7 +4,7 @@
  * Site Manual topic: blog posts and news.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

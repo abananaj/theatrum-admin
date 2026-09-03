@@ -4,7 +4,7 @@
  * Site Manual workflow: putting an audition up.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

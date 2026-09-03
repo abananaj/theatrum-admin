@@ -4,7 +4,7 @@
  * Site Manual topic: forms and form entries.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

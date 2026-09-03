@@ -4,7 +4,7 @@
  * Site Manual topic: seasons and series.
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
   exit;
 }
 

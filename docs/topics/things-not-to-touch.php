@@ -1,4 +1,4 @@
-<?php if (! defined('ABSPATH')) { exit; } ?>
+<?php if ( ! defined('ABSPATH')) { exit; } ?>
 
 <p class="ct-manual__intro">
   Short list. None of these will break the site instantly, but each one causes damage that is
