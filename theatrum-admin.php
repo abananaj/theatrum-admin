@@ -2,11 +2,14 @@
 
 /**
  * Plugin Name: Theatrum Admin
- * Plugin URI:  https://chancetheatre.com
+ * Plugin URI:  https://chancetheater.com
  * Description: WP admin interface customizations for Chance Theater — custom columns, submenus, and design system pages.
  * Version:     1.0.0
  * Author:      Chance Theater
  * Text Domain: theatrum-admin
+ * Requires at least: 6.7
+ * Requires PHP: 8.2
+ * License: GPL-2.0-or-later
  */
 
 if (! defined('ABSPATH')) {

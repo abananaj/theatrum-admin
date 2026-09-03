@@ -76,7 +76,7 @@ addFilter("editor.BlockListBlock", "chance/add-sr-only-badge", (BlockListBlock: 
 			return el(BlockListBlock, props)
 		}
 
-		return el("div", { className: "wp-block-sr-only-wrapper" }, el(BlockListBlock, props), el("div", { className: "wp-block-sr-only-badge" }, "SR-ONLY"))
+		return el("div", { className: "wp-block-sr-only-wrapper" }, el(BlockListBlock, props), el("div", { className: "wp-block-sr-only-badge", "aria-hidden": "true" }, "SR-ONLY"))
 	}
 })
 

@@ -260,7 +260,7 @@ function ct_render_pattern_usage_page(): void
   $n = count($posts);
   echo '<p><strong>' . esc_html($n) . '</strong> ' . ($n === 1 ? 'location' : 'locations') . '</p>';
   echo '<table class="wp-list-table widefat fixed striped">';
-  echo '<thead><tr><th>Title</th><th>Type</th><th>Status</th></tr></thead><tbody>';
+  echo '<thead><tr><th scope="col">Title</th><th scope="col">Type</th><th scope="col">Status</th></tr></thead><tbody>';
 
   foreach ($posts as $post) {
     $type_obj = get_post_type_object($post->post_type);

@@ -77,7 +77,7 @@ function chance_render_templates_page()
           'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
           'slug' => str_replace('.html', '', $file),
           'source' => 'theme',
-          'date' => date('Y-m-d H:i:s', filemtime($templates_dir . '/' . $file)),
+          'date' => gmdate('Y-m-d H:i:s', filemtime($templates_dir . '/' . $file)),
         ];
       }
     }
@@ -127,10 +127,10 @@ function chance_render_templates_page()
     <table class="wp-list-table widefat fixed striped">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Slug</th>
-          <th>Created</th>
-          <th>Source</th>
+          <th scope="col">Title</th>
+          <th scope="col">Slug</th>
+          <th scope="col">Created</th>
+          <th scope="col">Source</th>
         </tr>
       </thead>
       <tbody>
@@ -138,7 +138,7 @@ function chance_render_templates_page()
           <?php foreach ($templates as $template) : ?>
             <tr>
               <td>
-                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_template/chance-ollie//' . $template['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($template['title']); ?></a></strong>
+                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_template/chance-ollie//' . $template['slug']) . '&canvas=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($template['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a></strong>
               </td>
               <td><?php echo esc_html($template['slug']); ?></td>
               <td><?php echo esc_html($template['date']); ?></td>
@@ -386,12 +386,12 @@ function chance_render_patterns_page()
       <table class="wp-list-table widefat fixed striped">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Slug</th>
-            <th>Categories</th>
-            <th>Tags</th>
+            <th scope="col">Title</th>
+            <th scope="col">Slug</th>
+            <th scope="col">Categories</th>
+            <th scope="col">Tags</th>
             <th>Used In</th>
-            <th>Source</th>
+            <th scope="col">Source</th>
           </tr>
         </thead>
         <tbody>
@@ -400,9 +400,9 @@ function chance_render_patterns_page()
               <td>
                 <strong>
                   <?php if ($pattern['source'] === 'database') : ?>
-                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($pattern['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a>
                   <?php else : ?>
-                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($pattern['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a>
                   <?php endif; ?>
                 </strong>
               </td>
@@ -420,16 +420,16 @@ function chance_render_patterns_page()
                     <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
                   <?php endforeach; ?>
                 <?php else : ?>
-                  <span style="color:#aaa">—</span>
+                  <span style="color:#646970">—</span>
                 <?php endif; ?>
               </td>
               <td>
                 <?php if ($pattern['source'] === 'database' && !empty($pattern['usage_count'])) : ?>
                   <a href="<?php echo esc_url(admin_url('admin.php?page=ct-pattern-usage&id=' . $pattern['id'])); ?>"><?php echo (int) $pattern['usage_count']; ?></a>
                 <?php elseif ($pattern['source'] === 'database') : ?>
-                  <span style="color:#aaa">0</span>
+                  <span style="color:#646970">0</span>
                 <?php else : ?>
-                  <span style="color:#aaa">n/a</span>
+                  <span style="color:#646970">n/a</span>
                 <?php endif; ?>
               </td>
               <td>
@@ -449,12 +449,12 @@ function chance_render_patterns_page()
       <table class="wp-list-table widefat fixed striped">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Slug</th>
-            <th>Categories</th>
-            <th>Tags</th>
+            <th scope="col">Title</th>
+            <th scope="col">Slug</th>
+            <th scope="col">Categories</th>
+            <th scope="col">Tags</th>
             <th>Used In</th>
-            <th>Source</th>
+            <th scope="col">Source</th>
           </tr>
         </thead>
         <tbody>
@@ -463,9 +463,9 @@ function chance_render_patterns_page()
               <td>
                 <strong>
                   <?php if ($pattern['source'] === 'database') : ?>
-                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                    <a href="<?php echo esc_url(admin_url('post.php?post=' . $pattern['id'] . '&action=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($pattern['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a>
                   <?php else : ?>
-                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($pattern['title']); ?></a>
+                    <a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_block/chance-ollie//' . $pattern['slug']) . '&canvas=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($pattern['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a>
                   <?php endif; ?>
                 </strong>
               </td>
@@ -483,16 +483,16 @@ function chance_render_patterns_page()
                     <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
                   <?php endforeach; ?>
                 <?php else : ?>
-                  <span style="color:#aaa">—</span>
+                  <span style="color:#646970">—</span>
                 <?php endif; ?>
               </td>
               <td>
                 <?php if ($pattern['source'] === 'database' && !empty($pattern['usage_count'])) : ?>
                   <a href="<?php echo esc_url(admin_url('admin.php?page=ct-pattern-usage&id=' . $pattern['id'])); ?>"><?php echo (int) $pattern['usage_count']; ?></a>
                 <?php elseif ($pattern['source'] === 'database') : ?>
-                  <span style="color:#aaa">0</span>
+                  <span style="color:#646970">0</span>
                 <?php else : ?>
-                  <span style="color:#aaa">n/a</span>
+                  <span style="color:#646970">n/a</span>
                 <?php endif; ?>
               </td>
               <td>
@@ -527,7 +527,7 @@ function chance_render_template_parts_page()
           'title' => ucfirst(str_replace(['-', '.html'], [' ', ''], $file)),
           'slug' => str_replace('.html', '', $file),
           'source' => 'theme',
-          'date' => date('Y-m-d H:i:s', filemtime($parts_dir . '/' . $file)),
+          'date' => gmdate('Y-m-d H:i:s', filemtime($parts_dir . '/' . $file)),
         ];
       }
     }
@@ -574,10 +574,10 @@ function chance_render_template_parts_page()
     <table class="wp-list-table widefat fixed striped">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Slug</th>
-          <th>Created</th>
-          <th>Source</th>
+          <th scope="col">Title</th>
+          <th scope="col">Slug</th>
+          <th scope="col">Created</th>
+          <th scope="col">Source</th>
         </tr>
       </thead>
       <tbody>
@@ -585,7 +585,7 @@ function chance_render_template_parts_page()
           <?php foreach ($template_parts as $part) : ?>
             <tr>
               <td>
-                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_template_part/chance-ollie//' . $part['slug']) . '&canvas=edit')); ?>" target="_blank"><?php echo esc_html($part['title']); ?></a></strong>
+                <strong><a href="<?php echo esc_url(admin_url('site-editor.php?p=' . urlencode('/wp_template_part/chance-ollie//' . $part['slug']) . '&canvas=edit')); ?>" target="_blank" rel="noopener"><?php echo esc_html($part['title']); ?><span class="screen-reader-text"> (opens in a new tab)</span></a></strong>
               </td>
               <td><?php echo esc_html($part['slug']); ?></td>
               <td><?php echo esc_html($part['date']); ?></td>

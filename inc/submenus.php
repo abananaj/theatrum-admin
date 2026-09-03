@@ -195,7 +195,7 @@ add_action('admin_menu', function () {
   ];
 
   // Hidden page for the all-types tagged-posts view
-  add_submenu_page(null, 'Tagged Posts', 'Tagged Posts', 'edit_posts', 'ct-tagged-posts', 'ct_render_tagged_posts_page');
+  add_submenu_page('', 'Tagged Posts', 'Tagged Posts', 'edit_posts', 'ct-tagged-posts', 'ct_render_tagged_posts_page');
 }, 999);
 
 // ── Filter productions to exclude visiting-companies from "Chance Productions" ──
@@ -244,6 +244,8 @@ add_action('admin_head', function () {
       cursor: default !important;
     }
   </style>';
+  // The separator rows are still <a> elements in the menu DOM — take them out of the tab order and the accessibility tree.
+  echo '<script>document.querySelectorAll("#adminmenu .ct-submenu-separator > a").forEach(function (a) { a.setAttribute("tabindex", "-1"); a.setAttribute("aria-hidden", "true"); });</script>';
 });
 
 // ── Override count column in the global tag list to link to the all-types view ─
@@ -324,7 +326,7 @@ function ct_render_tagged_posts_page()
   }
 
   echo '<table class="wp-list-table widefat fixed striped">';
-  echo '<thead><tr><th>Title</th><th>Type</th><th>Status</th></tr></thead><tbody>';
+  echo '<thead><tr><th scope="col">Title</th><th scope="col">Type</th><th scope="col">Status</th></tr></thead><tbody>';
 
   foreach ($posts as $post) {
     $type_obj  = get_post_type_object($post->post_type);
