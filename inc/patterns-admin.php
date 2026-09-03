@@ -147,6 +147,7 @@ function ct_count_pattern_usage(int $pattern_id): int
   $like_close = '%' . $wpdb->esc_like('"ref":' . $pattern_id . '}') . '%';
   $like_comma = '%' . $wpdb->esc_like('"ref":' . $pattern_id . ',') . '%';
 
+  // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- pattern usage is a LIKE scan over post_content that no WP API expresses; admin-only, run on demand for one pattern.
   return (int) $wpdb->get_var(
     $wpdb->prepare(
       "SELECT COUNT(*) FROM {$wpdb->posts}
@@ -178,6 +179,7 @@ function ct_get_all_pattern_usage_counts(): array
   }
 
   global $wpdb;
+  // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- as above; the result IS cached, in the ct_pattern_usage_counts transient just above, which the sniff does not recognise as caching.
   $rows = $wpdb->get_results(
     "SELECT post_content FROM {$wpdb->posts}
      WHERE post_status NOT IN ('auto-draft', 'trash', 'inherit')
@@ -236,6 +238,7 @@ function ct_render_pattern_usage_page(): void
   $like_close = '%' . $wpdb->esc_like('"ref":' . $pattern_id . '}') . '%';
   $like_comma = '%' . $wpdb->esc_like('"ref":' . $pattern_id . ',') . '%';
 
+  // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- pattern usage is a LIKE scan over post_content that no WP API expresses; admin-only, run on demand for one pattern.
   $posts = $wpdb->get_results(
     $wpdb->prepare(
       "SELECT ID, post_title, post_type, post_status FROM {$wpdb->posts}
