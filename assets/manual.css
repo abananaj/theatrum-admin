@@ -214,6 +214,7 @@
 /* Narrow screens */
 
 @media screen and (max-width: 782px) {
+
   .ct-manual {
     grid-template-columns: 1fr;
   }
@@ -230,6 +231,7 @@
 /* Staff will print these */
 
 @media print {
+
   #adminmenumain,
   #wpadminbar,
   #wpfooter,
