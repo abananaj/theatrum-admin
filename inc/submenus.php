@@ -100,6 +100,8 @@ add_action('admin_menu', function () {
   $insert_sep('edit.php?post_type=production');
   $insert_sep('edit.php?post_type=supporter');
   $insert_sep('edit.php?post_type=class');
+  // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Kept deliberately.
+  // $insert_sep('edit.php?post_type=venue');
 
   // ── Hide Tags ───────────────────────────────────────────────────────────────
   $remove_submenu('edit.php?post_type=page',        'taxonomy=post_tag');
