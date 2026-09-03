@@ -100,7 +100,6 @@ add_action('admin_menu', function () {
   $insert_sep('edit.php?post_type=production');
   $insert_sep('edit.php?post_type=supporter');
   $insert_sep('edit.php?post_type=class');
-  // $insert_sep('edit.php?post_type=venue');
 
   // ── Hide Tags ───────────────────────────────────────────────────────────────
   $remove_submenu('edit.php?post_type=page',        'taxonomy=post_tag');
@@ -276,7 +275,7 @@ add_filter('manage_post_tag_custom_column', function ($string, $column_name, $te
 
 function ct_render_tagged_posts_page()
 {
-  $tag_slug = isset($_GET['tag']) ? sanitize_text_field($_GET['tag']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
+  $tag_slug = isset($_GET['tag']) ? sanitize_text_field(wp_unslash($_GET['tag'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
 
   echo '<div class="wrap">';
 

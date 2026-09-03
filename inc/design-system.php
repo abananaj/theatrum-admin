@@ -164,8 +164,8 @@ function chance_render_templates_page()
 function chance_render_patterns_page()
 {
   // Check for category / tag filters
-  $filter_category = isset($_GET['pattern_category']) ? sanitize_text_field($_GET['pattern_category']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
-  $filter_tag      = isset($_GET['pattern_tag']) ? sanitize_text_field($_GET['pattern_tag']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
+  $filter_category = isset($_GET['pattern_category']) ? sanitize_text_field(wp_unslash($_GET['pattern_category'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
+  $filter_tag      = isset($_GET['pattern_tag']) ? sanitize_text_field(wp_unslash($_GET['pattern_tag'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
 
   // Get registered patterns from WordPress registry
   $registry = WP_Block_Patterns_Registry::get_instance();
