@@ -2,8 +2,7 @@
 
 > First draft. Component deep-dive; project-level story lives in the [root case study](../../../CASE_STUDY.md).
 
-The smallest plugin by commit count, and the one the client touches most —
-it shapes what the editing experience actually feels like.
+The smallest plugin by commit count, and the one the client touches most — it shapes what the editing experience actually feels like.
 
 ---
 
@@ -41,8 +40,7 @@ it shapes what the editing experience actually feels like.
 
 - `copy-caption.tsx` · `custom-formats.tsx` · `hgroup-control.tsx` · `position-controls.tsx` · `sr-only-blocks.tsx` · `list-view-css-indicator.ts`
 
-Seven separate Vite configs — each editor extension builds and loads independently rather than
-shipping as one bundle.
+Seven separate Vite configs — each editor extension builds and loads independently rather than shipping as one bundle.
 
 ---
 

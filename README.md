@@ -6,14 +6,14 @@ WordPress **admin-customization plugin** for Chance Theater. Reshapes the wp-adm
 
 **Quick facts**
 
-| | |
-|---|---|
-| Type | Site-specific must-have plugin (git submodule) |
-| Stack | PHP · Vite 8 · TypeScript · SCSS · `@wordpress/*` editor packages |
-| Loads | `submenus` · `media-library-assistant` · `patterns-admin` · `design-system` · `sr-only-blocks` · `position-controls` |
-| Version | `1.0.0` (plugin header + `package.json` agree ✅) |
-| Text Domain | `chance-theater` (declared; no `/languages` loaded) |
-| PHP | **8.0+ required** (not "recommended" — `str_ends_with()` fatals on 7.4; see `jul5-code-review.md` #6) |
+|             |                                                                                                                      |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Type        | Site-specific must-have plugin (git submodule)                                                                       |
+| Stack       | PHP · Vite 8 · TypeScript · SCSS · `@wordpress/*` editor packages                                                    |
+| Loads       | `submenus` · `media-library-assistant` · `patterns-admin` · `design-system` · `sr-only-blocks` · `position-controls` |
+| Version     | `1.0.0` (plugin header + `package.json` agree ✅)                                                                     |
+| Text Domain | `chance-theater` (declared; no `/languages` loaded)                                                                  |
+| PHP         | **8.0+ required** (not "recommended" — `str_ends_with()` fatals on 7.4; see `jul5-code-review.md` #6)                |
 
 🔗 [Parent project CLAUDE.md](../../../CLAUDE.md) · [Theme README](../../themes/chance-ollie/README.md) · [SR-Only feature doc](SR-ONLY-FEATURE.md)
 
@@ -112,8 +112,7 @@ The remaining issues are concentrated in the **JS/build layer**, which has drift
 1. **`dist/` is gitignored — must be rebuilt in every environment**, and `npm run build:watch` only rebuilds the default config with `emptyOutDir: true`, so a watch session silently empties the other 4 built files. Run the **full** `npm run build` (all 5 configs) before relying on any editor feature. *(Note: srOnly content that's already set still hides correctly on the frontend — the theme defines `.sr-only` in `dist/main.css`, so a stale build is an authoring breakage, not an accessibility regression.)*
 2. **Build output ↔ enqueue mismatch across the JS/CSS layer.** Two loose wires:
    - `theatrum-admin.php` enqueues `dist/sr-only-blocks.css`, but **no build step emits it** — the SCSS is self-injected by `index.js` instead. Only impact today is the editor-only SR-ONLY **badge** cosmetics (the frontend `.sr-only` rule comes from the theme). The editor script also loads in the *outer* admin frame while the badge renders inside the editor canvas iframe, so even a real CSS file wouldn't reach it without also fixing the iframe-isolation issue.
-   - `dist/index.js` **is built but never enqueued** by any PHP.
-   → Decide one strategy: emit named files per feature, *or* enqueue `index.js` + its CSS. Then make the PHP paths match the build outputs.
+   - `dist/index.js` **is built but never enqueued** by any PHP. → Decide one strategy: emit named files per feature, *or* enqueue `index.js` + its CSS. Then make the PHP paths match the build outputs.
 3. **"Themes moved into Settings" is broken, implemented twice.** `submenus.php` and `design-system.php` each try to move the Themes menu item using the wrong parent-slug key (`'themes'`/`'options'` instead of `themes.php`/`options-general.php`). Delete one implementation and fix the keys in the survivor — see `jul5-code-review.md` #1 for exact line numbers.
 4. **Deploy docs contradict this plugin's `.gitignore`.** Root `CLAUDE.md` says to stage `dist/`+`build/` alongside code, but this plugin ignores `dist/` entirely and the deploy flow (git push → SSH pull) has no remote build step — so this plugin's built assets never reach the server as documented. This needs an actual decision (start committing `dist/`, or add a remote build step) before either doc can be called accurate. See `jul5-code-review.md` #8.
 

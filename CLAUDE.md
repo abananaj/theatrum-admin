@@ -6,20 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Markdown Formatting
 
-Write prose as one line per paragraph — never hard-wrap sentences across multiple lines. Tables, code blocks, and lists are unaffected.
+Write prose as one line per paragraph — never hard-wrap sentences across multiple lines. In tables, pad every cell with spaces so the `|` columns line up visually in the raw text. Code blocks and lists are otherwise unaffected.
 
 ## Project Overview
 
-Theatrum Admin is a site-specific WordPress plugin (git submodule, must-use in spirit but
-loaded as a regular plugin) that reshapes wp-admin for Chance Theater: menu reorganization,
-pattern/template management screens, a cross-post-type tagged-posts view, a Screen-Reader-Only
-block toggle, position controls for two theatrum-blocks blocks, and a few editor RichText
-formats. Mostly server-side PHP with a small Vite/TypeScript editor layer.
+Theatrum Admin is a site-specific WordPress plugin (git submodule, must-use in spirit but loaded as a regular plugin) that reshapes wp-admin for Chance Theater: menu reorganization, pattern/template management screens, a cross-post-type tagged-posts view, a Screen-Reader-Only block toggle, position controls for two theatrum-blocks blocks, and a few editor RichText formats. Mostly server-side PHP with a small Vite/TypeScript editor layer.
 
-For the full architecture, feature-by-feature breakdown, and current known issues, see
-**[README.md](README.md)** — it's kept in much more detail than this file duplicates.
-**[jul5-code-review.md](jul5-code-review.md)** has line-numbered findings from the last
-full review; treat it as more current than README's own "Next Steps" list where they overlap.
+For the full architecture, feature-by-feature breakdown, and current known issues, see **[README.md](README.md)** — it's kept in much more detail than this file duplicates. **[jul5-code-review.md](jul5-code-review.md)** has line-numbered findings from the last full review; treat it as more current than README's own "Next Steps" list where they overlap.
 
 ## Build & Development Commands
 
@@ -31,14 +24,11 @@ npm run build:watch  # ⚠️ watch mode only rebuilds the DEFAULT config and em
 npm run deploy        # identical to build
 ```
 
-`dist/` is gitignored — every environment must run `npm run build` itself. There is currently
-no remote build step in the deploy pipeline (see README Next Steps #4 for why this matters).
+`dist/` is gitignored — every environment must run `npm run build` itself. There is currently no remote build step in the deploy pipeline (see README Next Steps #4 for why this matters).
 
 ## Architecture
 
-A thin loader (`theatrum-admin.php`) `require_once`s each feature module in `inc/`, then
-registers every editor script/style enqueue in the same file. Everything is hook-driven; no
-classes.
+A thin loader (`theatrum-admin.php`) `require_once`s each feature module in `inc/`, then registers every editor script/style enqueue in the same file. Everything is hook-driven; no classes.
 
 ```
 theatrum-admin/
@@ -64,19 +54,10 @@ theatrum-admin/
 
 ## Known Issues Worth Knowing Before You Touch This Plugin
 
-- **"Themes → Settings" menu move doesn't work.** Implemented twice (`submenus.php` and
-  `design-system.php`), both use the wrong menu-parent key. Don't build on top of either
-  implementation without fixing the key first — see README Next Steps #3.
-- **PHP 8.0 is a hard requirement**, not documented in the plugin header. `str_ends_with()`
-  in `design-system.php` fatals on 7.4.
-- **Build ↔ enqueue mismatch**: `dist/sr-only-blocks.css` is enqueued but never emitted by
-  any Vite config (SCSS is self-injected into JS instead), and `dist/index.js` is built but
-  never enqueued by any PHP. Don't assume an enqueue call means the asset exists — check the
-  actual Vite config it's supposed to come from.
-- **Deploy path for `dist/` is unresolved.** This plugin's `.gitignore` excludes `dist/`, but
-  the deploy flow (git push → SSH pull) has no remote build step, so built assets never reach
-  the server as root `CLAUDE.md`'s deploy checklist assumes. Confirm which side is being fixed
-  before treating either doc as authoritative.
+- **"Themes → Settings" menu move doesn't work.** Implemented twice (`submenus.php` and `design-system.php`), both use the wrong menu-parent key. Don't build on top of either implementation without fixing the key first — see README Next Steps #3.
+- **PHP 8.0 is a hard requirement**, not documented in the plugin header. `str_ends_with()` in `design-system.php` fatals on 7.4.
+- **Build ↔ enqueue mismatch**: `dist/sr-only-blocks.css` is enqueued but never emitted by any Vite config (SCSS is self-injected into JS instead), and `dist/index.js` is built but never enqueued by any PHP. Don't assume an enqueue call means the asset exists — check the actual Vite config it's supposed to come from.
+- **Deploy path for `dist/` is unresolved.** This plugin's `.gitignore` excludes `dist/`, but the deploy flow (git push → SSH pull) has no remote build step, so built assets never reach the server as root `CLAUDE.md`'s deploy checklist assumes. Confirm which side is being fixed before treating either doc as authoritative.
 
 ## Related Documentation
 

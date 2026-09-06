@@ -19,8 +19,7 @@
 - **Fix:** Delete one implementation. In the survivor use `remove_submenu_page('themes.php', 'themes.php')` and `add_submenu_page('options-general.php', …)`, then verify in wp-admin.
 
 ### 2. Early `return` aborts half the menu customizations if the production submenu is missing
-`inc/submenus.php:111` — `if (!isset($submenu[$key])) return;` exits the **entire** `admin_menu` closure. Everything after it — the top-level **Tags** menu (`:161`), the Themes move (`:171`), and crucially the hidden **Tagged Posts** page registration (`:194`) — silently depends on the `production` CPT's submenu existing. If the theme (which registers the CPT) is inactive or the user lacks the CPT capability, the tag-count links rendered by `manage_post_tag_custom_column` (`:257-267`) point to an unregistered page → *"Sorry, you are not allowed to access this page."*
-**Fix:** Wrap only the production-specific blocks in the `isset` check; never `return` from the shared closure.
+`inc/submenus.php:111` — `if (!isset($submenu[$key])) return;` exits the **entire** `admin_menu` closure. Everything after it — the top-level **Tags** menu (`:161`), the Themes move (`:171`), and crucially the hidden **Tagged Posts** page registration (`:194`) — silently depends on the `production` CPT's submenu existing. If the theme (which registers the CPT) is inactive or the user lacks the CPT capability, the tag-count links rendered by `manage_post_tag_custom_column` (`:257-267`) point to an unregistered page → *"Sorry, you are not allowed to access this page."* **Fix:** Wrap only the production-specific blocks in the `isset` check; never `return` from the shared closure.
 
 ### 3. Build ↔ enqueue drift — confirmed, and one layer worse than the README says ✅ *verified*
 Ran the full `npm run build`; output is exactly `dist/index.js` (1.0 kB) + `dist/sr-only-blocks.js` (2.2 kB). Confirmed:
@@ -31,27 +30,23 @@ Ran the full `npm run build`; output is exactly `dist/index.js` (1.0 kB) + `dist
 - Note: running the build during this review restored `dist/sr-only-blocks.js` locally, so the SR-Only toggle authoring (README High #1) now works **on this machine** — the underlying "partial build leaves it broken" hazard remains for other environments.
 
 ### 4. `npm run build:watch` destroys the editor bundle ✅ *config-verified*
-`package.json` `build:watch` runs only the default config, and `vite.config.js` sets `emptyOutDir: true`. Every watch rebuild **empties `dist/` and never rebuilds `sr-only-blocks.js`** — dev sessions in watch mode silently strip the SR-Only editor feature until the next full build (very likely how `dist/` ended up holding only `index.js`, the state the README flags as High #1).
-**Fix:** `emptyOutDir: false` in watch, or a combined watch script for both configs.
+`package.json` `build:watch` runs only the default config, and `vite.config.js` sets `emptyOutDir: true`. Every watch rebuild **empties `dist/` and never rebuilds `sr-only-blocks.js`** — dev sessions in watch mode silently strip the SR-Only editor feature until the next full build (very likely how `dist/` ended up holding only `index.js`, the state the README flags as High #1). **Fix:** `emptyOutDir: false` in watch, or a combined watch script for both configs.
 
 ---
 
 ## 🟠 Medium
 
 ### 5. N+1 unindexed `LIKE` scans on the pattern screens
-`ct_count_pattern_usage()` (`inc/patterns-admin.php:145-162`) issues one full-table `LIKE '%…%'` scan of `wp_posts.post_content` **per row** of the native `wp_block` list (`:126`) and again per DB pattern on the grouped overview (`inc/design-system.php:287`). With dozens of patterns that's dozens of unindexable scans per page view. Root `CLAUDE.md` explicitly prescribes `wp_cache_*` for expensive queries; none is used.
-**Fix:** cache per pattern (`wp_cache_set`/transient, invalidated on `save_post`), or compute all counts in one query per page load.
+`ct_count_pattern_usage()` (`inc/patterns-admin.php:145-162`) issues one full-table `LIKE '%…%'` scan of `wp_posts.post_content` **per row** of the native `wp_block` list (`:126`) and again per DB pattern on the grouped overview (`inc/design-system.php:287`). With dozens of patterns that's dozens of unindexable scans per page view. Root `CLAUDE.md` explicitly prescribes `wp_cache_*` for expensive queries; none is used. **Fix:** cache per pattern (`wp_cache_set`/transient, invalidated on `save_post`), or compute all counts in one query per page load.
 
 ### 6. PHP 8.0 is *required*, not "recommended" — and undeclared
-`str_ends_with()` (`inc/design-system.php:103,223,551`) fatals on PHP 7.4. The plugin header declares neither `Requires PHP:` nor `Requires at least:`, and the README states "PHP 7.4+ (`str_ends_with` → 8.0+ recommended)", which is wrong — 7.4 white-screens the three Appearance pages.
-**Fix:** add `Requires PHP: 8.0` (and `Requires at least: 6.x`) to the plugin header; correct the README.
+`str_ends_with()` (`inc/design-system.php:103,223,551`) fatals on PHP 7.4. The plugin header declares neither `Requires PHP:` nor `Requires at least:`, and the README states "PHP 7.4+ (`str_ends_with` → 8.0+ recommended)", which is wrong — 7.4 white-screens the three Appearance pages. **Fix:** add `Requires PHP: 8.0` (and `Requires at least: 6.x`) to the plugin header; correct the README.
 
 ### 7. `add_submenu_page(null, …)` — deprecated hidden-page pattern
 Three call sites: `inc/submenus.php:194`, `inc/patterns-admin.php:34`, `inc/design-system.php:41`. Passing `null` as `$parent_slug` triggers PHP 8.1+ deprecation notices inside core (null fed to string functions) and is discouraged in the developer reference; the supported value for menu-less pages is `''` (empty string).
 
 ### 8. Deployment docs contradict the `.gitignore`
-Root `CLAUDE.md` says: *"Commit: Stage `dist/` and `build/` changes alongside code"* and the checklist requires *"`dist/` and `build/` folders staged and committed"*. This plugin's `.gitignore` ignores `dist/` entirely, and the README says assets "must be rebuilt in each environment" — but the documented deploy flow is git push → SSH pull with **no remote build step**, so the remote server never receives `dist/`. One of the three documents is lying to the next person who deploys.
-**Fix:** either stop gitignoring `dist/` (matching CLAUDE.md), or add an `npm run build` step to `.deploy` remote scripts and fix CLAUDE.md.
+Root `CLAUDE.md` says: *"Commit: Stage `dist/` and `build/` changes alongside code"* and the checklist requires *"`dist/` and `build/` folders staged and committed"*. This plugin's `.gitignore` ignores `dist/` entirely, and the README says assets "must be rebuilt in each environment" — but the documented deploy flow is git push → SSH pull with **no remote build step**, so the remote server never receives `dist/`. One of the three documents is lying to the next person who deploys. **Fix:** either stop gitignoring `dist/` (matching CLAUDE.md), or add an `npm run build` step to `.deploy` remote scripts and fix CLAUDE.md.
 
 ### 9. Grouped overview inverts "synced" semantics for theme patterns
 `inc/design-system.php:204-233`: theme-file patterns found in `WP_Block_Patterns_Registry` are marked `'synced' => true` and listed under **"Synced Patterns"**. Registered theme patterns are by definition *not* synced — synced patterns are `wp_block` posts (per the Synced Patterns reference). DB-side detection (`wp_pattern_sync_status` empty ⇒ synced, `:253-254`) is correct; the theme-file branch mislabels, inflating the "Synced" count and confusing the page's whole premise. (Page is archived/hidden, so severity is capped — but it's linked from the native list's "Grouped Overview" view.)
