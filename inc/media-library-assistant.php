@@ -130,14 +130,18 @@ add_filter(
 add_action(
     'admin_menu',
     function () {
-    add_submenu_page(
+    $hook = add_submenu_page(
         'upload.php',
         __('Icons', 'theatrum-admin'),
         __('Icons', 'theatrum-admin'),
         'upload_files',
         'ct-media-icons',
-        'ct_mla_render_icons_redirect'
+        '__return_null'
     );
+
+    // Redirect on 'load-' so it fires before admin-header.php sends any output;
+    // running this as the page callback itself is too late (headers already sent, wp_safe_redirect no-ops silently, exit leaves a blank page).
+    add_action("load-$hook", 'ct_mla_render_icons_redirect');
     },
     20
 );
