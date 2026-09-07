@@ -84,10 +84,6 @@ add_filter(
       return $query;
     }
 
-    if ( ! empty($query[CT_MLA_ICON_TAXONOMY])) {
-      return $query;
-    }
-
     // phpcs:ignore WordPress.DB.SlowDBQuery -- admin-only, runs on Media Library screens.
     $query['tax_query'] = ct_mla_exclude_icon_tax_query($query['tax_query'] ?? []);
     return $query;
@@ -153,11 +149,17 @@ add_action(
 function ct_mla_render_icons_redirect() {
   $term = ct_mla_get_icon_term();
 
-  $args = ['mode' => 'grid'];
-  if ($term) {
-    $args[CT_MLA_ICON_TAXONOMY] = $term->slug;
-  }
+  $url = $term
+    ? add_query_arg(
+        [
+        'page'     => 'mla-menu',
+        'mla-tax'  => CT_MLA_ICON_TAXONOMY,
+        'mla-term' => $term->slug,
+        ],
+        admin_url('upload.php')
+    )
+    : admin_url('upload.php?page=mla-menu');
 
-  wp_safe_redirect(add_query_arg($args, admin_url('upload.php')));
+  wp_safe_redirect($url);
   exit;
 }
