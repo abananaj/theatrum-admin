@@ -142,6 +142,10 @@ return [
         'title'   => __('Images and the media library', 'theatrum-admin'),
         'summary' => __('Uploading, alt text, choosing the right size, and finding an image again later.', 'theatrum-admin'),
       ],
+      'icons'            => [
+        'title'   => __('Icons', 'theatrum-admin'),
+        'summary' => __('Where the site\'s icon set comes from and how to use one.', 'theatrum-admin'),
+      ],
     ],
   ],
 
@@ -176,6 +180,28 @@ return [
       'accessibility'              => [
         'title'   => __('Accessibility', 'theatrum-admin'),
         'summary' => __('Alt text, heading order, link text, and two checks you can run yourself.', 'theatrum-admin'),
+      ],
+    ],
+  ],
+
+  'blocks' => [
+    'label'  => __('Blocks', 'theatrum-admin'),
+    'topics' => [
+      'wp-core-blocks'    => [
+        'title'   => __('WP Core Blocks', 'theatrum-admin'),
+        'summary' => __('The built-in WordPress blocks this site relies on, alongside the custom ones.', 'theatrum-admin'),
+      ],
+      'blocks-meta'       => [
+        'title'   => __('Meta Blocks', 'theatrum-admin'),
+        'summary' => __('The blocks that pull post, term and site-option field values onto a page.', 'theatrum-admin'),
+      ],
+      'blocks-layout'     => [
+        'title'   => __('Layout Blocks', 'theatrum-admin'),
+        'summary' => __('Carousels, tabs, popovers, tables and the other structural blocks.', 'theatrum-admin'),
+      ],
+      'blocks-variations' => [
+        'title'   => __('Variations', 'theatrum-admin'),
+        'summary' => __('Production-specific blocks that don\'t fit the other two groups.', 'theatrum-admin'),
       ],
     ],
   ],

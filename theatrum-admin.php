@@ -2,10 +2,10 @@
 
 /**
  * Plugin Name: Theatrum Admin
- * Plugin URI:  https://chancetheater.com
- * Description: WP admin interface customizations for Chance Theater — custom columns, submenus, and design system pages.
+ * Plugin URI:  https://theatrum.dev
+ * Description: WP admin interface customizations for columns, submenus, and design system pages.
  * Version:     1.0.0
- * Author:      Chance Theater
+ * Author:      Anna Jennings (Theatrum Mundi)
  * Text Domain: theatrum-admin
  * Requires at least: 6.7
  * Requires PHP: 8.2
