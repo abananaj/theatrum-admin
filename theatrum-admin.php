@@ -33,6 +33,7 @@ require_once THEATRUM_ADMIN_DIR . 'patterns-admin.php';
 require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
 require_once THEATRUM_ADMIN_DIR . 'position-controls.php';
+require_once THEATRUM_ADMIN_DIR . 'overflow-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'copy-caption.php';
 
 /**
@@ -72,6 +73,24 @@ function chance_enqueue_position_editor_script() {
 add_action('enqueue_block_editor_assets', 'chance_enqueue_position_editor_script');
 
 /**
+ * Enqueue the Group block overflow-clip toggle editor script
+ */
+function chance_enqueue_overflow_editor_script() {
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/overflow-controls.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+        'chance-overflow-controls',
+        plugin_dir_url(__FILE__) . 'dist/overflow-controls.js',
+        ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-hooks'],
+        filemtime($script_dist_path),
+        true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_overflow_editor_script');
+
+/**
  * Enqueue custom RichText format editor script (Inline Quote, Small Text, Span)
  */
 function chance_enqueue_custom_formats_editor_script() {
@@ -88,24 +107,6 @@ function chance_enqueue_custom_formats_editor_script() {
   }
 }
 add_action('enqueue_block_editor_assets', 'chance_enqueue_custom_formats_editor_script');
-
-/**
- * Enqueue the Group block <hgroup> toggle editor script
- */
-function chance_enqueue_hgroup_control_editor_script() {
-  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/hgroup-control.js';
-
-  if (file_exists($script_dist_path)) {
-    wp_enqueue_script(
-        'chance-hgroup-control',
-        plugin_dir_url(__FILE__) . 'dist/hgroup-control.js',
-        ['wp-block-editor', 'wp-components', 'wp-element', 'wp-hooks'],
-        filemtime($script_dist_path),
-        true
-    );
-  }
-}
-add_action('enqueue_block_editor_assets', 'chance_enqueue_hgroup_control_editor_script');
 
 /**
  * Enqueue List View Custom CSS Indicator editor script (outer editor UI — List View badge)

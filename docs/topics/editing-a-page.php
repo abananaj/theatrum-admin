@@ -156,10 +156,6 @@ if ( ! defined('ABSPATH')) {
     from the design but a screen-reader user would otherwise miss.
   </li>
   <li>
-    <strong>Mark as &lt;hgroup&gt;</strong>, on Group blocks — tells the site that a heading
-    and its subtitle are one unit rather than two separate headings.
-  </li>
-  <li>
     <strong>Inline quote</strong> and <strong>Small text</strong>, in the text toolbar under
     the arrow at its right end — for styling a few words inside a paragraph.
   </li>

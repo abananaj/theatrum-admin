@@ -66,11 +66,6 @@ if ( ! defined('ABSPATH')) {
     obvious to a sighted reader that a screen-reader user would otherwise miss — the heading
     above a list of shows, for instance.
   </li>
-  <li>
-    <strong>Mark as &lt;hgroup&gt;</strong>, on a Group block. When a heading and its subtitle
-    are stacked together, this tells the site they are one unit, so the subtitle is not
-    announced as a separate section.
-  </li>
 </ul>
 
 <h2>Writing that helps</h2>

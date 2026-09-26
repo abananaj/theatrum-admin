@@ -34,20 +34,21 @@ theatrum-admin/
 │   ├── patterns-admin.php            # ✅ wp_block tag support, usage count, list columns
 │   ├── design-system.php             # ✅ Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php            # ✅ srOnly attribute + render_block class injection
-│   └── position-controls.php         # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
+│   ├── position-controls.php         # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
+│   └── overflow-controls.php         # ✅ Group overflowClip/overflowClipMargin attrs + render_block style injection
 ├── src/
 │   ├── index.ts                # bundles SCSS
 │   ├── sr-only-blocks.tsx      # editor toggle + outline badge (editor build)
 │   ├── position-controls.tsx   # Position panel (Static/Relative/Absolute/Fixed/Sticky + UnitControl offsets)
 │   ├── custom-formats.tsx      # RichText formats: Inline Quote, Small Text, Span
-│   ├── hgroup-control.tsx      # Group block <hgroup> toggle
+│   ├── overflow-controls.tsx   # Group block "Clip overflow" toggle (overflow: clip, never hidden — keeps sticky working)
 │   └── scss/                   # sr-only.scss, svg-media-library.scss
 ├── dist/                       # build output (gitignored) — rebuild in every environment
 ├── vite.config.js              # builds src/index.ts → dist/index.js (IIFE, self-injects CSS)
 ├── vite.config.editor.js       # builds src/sr-only-blocks.tsx → dist/sr-only-blocks.js
 ├── vite.config.position.js     # builds src/position-controls.tsx → dist/position-controls.js
 ├── vite.config.formats.js      # builds src/custom-formats.tsx → dist/custom-formats.js
-└── vite.config.hgroup.js       # builds src/hgroup-control.tsx → dist/hgroup-control.js
+└── vite.config.overflow.js     # builds src/overflow-controls.tsx → dist/overflow-controls.js
 ```
 
 > ⚠️ The build/enqueue wiring is **out of sync** — see [Next Steps #1](#-high). The dependable, working surface of this plugin is the PHP in `submenus.php`, `patterns-admin.php`, and `design-system.php`.

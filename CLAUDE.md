@@ -18,7 +18,7 @@ For the full architecture, feature-by-feature breakdown, and current known issue
 
 ```bash
 npm install
-npm run build        # runs all 6 Vite configs (index, sr-only editor, position, formats, hgroup, list-view-css)
+npm run build        # runs every Vite config (index, sr-only editor, position, overflow, formats, list-view-css, copy-caption ×2, sr-only-css)
 npm run build:watch  # ⚠️ watch mode only rebuilds the DEFAULT config and empties dist/ each run —
                       # do not rely on this alone; it silently strips the other 5 built files
 npm run deploy        # identical to build
@@ -39,13 +39,14 @@ theatrum-admin/
 │   ├── patterns-admin.php            # wp_block tag support, usage count, list columns
 │   ├── design-system.php             # Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php            # srOnly attribute + render_block class injection
-│   └── position-controls.php         # position attrs + render_block style injection
+│   ├── position-controls.php         # position attrs + render_block style injection
+│   └── overflow-controls.php         # Group overflowClip/overflowClipMargin attrs + render_block style injection
 ├── src/
 │   ├── index.ts                      # bundles SCSS
 │   ├── sr-only-blocks.tsx            # editor toggle + outline badge
 │   ├── position-controls.tsx         # Position panel (theatrum/cover-card, theatrum/chance-card)
 │   ├── custom-formats.tsx            # RichText formats: Inline Quote, Small Text, Span
-│   ├── hgroup-control.tsx            # Group block <hgroup> toggle
+│   ├── overflow-controls.tsx         # Group block "Clip overflow" toggle + clip-margin field (Advanced panel)
 │   ├── list-view-css-indicator.ts    # List View "CSS" badge for blocks with Additional CSS set
 │   └── scss/                         # sr-only.scss, svg-media-library.scss
 ├── dist/                             # build output (gitignored)

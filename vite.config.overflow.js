@@ -5,17 +5,19 @@ export default defineConfig({
 		outDir: 'dist',
 		emptyOutDir: false,
 		rollupOptions: {
-			input: 'src/hgroup-control.tsx',
+			input: 'src/overflow-controls.tsx',
 			output: {
-				entryFileNames: 'hgroup-control.js',
+				entryFileNames: 'overflow-controls.js',
 				assetFileNames: '[name].[ext]',
 				format: 'iife',
-				name: 'TheatrumAdminHgroup',
+				name: 'TheatrumAdminOverflow',
 				globals: {
 					'@wordpress/element': 'wp.element',
 					'@wordpress/hooks': 'wp.hooks',
 					'@wordpress/block-editor': 'wp.blockEditor',
 					'@wordpress/components': 'wp.components',
+					'@wordpress/blocks': 'wp.blocks',
+					'@wordpress/data': 'wp.data',
 				},
 			},
 			external: [/^@wordpress\//],

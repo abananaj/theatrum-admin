@@ -38,7 +38,7 @@ The smallest plugin by commit count, and the one the client touches most — it 
 
 `src/` — TypeScript/React editor extensions
 
-- `copy-caption.tsx` · `custom-formats.tsx` · `hgroup-control.tsx` · `position-controls.tsx` · `sr-only-blocks.tsx` · `list-view-css-indicator.ts`
+- `copy-caption.tsx` · `custom-formats.tsx` · `overflow-controls.tsx` · `position-controls.tsx` · `sr-only-blocks.tsx` · `list-view-css-indicator.ts`
 
 Seven separate Vite configs — each editor extension builds and loads independently rather than shipping as one bundle.
 
@@ -53,7 +53,6 @@ Seven separate Vite configs — each editor extension builds and loads independe
 **Accessibility as an editor control**
 
 - `.sr-only` on any block, from the inspector. Unified with the theme's rule during the audit so there's exactly one definition sitewide.
-- `hgroup-control` gives editors semantic heading groups instead of a visually-styled fake.
 
 **List-view CSS indicator**
 

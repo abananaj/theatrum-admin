@@ -16,7 +16,7 @@ Before adding a new admin feature, check `jul5-code-review.md` first — several
 
 ### Adding a new admin-only editor feature (RichText format, block filter, etc.)
 
-Follow the pattern used by `custom-formats.tsx`/`hgroup-control.tsx`:
+Follow the pattern used by `custom-formats.tsx`/`overflow-controls.tsx`:
 
 1. Add `src/my-feature.tsx`
 2. Add a matching `vite.config.myfeature.js` (one file in, one file out — this plugin does not use a single multi-entry build)
