@@ -1,5 +1,5 @@
 /**
- * Group Block Overflow Clip — a toggle in the Advanced panel that sets `overflow: clip`, revealing a unit field for `overflow-clip-margin` (empty = 0) while on.
+ * Group/Columns Block Overflow Clip — a toggle in the Advanced panel that sets `overflow: clip`, revealing a unit field for `overflow-clip-margin` (empty = 0) while on.
  * Attributes are declared by an inline script on 'wp-blocks' and rendered by a render_block filter — see inc/overflow-controls.php.
  */
 import { createElement as el, Fragment } from '@wordpress/element';
@@ -12,7 +12,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
 
-const OVERFLOW_CLIP_BLOCKS = ['core/group'];
+const OVERFLOW_CLIP_BLOCKS = ['core/group', 'core/columns'];
 
 // overflow-clip-margin accepts lengths only — no percentages.
 const CLIP_MARGIN_UNITS = [

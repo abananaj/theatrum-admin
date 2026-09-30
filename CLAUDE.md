@@ -40,13 +40,13 @@ theatrum-admin/
 │   ├── design-system.php             # Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php            # srOnly attribute + render_block class injection
 │   ├── position-controls.php         # position attrs + render_block style injection
-│   └── overflow-controls.php         # Group overflowClip/overflowClipMargin attrs + render_block style injection
+│   └── overflow-controls.php         # Group/Columns overflowClip/overflowClipMargin attrs + render_block style injection
 ├── src/
 │   ├── index.ts                      # bundles SCSS
 │   ├── sr-only-blocks.tsx            # editor toggle + outline badge
 │   ├── position-controls.tsx         # Position panel (theatrum/cover-card, theatrum/chance-card)
 │   ├── custom-formats.tsx            # RichText formats: Inline Quote, Small Text, Span
-│   ├── overflow-controls.tsx         # Group block "Clip overflow" toggle + clip-margin field (Advanced panel)
+│   ├── overflow-controls.tsx         # Group/Columns "Clip overflow" toggle + clip-margin field (Advanced panel)
 │   ├── list-view-css-indicator.ts    # List View "CSS" badge for blocks with Additional CSS set
 │   └── scss/                         # sr-only.scss, svg-media-library.scss
 ├── dist/                             # build output (gitignored)

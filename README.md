@@ -35,13 +35,13 @@ theatrum-admin/
 │   ├── design-system.php             # ✅ Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php            # ✅ srOnly attribute + render_block class injection
 │   ├── position-controls.php         # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
-│   └── overflow-controls.php         # ✅ Group overflowClip/overflowClipMargin attrs + render_block style injection
+│   └── overflow-controls.php         # ✅ Group/Columns overflowClip/overflowClipMargin attrs + render_block style injection
 ├── src/
 │   ├── index.ts                # bundles SCSS
 │   ├── sr-only-blocks.tsx      # editor toggle + outline badge (editor build)
 │   ├── position-controls.tsx   # Position panel (Static/Relative/Absolute/Fixed/Sticky + UnitControl offsets)
 │   ├── custom-formats.tsx      # RichText formats: Inline Quote, Small Text, Span
-│   ├── overflow-controls.tsx   # Group block "Clip overflow" toggle (overflow: clip, never hidden — keeps sticky working)
+│   ├── overflow-controls.tsx   # Group/Columns "Clip overflow" toggle (overflow: clip, never hidden — keeps sticky working)
 │   └── scss/                   # sr-only.scss, svg-media-library.scss
 ├── dist/                       # build output (gitignored) — rebuild in every environment
 ├── vite.config.js              # builds src/index.ts → dist/index.js (IIFE, self-injects CSS)
