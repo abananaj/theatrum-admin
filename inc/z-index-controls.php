@@ -70,8 +70,10 @@ function chance_apply_z_index_style($block_content, $block) {
 
   $css = 'z-index: ' . (int) $z_index . ';';
 
-  // Core's Position support (sticky/fixed) already makes the box positioned via its own class — an inline `position` here would override it.
-  if (empty($block['attrs']['style']['position']['type'])) {
+  // Skip when core's Position support or position-controls.php already positions the box — a later inline `position: relative` would override its absolute/fixed/sticky.
+  $has_position = ! empty($block['attrs']['style']['position']['type'])
+    || in_array($block['attrs']['positionType'] ?? 'static', ['relative', 'absolute', 'fixed', 'sticky'], true);
+  if ( ! $has_position) {
     $css = 'position: relative; ' . $css;
   }
 
