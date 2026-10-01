@@ -35,20 +35,23 @@ theatrum-admin/
 │   ├── design-system.php             # ✅ Templates / Patterns / Parts admin pages
 │   ├── sr-only-blocks.php            # ✅ srOnly attribute + render_block class injection
 │   ├── position-controls.php         # ✅ positionType/Top/Right/Bottom/Left attrs + render_block style injection
-│   └── overflow-controls.php         # ✅ Group/Columns overflowClip/overflowClipMargin attrs + render_block style injection
+│   ├── overflow-controls.php         # ✅ Group/Columns overflowClip/overflowClipMargin attrs + render_block style injection
+│   └── z-index-controls.php          # ✅ Group/Columns zIndex attr + render_block style injection (adds position: relative unless sticky/fixed)
 ├── src/
 │   ├── index.ts                # bundles SCSS
 │   ├── sr-only-blocks.tsx      # editor toggle + outline badge (editor build)
 │   ├── position-controls.tsx   # Position panel (Static/Relative/Absolute/Fixed/Sticky + UnitControl offsets)
 │   ├── custom-formats.tsx      # RichText formats: Inline Quote, Small Text, Span
 │   ├── overflow-controls.tsx   # Group/Columns "Clip overflow" toggle (overflow: clip, never hidden — keeps sticky working)
+│   ├── z-index-controls.tsx    # Group/Columns "Z-index" field (Advanced panel)
 │   └── scss/                   # sr-only.scss, svg-media-library.scss
 ├── dist/                       # build output (gitignored) — rebuild in every environment
 ├── vite.config.js              # builds src/index.ts → dist/index.js (IIFE, self-injects CSS)
 ├── vite.config.editor.js       # builds src/sr-only-blocks.tsx → dist/sr-only-blocks.js
 ├── vite.config.position.js     # builds src/position-controls.tsx → dist/position-controls.js
 ├── vite.config.formats.js      # builds src/custom-formats.tsx → dist/custom-formats.js
-└── vite.config.overflow.js     # builds src/overflow-controls.tsx → dist/overflow-controls.js
+├── vite.config.overflow.js     # builds src/overflow-controls.tsx → dist/overflow-controls.js
+└── vite.config.z-index.js      # builds src/z-index-controls.tsx → dist/z-index-controls.js
 ```
 
 > ⚠️ The build/enqueue wiring is **out of sync** — see [Next Steps #1](#-high). The dependable, working surface of this plugin is the PHP in `submenus.php`, `patterns-admin.php`, and `design-system.php`.

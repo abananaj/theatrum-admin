@@ -34,6 +34,7 @@ require_once THEATRUM_ADMIN_DIR . 'design-system.php';
 require_once THEATRUM_ADMIN_DIR . 'sr-only-blocks.php';
 require_once THEATRUM_ADMIN_DIR . 'position-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'overflow-controls.php';
+require_once THEATRUM_ADMIN_DIR . 'z-index-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'copy-caption.php';
 
 /**
@@ -89,6 +90,24 @@ function chance_enqueue_overflow_editor_script() {
   }
 }
 add_action('enqueue_block_editor_assets', 'chance_enqueue_overflow_editor_script');
+
+/**
+ * Enqueue the Group/Columns z-index field editor script
+ */
+function chance_enqueue_z_index_editor_script() {
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/z-index-controls.js';
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+        'chance-z-index-controls',
+        plugin_dir_url(__FILE__) . 'dist/z-index-controls.js',
+        ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-hooks'],
+        filemtime($script_dist_path),
+        true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_z_index_editor_script');
 
 /**
  * Enqueue custom RichText format editor script (Inline Quote, Small Text, Span)
