@@ -89,6 +89,31 @@ add_action(
     }
 );
 
+// Category dropdown above the native wp_block list; submits ?wp_pattern_category=slug for the filter above.
+add_action(
+    'restrict_manage_posts',
+    function ($post_type) {
+    if ($post_type !== 'wp_block') { return;
+    }
+    $selected = isset($_GET['wp_pattern_category']) ? sanitize_text_field(wp_unslash($_GET['wp_pattern_category'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only list filter.
+    echo '<label for="filter-by-pattern-category" class="screen-reader-text">' . esc_html__('Filter by pattern category', 'theatrum-admin') . '</label>';
+    wp_dropdown_categories(
+        [
+        'taxonomy'        => 'wp_pattern_category',
+        'name'            => 'wp_pattern_category',
+        'id'              => 'filter-by-pattern-category',
+        'value_field'     => 'slug',
+        'selected'        => $selected,
+        'show_option_all' => __('All pattern categories', 'theatrum-admin'),
+        'hide_empty'      => false,
+        'hierarchical'    => true,
+        'orderby'         => 'name',
+        'show_count'      => true,
+        ]
+    );
+    }
+);
+
 // ── Columns on the native wp_block admin list ─────────────────────────────────
 
 add_filter(
@@ -164,6 +189,9 @@ add_action(
 
 // ── Usage count ───────────────────────────────────────────────────────────────
 
+// Versioned key so counts cached before wp_block was included get ignored.
+const CT_PATTERN_USAGE_TRANSIENT = 'ct_pattern_usage_counts_v2';
+
 /**
  * Count how many published/drafted posts embed a synced pattern by ref ID — searches post_content for "ref":ID as written by Gutenberg ({"ref":123} or {"ref":123,"syncBehavior":"..."}).
  */
@@ -178,8 +206,10 @@ return (int) $wpdb->get_var(
     $wpdb->prepare(
         "SELECT COUNT(*) FROM {$wpdb->posts}
        WHERE post_status NOT IN ('auto-draft', 'trash', 'inherit')
-       AND post_type NOT IN ('wp_block', 'revision')
+       AND post_type <> 'revision'
+       AND ID <> %d
        AND (post_content LIKE %s OR post_content LIKE %s)",
+        $pattern_id,
         $like_close,
         $like_comma
     )
@@ -197,18 +227,18 @@ function ct_get_all_pattern_usage_counts(): array {
     return $counts;
   }
 
-  $cached = get_transient('ct_pattern_usage_counts');
+  $cached = get_transient(CT_PATTERN_USAGE_TRANSIENT);
   if (is_array($cached)) {
     $counts = $cached;
     return $counts;
   }
 
   global $wpdb;
-  // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- as above; the result IS cached, in the ct_pattern_usage_counts transient just above, which the sniff does not recognise as caching.
+  // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- as above; the result IS cached, in the CT_PATTERN_USAGE_TRANSIENT transient just above, which the sniff does not recognise as caching.
 $rows = $wpdb->get_results(
-    "SELECT post_content FROM {$wpdb->posts}
+    "SELECT ID, post_content FROM {$wpdb->posts}
      WHERE post_status NOT IN ('auto-draft', 'trash', 'inherit')
-     AND post_type NOT IN ('wp_block', 'revision')
+     AND post_type <> 'revision'
      AND post_content LIKE '%\"ref\":%'"
 );
 
@@ -219,12 +249,15 @@ $rows = $wpdb->get_results(
     }
     // Count each pattern once per post, matching the old per-post COUNT(*) semantics
     foreach (array_unique($matches[1]) as $ref_id) {
-      $ref_id          = (int) $ref_id;
+      $ref_id = (int) $ref_id;
+      if ($ref_id === (int) $row->ID) {
+        continue;
+      }
       $counts[$ref_id] = ($counts[$ref_id] ?? 0) + 1;
     }
   }
 
-  set_transient('ct_pattern_usage_counts', $counts, 12 * HOUR_IN_SECONDS);
+  set_transient(CT_PATTERN_USAGE_TRANSIENT, $counts, 12 * HOUR_IN_SECONDS);
   return $counts;
 }
 
@@ -233,13 +266,13 @@ add_action(
     function ($post_id) {
     if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) { return;
     }
-    delete_transient('ct_pattern_usage_counts');
+    delete_transient(CT_PATTERN_USAGE_TRANSIENT);
     }
 );
 add_action(
     'before_delete_post',
     function () {
-    delete_transient('ct_pattern_usage_counts');
+    delete_transient(CT_PATTERN_USAGE_TRANSIENT);
     }
 );
 
@@ -274,9 +307,11 @@ $posts = $wpdb->get_results(
     $wpdb->prepare(
         "SELECT ID, post_title, post_type, post_status FROM {$wpdb->posts}
        WHERE post_status NOT IN ('auto-draft', 'trash', 'inherit')
-       AND post_type NOT IN ('wp_block', 'revision')
+       AND post_type <> 'revision'
+       AND ID <> %d
        AND (post_content LIKE %s OR post_content LIKE %s)
        ORDER BY post_type ASC, post_title ASC",
+        $pattern_id,
         $like_close,
         $like_comma
     )
@@ -293,7 +328,7 @@ $posts = array_values(
 );
 
   if (empty($posts)) {
-    echo '<p>This pattern is not used in any posts or pages.</p></div>';
+    echo '<p>This pattern is not used anywhere.</p></div>';
     return;
   }
 
