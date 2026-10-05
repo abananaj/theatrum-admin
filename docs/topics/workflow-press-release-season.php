@@ -49,6 +49,24 @@ if ( ! defined('ABSPATH')) {
   production one is.
 </p>
 
+<p>
+  OTR announcements go in the separate <strong>OTR Press Releases</strong> field on the same season.
+</p>
+
+<h2>Where it shows up</h2>
+
+<p>
+  The <strong>Press Room</strong> builds itself from these fields: visitors pick a season from the
+  <strong>Season</strong> dropdown (it opens on the current season) and see that season's general and
+  OTR releases beside its productions. Nothing on the Press Room page itself needs editing — attach
+  the file to the season and it appears.
+</p>
+
+<p>
+  Which season counts as "current" is the <strong>Current Season</strong> setting in Site Options;
+  change it when a new season goes up. <?php chance_manual_see('site-options', 'Site Options'); ?>
+</p>
+
 <h2>While you are in there</h2>
 
 <p>

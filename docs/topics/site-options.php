@@ -53,6 +53,11 @@ if ( ! defined('ABSPATH')) {
   <li>
     <strong>A production with no season is invisible here</strong>, however well filled in it is.
   </li>
+  <li>
+    <strong>Past Productions and the Press Room open on it too.</strong> Both pages show one season
+    at a time, with a <strong>Season</strong> dropdown for the others; with nothing chosen they show
+    the Current Season.
+  </li>
 </ul>
 
 <p>

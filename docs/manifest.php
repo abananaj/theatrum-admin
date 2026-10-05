@@ -50,6 +50,11 @@ return [
         'summary' => __('Season, then productions, then credits, then events — in the order that causes the least trouble.', 'theatrum-admin'),
         'key'     => true,
       ],
+      'workflow-new-page'                 => [
+        'title'   => __('Making a new page', 'theatrum-admin'),
+        'summary' => __('Parent, featured image, the shared page header, sections that build the page navigation, and linking it from its parent.', 'theatrum-admin'),
+        'key'     => true,
+      ],
       'workflow-production-photos'        => [
         'title'   => __('Adding production photos', 'theatrum-admin'),
         'summary' => __('Uploading a batch of photos, and the second step that actually puts them on the show page.', 'theatrum-admin'),
@@ -89,6 +94,10 @@ return [
         'summary' => __('The full walkthrough for putting a show on the site, start to finish.', 'theatrum-admin'),
         'key'     => true,
         'screens' => ['production'],
+      ],
+      'titles'                    => [
+        'title'   => __('Pretitle, short title and subtitle', 'theatrum-admin'),
+        'summary' => __('The three extra title fields, which cards use them, and what not to put in a title.', 'theatrum-admin'),
       ],
       'production-credits'        => [
         'title'   => __('Cast and creative credits', 'theatrum-admin'),
