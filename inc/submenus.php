@@ -157,7 +157,14 @@ add_action(
     'edit.php?post_type=production&series=visiting-companies',
     'Visiting Companies',
     ];
-  
+
+    $otr_readings_item = [
+    'OTR Readings',
+    'read',
+    'edit.php?post_type=production&series=otr-series',
+    'OTR Readings',
+    ];
+
     // Insert after first item (All Productions)
     $items         = array_values($submenu[$key]);
     $submenu[$key] = [];
@@ -165,6 +172,7 @@ add_action(
       $submenu[$key][] = $item;
       if ($i === 0) {
         $submenu[$key][] = $visiting_companies_item;
+        $submenu[$key][] = $otr_readings_item;
       }
     }
 
@@ -226,20 +234,55 @@ add_action(
       return;
     }
 
-    // Exclude visiting-companies term from the main list
+    // Exclude visiting-companies, and otr-series unless also main-series, from the main list
     $tax_query = $query->get('tax_query');
     if ( ! is_array($tax_query)) {
       $tax_query = [];
     }
 
     $tax_query[] = [
-    'taxonomy' => 'series',
-    'field'    => 'slug',
-    'terms'    => 'visiting-companies',
-    'operator' => 'NOT IN',
+    'relation' => 'AND',
+    [
+      'taxonomy' => 'series',
+      'field'    => 'slug',
+      'terms'    => 'visiting-companies',
+      'operator' => 'NOT IN',
+    ],
+    [
+      'relation' => 'OR',
+      [
+        'taxonomy' => 'series',
+        'field'    => 'slug',
+        'terms'    => 'otr-series',
+        'operator' => 'NOT IN',
+      ],
+      [
+        'taxonomy' => 'series',
+        'field'    => 'slug',
+        'terms'    => 'main-series',
+        'operator' => 'IN',
+      ],
+    ],
     ];
 
     $query->set('tax_query', $tax_query);
+    }
+);
+
+// ── Highlight the Visiting Companies / OTR Readings submenu item on their filtered lists ──
+
+add_filter(
+    'submenu_file',
+    function ($submenu_file) {
+    global $pagenow;
+    if ($pagenow !== 'edit.php' || ! isset($_GET['post_type'], $_GET['series']) || $_GET['post_type'] !== 'production') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return $submenu_file;
+    }
+    $series = sanitize_key(wp_unslash($_GET['series'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+    if (in_array($series, ['visiting-companies', 'otr-series'], true)) {
+      return 'edit.php?post_type=production&series=' . $series;
+    }
+    return $submenu_file;
     }
 );
 
