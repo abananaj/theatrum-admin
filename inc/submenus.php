@@ -85,15 +85,19 @@ add_action(
       $submenu['edit.php'] = $rebuilt;
     }
 
-    // ── Separator after 2nd subitem for other post types ────────────────────────
+    // ── Separator after 2nd subitem for other post types, plus any "Add …" (post-new.php) links directly following it ──
     $insert_sep = function ($key) use (&$submenu) {
     if (empty($submenu[$key])) { return;
     }
-    $items   = array_values($submenu[$key]);
+    $items = array_values($submenu[$key]);
+    $last  = 1;
+    while (isset($items[$last + 1][2]) && strpos($items[$last + 1][2], 'post-new.php') === 0) {
+      $last++;
+    }
     $rebuilt = [];
     foreach ($items as $i => $item) {
       $rebuilt[] = $item;
-      if ($i === 1) {
+      if ($i === $last) {
         $rebuilt[] = ['<span class="ct-sub-sep"></span>', 'read', '#sep-' . sanitize_key($key), '', 'ct-submenu-separator'];
       }
     }
@@ -150,7 +154,7 @@ add_action(
       $submenu[$key][$series_index] = $season_item;
     }
 
-    // ── Add "Visiting Companies" custom submenu item after "All Productions" ─────
+    // ── Add "OTR Readings" and "Visiting Companies" submenu items after "All Productions" ─────
     $visiting_companies_item = [
     'Visiting Companies',
     'read',
@@ -171,8 +175,8 @@ add_action(
     foreach ($items as $i => $item) {
       $submenu[$key][] = $item;
       if ($i === 0) {
-        $submenu[$key][] = $visiting_companies_item;
         $submenu[$key][] = $otr_readings_item;
+        $submenu[$key][] = $visiting_companies_item;
       }
     }
 
