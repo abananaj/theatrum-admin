@@ -120,77 +120,49 @@ add_action(
     $remove_submenu('edit.php?post_type=artist',   'taxonomy=post_tag');
     $remove_submenu('edit.php?post_type=production', 'taxonomy=post_tag');
 
-    // ── production: put Series before Season ─────────────────────────────────
+    // ── Productions: All / Add links, divider, then the three series views (Anna, Oct 6). Series, Seasons and Credits move out (Credits stays reachable by URL). ──
     $key = 'edit.php?post_type=production';
 
-    if ( ! isset($submenu[$key])) { return;
+    if (isset($submenu[$key])) {
+      $add_links = [];
+      foreach ($submenu[$key] as $item) {
+        if (isset($item[2]) && strpos($item[2], 'post-new.php?post_type=production') === 0) {
+          $add_links[] = $item;
+        }
+      }
+      $submenu[$key] = array_merge(
+          [['All Productions', 'edit_posts', 'edit.php?post_type=production', 'All Productions']],
+          $add_links,
+          [
+          ['<span class="ct-sub-sep"></span>', 'read', '#sep-' . sanitize_key($key), '', 'ct-submenu-separator'],
+          ['Chance Productions', 'edit_posts', 'edit.php?post_type=production&ct_chance=1', 'Chance Productions'],
+          ['OTR Readings', 'edit_posts', 'edit.php?post_type=production&series=otr-series', 'OTR Readings'],
+          ['Visiting Companies', 'edit_posts', 'edit.php?post_type=production&series=visiting-companies', 'Visiting Companies'],
+          ]
+      );
     }
 
-    // ── Rename "All Productions" to "Chance Productions" ─────────────────────────
-    foreach ($submenu[$key] as $index => $item) {
-      if (isset($item[2]) && $item[2] === 'edit.php?post_type=production') {
-        $submenu[$key][$index][0] = 'Chance Productions';
-        $submenu[$key][$index][3] = 'Chance Productions';
-        break;
+    // ── Season / series / page taxonomies now live under the Seasons menu, so drop their per-post-type copies ──
+    $drop = function ($parent, $fragments) use (&$submenu) {
+    if (empty($submenu[$parent])) { return;
+    }
+    foreach ($submenu[$parent] as $index => $item) {
+      foreach ($fragments as $fragment) {
+        if (isset($item[2]) && strpos($item[2], $fragment) !== false) {
+          unset($submenu[$parent][$index]);
+          break;
+        }
       }
     }
+    };
+    $drop('edit.php', ['taxonomy=season', 'taxonomy=series']);
+    $drop('edit.php?post_type=event', ['taxonomy=season', 'taxonomy=series']);
+    $drop('edit.php?post_type=page', ['taxonomy=season', 'taxonomy=series', 'taxonomy=category', 'taxonomy=event-type', 'taxonomy=program', 'ct_layout=season', 'post_type=archived-page']);
 
-    $series_item  = $season_item = null;
-    $series_index = $season_index = null;
-
-    foreach ($submenu[$key] as $index => $item) {
-      if (isset($item[2]) && strpos($item[2], 'taxonomy=series') !== false) {
-        $series_item  = $item;
-        $series_index = $index;
-      }
-      if (isset($item[2]) && strpos($item[2], 'taxonomy=season') !== false) {
-        $season_item  = $item;
-        $season_index = $index;
-      }
+    // ── Pages: "Archived Pages" lists pages with the archive status (the old link pointed at an empty archived-page post type) ──
+    if (isset($submenu['edit.php?post_type=page'])) {
+      $submenu['edit.php?post_type=page'][] = ['Archived Pages', 'edit_pages', 'edit.php?post_status=archive&post_type=page', 'Archived Pages'];
     }
-
-    if ($series_item && $season_item && $season_index < $series_index) {
-      $submenu[$key][$season_index] = $series_item;
-      $submenu[$key][$series_index] = $season_item;
-    }
-
-    // ── Add "OTR Readings" and "Visiting Companies" submenu items after "All Productions" ─────
-    $visiting_companies_item = [
-    'Visiting Companies',
-    'read',
-    'edit.php?post_type=production&series=visiting-companies',
-    'Visiting Companies',
-    ];
-
-    $otr_readings_item = [
-    'OTR Readings',
-    'read',
-    'edit.php?post_type=production&series=otr-series',
-    'OTR Readings',
-    ];
-
-    // Insert after first item (All Productions)
-    $items         = array_values($submenu[$key]);
-    $submenu[$key] = [];
-    foreach ($items as $i => $item) {
-      $submenu[$key][] = $item;
-      if ($i === 0) {
-        $submenu[$key][] = $otr_readings_item;
-        $submenu[$key][] = $visiting_companies_item;
-      }
-    }
-
-    // ── Top-level Tags menu (before the separator before Appearance) ────────────
-    global $menu;
-    $menu[58] = [
-    'Tags',
-    'edit_posts',
-    'edit-tags.php?taxonomy=post_tag',
-    'Tags',
-    'menu-top menu-icon-post_tag',
-    'menu-posts-post_tag',
-    'dashicons-tag',
-    ];
 
     // ── Move Themes from Appearance to Settings submenu ────────────────────────
     // Remove Themes from Appearance
@@ -233,8 +205,8 @@ add_action(
       return;
     }
 
-    // Only filter when viewing the main Chance Productions list (no series filter)
-    if (isset($_GET['series'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
+    // Only filter the "Chance Productions" view; All Productions shows everything.
+    if (empty($_GET['ct_chance'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
       return;
     }
 
@@ -273,12 +245,126 @@ add_action(
     }
 );
 
+// ── Seasons top-level menu: seasons, new season page, series, then Global Categories, Tags and the season Settings page (Anna, Oct 6) ──
+
+define('THEATRUM_ADMIN_SEASONS_MENU', 'edit-tags.php?taxonomy=season');
+
+// Registered early (before ACF's priority-99 options pages) so the Settings sub-page resolves its hook against this parent.
+add_action(
+    'admin_menu',
+    function () {
+    add_menu_page(__('Seasons', 'theatrum-admin'), __('Seasons', 'theatrum-admin'), 'manage_categories', THEATRUM_ADMIN_SEASONS_MENU, '', 'dashicons-calendar-alt', 51);
+    },
+    9
+);
+
+add_action(
+    'admin_menu',
+    function () {
+    global $menu, $submenu;
+    $parent = THEATRUM_ADMIN_SEASONS_MENU;
+
+    // Global Categories and the old top-level Tags fold in here.
+    remove_menu_page('edit-tags.php?taxonomy=nomenclature');
+    foreach ($menu as $pos => $item) {
+      if (isset($item[2]) && 'edit-tags.php?taxonomy=post_tag' === $item[2]) {
+        unset($menu[$pos]);
+      }
+    }
+
+    // Settings is the ACF options page (chance-ollie season.php); kept last, its link is fixed up in the PHP_INT_MAX pass below.
+    $settings = array();
+    foreach ($submenu[$parent] ?? array() as $item) {
+      if (isset($item[2]) && 'season-settings' === $item[2]) {
+        $settings[] = $item;
+      }
+    }
+
+    $submenu[$parent] = array_merge(
+        array(
+        array(__('All Seasons', 'theatrum-admin'), 'manage_categories', $parent, __('All Seasons', 'theatrum-admin')),
+        array(__('New Season', 'theatrum-admin'), 'edit_pages', 'post-new.php?post_type=page&ct_layout=season', __('New Season', 'theatrum-admin')),
+        array(__('Series', 'theatrum-admin'), 'manage_categories', 'edit-tags.php?taxonomy=series', __('Series', 'theatrum-admin')),
+        array('<span class="ct-sub-sep"></span>', 'read', '#sep-seasons', '', 'ct-submenu-separator'),
+        array(__('Global Categories', 'theatrum-admin'), 'manage_categories', 'edit-tags.php?taxonomy=nomenclature', __('Global Categories', 'theatrum-admin')),
+        array(__('Tags', 'theatrum-admin'), 'manage_categories', 'edit-tags.php?taxonomy=post_tag', __('Tags', 'theatrum-admin')),
+        ),
+        $settings
+    );
+    },
+    1000
+);
+
+// Last pass: point the Settings row through admin.php (core would build edit-tags.php?…&page=, which errors).
+add_action(
+    'admin_menu',
+    function () {
+    global $submenu;
+    foreach ($submenu[THEATRUM_ADMIN_SEASONS_MENU] ?? array() as $index => $item) {
+      if (isset($item[2]) && 'season-settings' === $item[2]) {
+        $submenu[THEATRUM_ADMIN_SEASONS_MENU][$index][2] = 'admin.php?page=season-settings';
+      }
+    }
+    },
+    PHP_INT_MAX
+);
+
+// Keep Seasons open and the right row highlighted on its term screens and the New Season editor.
+add_filter(
+    'parent_file',
+    function ($parent_file) {
+    global $pagenow;
+    $screen = get_current_screen();
+    if ($screen && in_array($screen->taxonomy, array('season', 'series', 'nomenclature'), true)) {
+      return THEATRUM_ADMIN_SEASONS_MENU;
+    }
+    if ($screen && 'post_tag' === $screen->taxonomy && empty($_GET['post_type'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return THEATRUM_ADMIN_SEASONS_MENU;
+    }
+    if ('post-new.php' === $pagenow && isset($_GET['ct_layout']) && 'season' === $_GET['ct_layout']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return THEATRUM_ADMIN_SEASONS_MENU;
+    }
+    return $parent_file;
+    },
+    20
+);
+
+add_filter(
+    'submenu_file',
+    function ($submenu_file) {
+    global $pagenow;
+    $screen = get_current_screen();
+    if ($screen && in_array($pagenow, array('edit-tags.php', 'term.php'), true)) {
+      if ($screen && in_array($screen->taxonomy, array('season', 'series', 'nomenclature'), true)) {
+        return 'edit-tags.php?taxonomy=' . $screen->taxonomy;
+      }
+      if ($screen && 'post_tag' === $screen->taxonomy && empty($_GET['post_type'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+        return 'edit-tags.php?taxonomy=post_tag';
+      }
+    }
+    if ('post-new.php' === $pagenow && isset($_GET['ct_layout']) && 'season' === $_GET['ct_layout']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return 'post-new.php?post_type=page&ct_layout=season';
+    }
+    if (isset($_GET['page']) && 'season-settings' === $_GET['page']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return 'admin.php?page=season-settings';
+    }
+    return $submenu_file;
+    },
+    20
+);
+
 // ── Highlight the Visiting Companies / OTR Readings submenu item on their filtered lists ──
 
 add_filter(
     'submenu_file',
     function ($submenu_file) {
     global $pagenow;
+    if ($pagenow === 'edit.php' && ! empty($_GET['ct_chance'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return 'edit.php?post_type=production&ct_chance=1';
+    }
+    if ($pagenow === 'edit.php' && isset($_GET['post_status'], $_GET['post_type']) && 'archive' === $_GET['post_status'] && 'page' === $_GET['post_type']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+      return 'edit.php?post_status=archive&post_type=page';
+    }
     if ($pagenow !== 'edit.php' || ! isset($_GET['post_type'], $_GET['series']) || $_GET['post_type'] !== 'production') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
       return $submenu_file;
     }

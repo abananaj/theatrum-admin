@@ -36,6 +36,7 @@ require_once THEATRUM_ADMIN_DIR . 'position-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'overflow-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'z-index-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'copy-caption.php';
+require_once THEATRUM_ADMIN_DIR . 'acf-admin.php';
 
 /**
  * Enqueue SR-Only block editor script (outer editor UI — block filters)

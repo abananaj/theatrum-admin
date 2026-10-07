@@ -119,6 +119,46 @@ add_menu_page(
 add_action('admin_menu', 'chance_manual_menu', 9);
 
 /**
+ * Submenu: Contents, then one row per manifest section linking to its first topic (Anna, Oct 6).
+ */
+function chance_manual_submenu() {
+  global $submenu;
+
+  $rows = [[__('Contents', 'theatrum-admin'), 'edit_posts', CHANCE_MANUAL_SLUG, __('Contents', 'theatrum-admin')]];
+  foreach (chance_manual_manifest() as $group) {
+    $first = array_key_first($group['topics']);
+    if ($first) {
+      $rows[] = [$group['label'], 'edit_posts', 'admin.php?page=' . CHANCE_MANUAL_SLUG . '&topic=' . $first, $group['label']];
+    }
+  }
+  $submenu[CHANCE_MANUAL_SLUG] = $rows; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- building this menu's own submenu.
+}
+add_action('admin_menu', 'chance_manual_submenu', 1001);
+
+/**
+ * Highlight the section row for whichever topic is open.
+ *
+ * @param string|null $submenu_file Current submenu file.
+ * @return string|null
+ */
+function chance_manual_submenu_file($submenu_file) {
+  if (empty($_GET['page']) || CHANCE_MANUAL_SLUG !== $_GET['page']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+    return $submenu_file;
+  }
+  $topic = isset($_GET['topic']) ? sanitize_key(wp_unslash($_GET['topic'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin menu highlight; no state change.
+  if ( ! $topic) {
+    return CHANCE_MANUAL_SLUG;
+  }
+  foreach (chance_manual_manifest() as $group) {
+    if (isset($group['topics'][$topic])) {
+      return 'admin.php?page=' . CHANCE_MANUAL_SLUG . '&topic=' . array_key_first($group['topics']);
+    }
+  }
+  return $submenu_file;
+}
+add_filter('submenu_file', 'chance_manual_submenu_file');
+
+/**
  * Load the manual stylesheet, on the manual screen only.
  *
  * @param string $hook_suffix Current admin page hook.
