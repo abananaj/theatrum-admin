@@ -196,10 +196,6 @@ return [
   'blocks' => [
     'label'  => __('Blocks', 'theatrum-admin'),
     'topics' => [
-      'wp-core-blocks'    => [
-        'title'   => __('WP Core Blocks', 'theatrum-admin'),
-        'summary' => __('The built-in WordPress blocks this site relies on, alongside the custom ones.', 'theatrum-admin'),
-      ],
       'blocks-meta'       => [
         'title'   => __('Meta Blocks', 'theatrum-admin'),
         'summary' => __('The blocks that pull post, term and site-option field values onto a page.', 'theatrum-admin'),
