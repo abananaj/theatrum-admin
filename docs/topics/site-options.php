@@ -12,8 +12,8 @@ if ( ! defined('ABSPATH')) {
 
 <p class="ct-manual__intro">
   <strong>Site Options</strong> is one screen of settings that apply to the whole site rather
-  than to any one page. It is small, and it has more reach than anything else you can edit —
-  a single field here changes what the home page leads with.
+  than to any one page: the staff and board listings, and the fallback images that stand in when
+  a post has no picture of its own.
 </p>
 
 <?php chance_manual_go('admin.php?page=site-options', 'Open Site Options'); ?>
@@ -25,65 +25,14 @@ if ( ! defined('ABSPATH')) {
   </p>
 </div>
 
-<h2>Seasons — the most consequential field on the site</h2>
+<h2>Looking for Current Season?</h2>
 
 <p>
-  <strong>Current Season</strong> is a single choice, and a great deal follows from it. The site
-  works out what is on stage now by taking every production filed under that season and
-  comparing their opening and closing dates to today: whichever show is currently running is
-  “on stage”, and if none is running, the next one to open is. <strong>Next Up</strong> is then
-  the one after that.
-</p>
-
-<p>
-  So the home page's headline modules are not set by hand. They follow from this field plus the
-  dates on each production — which means:
-</p>
-
-<ul class="ct-manual__rules">
-  <li>
-    <strong>Rolling the site on to a new season is this one field.</strong> Change Current
-    Season, and everything downstream re-reads itself.
-  </li>
-  <li>
-    <strong>If the wrong show is on the home page, look at the dates first.</strong> A
-    production with a missing or mistyped opening date cannot be found by this logic, and the
-    site quietly moves on to the next one that has good dates.
-  </li>
-  <li>
-    <strong>A production with no season is invisible here</strong>, however well filled in it is.
-  </li>
-  <li>
-    <strong>Past Productions and the Press Room open on it too.</strong> Both pages show one season
-    at a time, with a <strong>Season</strong> dropdown for the others; with nothing chosen they show
-    the Current Season.
-  </li>
-</ul>
-
-<p>
-  <strong>Next Season</strong> is the season after the current one, used where the site needs to
-  advertise what is coming. See <?php chance_manual_see('seasons-and-series'); ?>.
-</p>
-
-<h2>Featured modules — the manual override</h2>
-
-<p>
-  <strong>Current</strong> and <strong>Next up</strong> let you pin a specific production into
-  those two slots instead of letting the dates decide. <strong>Featured 1</strong> to
-  <strong>Featured 4</strong> do the same for the promoted items further down.
-</p>
-
-<p>
-  <strong>Empty is the normal state for these.</strong> Left blank, each slot works itself out —
-  the note under each field tells you what it falls back to, which for Featured 1 to 3 is the
-  next upcoming readings and for Featured 4 the next upcoming event. Fill one in and it is
-  pinned: it escapes the date and category rules entirely and stays exactly as you set it,
-  including after the show has closed, until someone empties it again.
-</p>
-
-<p>
-  Use them for a deliberate exception, and make a note to clear them afterwards. A forgotten
-  override is one of the more common reasons the home page shows something stale.
+  It has moved. <strong>Current Season</strong>, <strong>Next Season</strong> and
+  <strong>Hide Next Season?</strong> now live under <strong>Seasons → Season Settings</strong>,
+  which only administrators can open. If you are an Editor and the season needs changing, ask an
+  administrator. <?php chance_manual_see('seasons-and-series', 'Seasons and series'); ?> explains
+  what the setting does.
 </p>
 
 <h2>Featured images — the fallbacks</h2>
@@ -103,24 +52,32 @@ if ( ! defined('ABSPATH')) {
 
 <p>
   Two lists of roles — Executive Artistic Director, General Manager, Production Manager and so
-  on for staff; President, Vice President, Treasurer, Secretary, Board Members, Emeritus and
-  Legacy for the board. Each slot points at an <strong>Artist</strong> record.
+  on for staff; President, Vice President, Treasurer, Secretary, Immediate Past Board
+  President, Board Members, Emeritus and Legacy for the board. Staff slots point at
+  <strong>Artist</strong> records; board slots point at <strong>Supporter</strong> records.
+</p>
+
+<p>
+  The same two lists can also be opened on their own, from <strong>Artists → Chance Staff</strong>
+  and <strong>Supporters → Board Positions</strong>. They are the same fields, not copies:
+  a change made in either place shows in both.
 </p>
 
 <ul>
   <li>
-    <strong>The person must exist as an Artist first.</strong> These fields search the Artists
-    list; they cannot create someone. See <?php chance_manual_see('adding-an-artist'); ?>.
+    <strong>The person must exist first</strong> — as an Artist for a staff role, as a Supporter
+    for a board role. These fields search those lists; they cannot create someone. See
+    <?php chance_manual_see('adding-an-artist'); ?> and <?php chance_manual_see('classes-venues-supporters'); ?>.
   </li>
   <li>
-    <strong>Changing who holds a role is done here</strong>, not on the artist. Editing the
-    artist changes their name and bio everywhere; it does not move them into or out of a role.
+    <strong>Changing who holds a role is done here</strong>, not on the person's own record. Editing the
+    record changes their name and bio everywhere; it does not move them into or out of a role.
   </li>
 </ul>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    <strong>Deleting an artist does not clear them out of these lists.</strong> The slot keeps
+    <strong>Deleting an artist or supporter does not clear them out of these lists.</strong> The slot keeps
     pointing at a record that no longer exists, and the listing on the site quietly loses that
     person with no warning on either screen. When someone leaves, empty the slot here first.
   </p>

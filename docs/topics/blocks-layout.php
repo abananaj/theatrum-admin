@@ -2,7 +2,10 @@
 
 <p class="ct-manual__intro">
   Structural and display blocks — carousels, tabs, tables, and the other pieces pages are
-  built from. One section below per block.
+  built from. One section below per block. Most are in the inserter's <strong>Custom Blocks</strong>
+  category; Tabs, Popup and Table of Contents are in <strong>Design</strong>, Advanced Table and
+  Title (Advanced) in <strong>Text</strong>, and Fancy Breadcrumbs and Page Nav in <strong>Theme</strong>.
+  Icon Accordion is a style of the ordinary Accordion block.
 </p>
 
 <h2>Carousel</h2>
@@ -21,32 +24,34 @@
 <p>Settings worth knowing, in the right-hand panel:</p>
 
 <ul>
-  <li><strong>Card Width</strong> — how wide each card is (175px to start). Leave it empty and each card sizes to its content.</li>
+  <li><strong>Card Width</strong> — how wide each card is. Leave it empty for the standard 175px.</li>
   <li><strong>Grid Gap</strong> — the space between cards.</li>
   <li><strong>Show scrollbar</strong> — a thin scrollbar under the row.</li>
-  <li><strong>Arrow Position</strong> — Outside (the default), Inside, or Hidden. Outside arrows move inside on their own when there is no room, for example near the edge of a phone screen.</li>
+  <li><strong>Arrow Styles</strong> — <strong>Arrow Position</strong> (Outside, the default; Inside; or Hidden), <strong>Arrow Background</strong> on or off, and <strong>Arrow Size</strong>. Outside arrows move inside on their own when there is no room, for example near the edge of a phone screen.</li>
   <li><strong>Arrow Colors</strong> — the arrow and its background.</li>
 </ul>
 
 <p>
-  On the live site visitors can drag, swipe or use the arrows; each arrow click moves about half
-  a screen. Arrows only appear when there is more to see. On phones a card is never wider than
-  70% of the screen.
+  On the live site visitors can drag, swipe or use the arrows; each arrow click moves the row by
+  half the carousel's width. The arrows are always there — the one pointing past the end of the
+  row fades out. On phones a card is never wider than 70% of the screen.
 </p>
 
 <div class="notice notice-info inline ct-manual__warning">
   <p>
-    Galleries and Query Loops have a separate <em>Carousel</em> style in their Styles panel
-    (Rental Information's photos use it). That style is not this block — it turns an existing
-    gallery or post list into a scrolling row.
+    Galleries and Query Loops have separate <em>Carousel</em> and <em>Slider</em> styles in their
+    Styles panel, and the comments list has a <em>Carousel</em> style too (the home page's post
+    rows use the carousel one). Those styles are not these blocks — they turn an existing gallery,
+    post list or comments list into a scrolling row or slideshow.
   </p>
 </div>
 
 <h2>Slider</h2>
 
 <p>
-  A slideshow that shows one slide at a time and fades between them, with arrows and a dot per
-  slide. Each slide gets a small “2 / 5” counter in its corner automatically.
+  A slideshow that shows one slide at a time, with arrows and a dot per slide. Slides switch
+  straight over, with no fade. Each slide gets a small “2 / 5” counter in its corner
+  automatically.
 </p>
 
 <p>
@@ -55,22 +60,24 @@
 </p>
 
 <ul>
-  <li><strong>Autoplay</strong> — moves to the next slide on its own.</li>
-  <li><strong>Autoplay speed (ms)</strong> — how long each slide stays, in thousandths of a second; 5000 is five seconds. Only shown when Autoplay is on.</li>
+  <li><strong>Autoplay</strong> — moves to the next slide on its own, and adds a pause/play button beside the dots.</li>
+  <li><strong>Autoplay speed (ms)</strong> — how long each slide stays, in thousandths of a second, from 100 to 10000; 5000 is five seconds. Only shown when Autoplay is on.</li>
   <li><strong>Arrow Styles</strong> and <strong>Arrow Colors</strong> — as for the Carousel, except the arrows sit inside the slides by default.</li>
 </ul>
 
 <p>
-  The arrows loop round from the last slide to the first. In the editor, the slide you have
-  selected is the one shown.
+  The arrows loop round from the last slide to the first. Visitors who have reduced motion turned
+  on get an autoplay slider that starts paused; they can press play. In the editor, the slide you
+  have selected is the one shown.
 </p>
 
 <h2>Tabs</h2>
 
 <p>
-  Content split into tabs on a computer, which turns into an accordion — stacked headings that
-  open one at a time — on phones. The production pages' Info / Trailer / Advisory / Events /
-  Photos / Buzz row is built with it.
+  Content split into tabs on wider screens, which turns into an accordion — stacked headings
+  that open one at a time — on screens narrower than 782px (most tablets held upright, and all
+  phones). The production pages' Info / Trailer / Advisory / Events / Photos / Buzz row is built
+  with it.
 </p>
 
 <p>
@@ -135,15 +142,15 @@
 
 <ol>
   <li>Select the Popup and, under <strong>Advanced</strong>, give it an <strong>HTML anchor</strong> — one word, e.g. <code>tickets</code>.</li>
-  <li>Link any button on the page to <code>#tickets</code> (the hash, then the anchor). Several buttons can open the same popup.</li>
+  <li>Link a Button block on the page to <code>#tickets</code> (the hash, then the anchor). Several buttons can open the same popup.</li>
   <li>Put whatever you like inside the popup: text, a form, a pattern.</li>
 </ol>
 
 <ul>
   <li><strong>Position</strong> — Center is a box over the middle of the page; Top, Right, Bottom and Left slide a panel in from that edge.</li>
   <li><strong>Size</strong> — Small, Medium, Large or Full.</li>
-  <li><strong>Auto-open after (seconds)</strong> — opens the popup by itself after that many seconds, once per visit. 0 means never.</li>
   <li><strong>Dialog Label</strong> — what screen readers announce; uses the anchor if empty.</li>
+  <li><strong>Auto-open after (seconds)</strong> — in the <strong>Automatic Opening</strong> panel, which starts collapsed. Opens the popup by itself after that many seconds, once per visit. 0 means never.</li>
 </ul>
 
 <p>
@@ -152,14 +159,17 @@
 </p>
 
 <p>
-  In the editor the popup only shows while it's selected; use the eye icon in its toolbar to
-  keep it open, and List View to find it when it's closed.
+  In the editor the popup only shows while it, or something inside it, is selected. The eye icon
+  in its toolbar shows or hides the preview for now — it goes back to following your selection
+  as soon as you click elsewhere. Use List View to find a popup when it's closed.
 </p>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    If a button doesn't open anything, check the spelling — the button link and the anchor
-    must match exactly, and the link needs the <code>#</code>. Nothing on the page warns you.
+    Use a Button block to open a popup. A plain text link to <code>#tickets</code> only works the
+    first time it's clicked. If a button doesn't open anything, check the spelling — the button
+    link and the anchor must match exactly, and the link needs the <code>#</code>. Nothing on the
+    page warns you.
   </p>
 </div>
 
@@ -181,15 +191,19 @@
   <li><strong>Activate On</strong> — <em>Click</em> (click the card to open, again to close) or <em>Hover</em>. Phones have no hover, so hover cards open on a tap.</li>
   <li><strong>Use the post's featured image</strong> — inside a post list, each card shows its own post's image; the image you chose becomes the fallback.</li>
   <li><strong>Link the image to the post</strong> — only with Hover.</li>
-  <li><strong>Image Size &amp; Fit</strong> — shape (Square, 4:3, Portrait and so on), focal point and quality.</li>
+  <li><strong>Image Size &amp; Fit</strong> — <strong>Aspect Ratio</strong> (Auto, which uses the Height you set; Square 1:1; Standard 4:3; Portrait 3:4; Widescreen 16:9; Vertical 9:16), Width, Height, <strong>Object Fit</strong>, <strong>Focal Point</strong> and <strong>Resolution</strong> (which size of the image file to load — smaller loads faster).</li>
 </ul>
 
-<p>Only one card is open at a time; opening another closes the first.</p>
+<p>
+  Only one card is open at a time; opening another closes the first, and clicking anywhere
+  outside an open card closes it.
+</p>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    Don't leave the Card header empty — with Click and Expand the card then can't be closed. The
-    panel shows a yellow warning when this happens.
+    Don't leave the Card header empty. With the <em>Expand</em> style and <em>Click</em>, the card
+    then shows permanently open and can't be closed; with the other settings, visitors see
+    nothing to open. The panel shows a yellow warning when the header is empty.
   </p>
 </div>
 
@@ -197,7 +211,7 @@
 
 <p>
   A wide card whose picture grows in from the left as it scrolls into view, pushing the text
-  across. The past-production archive cards use it.
+  across. It isn't used on the site yet.
 </p>
 
 <p>
@@ -224,6 +238,35 @@
   </p>
 </div>
 
+<h2>Icon Accordion</h2>
+
+<p>
+  A stack of coloured cards, each with a strip down its left edge (the “rail”) holding an icon,
+  that open in place to show their content. The artist pages' credits sidebar and the Membership
+  and Ticketing FAQs use it.
+</p>
+
+<p>
+  It isn't a separate block: it's WordPress's Accordion with this site's look. Insert
+  <strong>Icon Accordion</strong> from the inserter to get five starter cards, or give any
+  existing Accordion the <strong>Icon Accordion</strong> style in its Styles panel. Each card is
+  an Accordion Item with a heading and a panel that takes any blocks. Inserted fresh, opening one
+  card closes the others; an accordion given the style afterwards keeps its own setting for that.
+</p>
+
+<p>Select a single card for its <strong>Icon</strong> panel:</p>
+
+<ul>
+  <li><strong>Rail icon</strong> — any image from the Media Library; an SVG icon works best. Without one the rail shows the accordion's open/close “+”.</li>
+  <li><strong>Icon background</strong> — colours the rail behind the icon. It's tucked under the panel's <strong>⋮</strong> menu; left unset, the rail is a tinted strip of the card's own colour.</li>
+</ul>
+
+<p>
+  The icon is decoration only, so it needs no alt text — the card's heading says what it is. On
+  the live site SVG icons take the card's text colour; other images, and every icon in the editor,
+  keep the colours they were uploaded with.
+</p>
+
 <h2>Icon List</h2>
 
 <p>
@@ -243,21 +286,32 @@
   <li><strong>Icon Size</strong> — 24px to start.</li>
   <li><strong>Icon Position</strong> — left, top, right or bottom of the text.</li>
   <li><strong>Align</strong> — top, middle or bottom of the text.</li>
-  <li>More options — spacing, icon colour, show-on-hover — are under the panel's <strong>⋮</strong> menu.</li>
+  <li>More options are under the panel's <strong>⋮</strong> menu: <strong>Icon Spacing</strong>, <strong>Icon Color</strong> and <strong>Hover Only</strong>.</li>
 </ul>
+
+<p>
+  <strong>Icon Color</strong> is a text box, not a colour picker: type a colour such as
+  <code>#000000</code>. Left empty, icons follow the text colour.
+</p>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    <strong>Icon Color</strong> only recolours SVG icons, not photos or PNGs. Avoid
+    SVG icons always come out in a single colour (the Icon Color, or the text colour), even if the
+    file itself has several. Photos and PNGs keep their own colours and ignore Icon Color. Avoid
     <strong>Show icon on hover only</strong>: phones can't hover, so the icons never appear there.
-    The icon's description for screen readers is its Alt Text in the Media Library.
   </p>
 </div>
+
+<p>
+  The icon's description for screen readers is copied from its Alt Text in the Media Library at
+  the moment you pick it. If you fix the alt text later, pick the icon again to pick up the change.
+</p>
 
 <h2>Thumbnail List</h2>
 
 <p>
-  A list of headings where pointing at a row slides a small picture in beside it. Rental
+  A list of headings with one small picture (48px to start) beside it. As a visitor points at a
+  row, the picture slides level with that row and flips over to show that row's image. Rental
   Information and Membership use it.
 </p>
 
@@ -266,57 +320,69 @@
   Select an item to give it a picture in the <strong>Thumbnail Image</strong> panel.
 </p>
 
+<p>Select the whole list for its settings:</p>
+
 <ul>
-  <li><strong>Hide Description Until Hover</strong> — each paragraph only shows while its row is pointed at.</li>
-  <li><strong>Thumbnail Position</strong> — the picture slides in on the left or the right.</li>
-  <li><strong>Aspect Ratio</strong> and <strong>Object Fit</strong> — the picture's shape and how it fills it.</li>
-  <li><strong>Animation Speed</strong> — how fast the picture slides.</li>
+  <li><strong>Display Settings</strong> — <strong>Hide Description Until Hover</strong>, <strong>Thumbnail Position</strong> (left or right), <strong>Item Height</strong>, the picture's <strong>Thumbnail Width</strong> and height, and <strong>Animation Speed</strong>.</li>
+  <li><strong>Image Settings</strong> — <strong>Resolution</strong>, <strong>Aspect Ratio</strong> and <strong>Object Fit</strong>: which size of image file to load, the picture's shape, and how it fills that shape.</li>
 </ul>
 
 <p>
-  The first item's picture shows when the page loads. On tablets and phones the list becomes a
-  single column with a still picture beneath, and nothing slides.
+  The first item's picture shows when the page loads. On screens narrower than 782px the picture
+  stops moving and sits above the list instead, on the list's side; tapping a row still changes
+  it.
 </p>
+
+<div class="notice notice-warning inline ct-manual__warning">
+  <p>
+    <strong>Hide Description Until Hover</strong> only reveals a paragraph while a mouse pointer
+    is over its row. Keyboard users never see it, and on phones it depends on the browser — leave
+    it off if the text matters.
+  </p>
+</div>
 
 <h2>Blockquote</h2>
 
 <p>
   A quotation with an optional source line underneath, such as “— Author, <em>Work Title</em>”.
-  The quote itself holds paragraphs; select the source line and use <strong>Cite work title</strong>
-  in its toolbar to set a title in italics.
+  The quote itself holds paragraphs. To set a title in italics, select it in the source line and
+  choose <strong>Cite work title</strong> from the toolbar's <strong>⌄</strong> (More) menu.
 </p>
 
 <p>
-  Turn the source line on or off with <strong>Add citation</strong>. Turning it off deletes what
-  was typed there. <strong>Source URL</strong> records where the quote came from but isn't shown to
-  visitors.
+  Turn the source line on or off with <strong>Add citation</strong> (select the outer Blockquote).
+  Turning it off deletes what was typed there. <strong>Source URL</strong> (select the inner
+  <strong>Text</strong> block) records where the quote came from but isn't shown to visitors.
 </p>
 
 <h2>Advanced Table</h2>
 
 <p>
-  A table whose cells can hold any blocks — images, lists, icons — not just text. Advertising
-  dates, donor levels and rental rates are built with it.
+  A table whose cells can hold more than text — images, lists, icons. Advertising dates, donor
+  levels and rental rates are built with it.
 </p>
 
 <p>
   It starts with a <strong>Table Title</strong>, a <strong>Table Header</strong> and a
   <strong>Table Body</strong>, made of rows and cells. Add rows and cells with
-  <strong>+</strong>; turn a cell into a heading cell through the block's Transform menu.
+  <strong>+</strong>; turn a cell into a heading cell through the block's Transform menu. A cell
+  can hold paragraphs, lists, images, galleries, video, audio, files, covers, groups and icons.
 </p>
 
 <ul>
   <li><strong>Header row</strong> / <strong>Footer row</strong> — add or remove those sections.</li>
   <li><strong>Fixed column widths</strong> — then give each header cell a Width (Dimensions) to size its column.</li>
-  <li><strong>Sticky header row</strong> — the header stays in view while a long table scrolls.</li>
+  <li><strong>Sticky header row</strong> — the header stays in view while the table scrolls inside its own box.</li>
   <li><strong>Sticky first column</strong> — the first column stays in view while the table scrolls sideways.</li>
   <li><strong>Column span</strong> / <strong>Row span</strong> (select a cell) — merge a cell across columns or rows.</li>
-  <li><strong>Stripes</strong> (Styles) and <strong>Subsection Heading</strong> (a row's Styles) — a striped table, and a row that labels a group of rows.</li>
+  <li><strong>Subsection Heading</strong> (a row's Styles) — a row that labels the group of rows below it.</li>
 </ul>
 
 <p>
-  On the live site, pointing at a cell highlights its row and column, and a table taller than the
-  screen scrolls inside itself. On phones the table scrolls sideways, fading at the edge where
+  Every table is striped automatically, so there's no stripes setting. On the live site, pointing
+  at a cell highlights its row and column. A table taller than about nine-tenths of the screen
+  scrolls inside its own box, and the sticky header sticks to the top of that box, not the top of
+  the page. On screens narrower than 782px the table scrolls sideways, fading at the edge where
   there's more to see, and fixed column widths are ignored so no column gets crushed.
 </p>
 
@@ -336,15 +402,18 @@
 </p>
 
 <ul>
-  <li><strong>Unordered</strong> / <strong>Ordered</strong> (toolbar) — bullets or numbers.</li>
+  <li><strong>Unordered</strong> / <strong>Ordered</strong> (toolbar) — bullets or numbers. Numbers to start.</li>
   <li><strong>Include headings down to level</strong> — e.g. Heading 3 to leave out smaller sub-headings.</li>
+  <li><strong>Only include current page</strong> — for a post split into pages, lists just this page's headings.</li>
   <li><strong>Convert to static list</strong> (toolbar) — turns it into an ordinary list that no longer updates.</li>
 </ul>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
     A heading is only clickable in the list if it has an <strong>HTML anchor</strong> (select the
-    heading, Advanced). Without one it's listed but doesn't jump anywhere.
+    heading, Advanced). Without one it's listed but doesn't jump anywhere. The list is saved with
+    the page, so it only changes on the live site when this page is updated — if a heading comes
+    from a pattern that was edited elsewhere, open this page and Update it.
   </p>
 </div>
 
@@ -364,24 +433,23 @@
 <h2>Fancy Breadcrumbs</h2>
 
 <p>
-  The “you are here” trail at the top of a page, such as Backstage › Blog. It builds itself from
-  the page's parent pages — or, for shows and events, from their section — so there is nothing to
-  type. The editor only shows a sample trail; check the live page.
+  The “you are here” trail at the top of a page, such as Backstage › Blog. It builds itself, so
+  there is nothing to type: pages follow their parent pages, and shows follow All Productions,
+  then the show's category. The editor only shows a sample trail; check the live page.
 </p>
 
 <ul>
   <li><strong>Show home breadcrumb</strong> — starts the trail with Home (off by default).</li>
   <li><strong>Show current breadcrumb</strong> — ends the trail with this page (on by default).</li>
-  <li><strong>Prefer taxonomy terms</strong> — follow the page's category instead of its parent page.</li>
+  <li><strong>Prefer taxonomy terms</strong> — for pages and events, follow the category instead of the parent page. Shows always use their category, whatever this is set to.</li>
+  <li><strong>Show on homepage</strong> — off by default, so the trail doesn't appear on the home page.</li>
 </ul>
-
-<p>It never shows on the home page.</p>
 
 <h2>Page Nav</h2>
 
 <p>
   A row of buttons that jump to sections further down the same page. It builds itself — you
-  don't type any links.
+  don't type any links. It only works on pages, shows and events.
 </p>
 
 <p>For a section to get a button:</p>
@@ -394,39 +462,56 @@
 
 <p>
   A post list (Query Loop) with an HTML anchor also gets a button for each post, named after the
-  post; these show on the live page but not in the editor.
+  post — so each card in it needs a Post Title block. These show on the live page but not in the
+  editor.
 </p>
 
 <p>
-  On the live site the button for the section you're reading lights up as you scroll, and clicks
-  scroll smoothly to just below the header. With six or more buttons, a small “Jump to section”
-  menu appears once the row scrolls out of view. On phones the buttons wrap onto several rows.
+  Clicks scroll smoothly to just below the header. The buttons wrap onto more rows whenever they
+  don't fit. With six or more buttons, a small “Jump to section” menu appears once the row
+  scrolls out of view.
+</p>
+
+<p>
+  The button for the section you're reading isn't highlighted, by design. The exception is a Page
+  Nav in a sticky bar on a page other than a show (the Blog's, for example), where the current
+  section's button is underlined.
 </p>
 
 <div class="notice notice-warning inline ct-manual__warning">
   <p>
-    A section without a heading or an anchor gets no button, and sections inside Tabs are
-    skipped. If no button appears, check those two things first.
+    A section without a heading or an anchor gets no button, and sections inside a tab that isn't
+    open are skipped. If no button appears, check those first.
   </p>
 </div>
 
 <h2>Query Filter</h2>
 
 <p>
-  A drop-down that lets visitors filter or re-sort a list of posts on the same page — the Press
-  Room's season picker is one. Choosing an option updates the list without reloading the page.
+  A drop-down that lets visitors filter or re-sort a list on the same page. Choosing an option
+  applies it straight away; the <strong>Apply</strong> button beside it does the same.
 </p>
 
 <ul>
-  <li><strong>Target Query Loop</strong> — which list on the page it controls. Needed when the page has more than one.</li>
+  <li><strong>Target Query Loop</strong> — which post list (Query Loop) on the page it controls. Always choose one: a Query Loop is only filtered when it's chosen here.</li>
   <li><strong>Filter Type</strong> — filter by <em>Taxonomy</em> (Season, Series or Tags), or <em>Sort Order</em> (newest, oldest, A–Z, Z–A).</li>
   <li><strong>Label</strong> / <strong>Show label</strong> — the text beside the drop-down.</li>
   <li><strong>“All” option label</strong> — what the show-everything choice says.</li>
   <li><strong>Term order</strong> — A → Z, or Z → A to put the newest season first.</li>
+  <li><strong>URL parameter name</strong> — the word that appears in the page address after filtering, e.g. <code>?season=2024</code>. Leave it as it is.</li>
   <li><strong>Layout</strong> — horizontal or vertical.</li>
 </ul>
 
-<p>Seasons, series or tags with nothing in them are left out of the drop-down automatically.</p>
+<p>
+  With a Query Loop chosen, the list updates without reloading the page. The Press Room and Past
+  Productions season pickers work differently: they filter a list of seasons (a Terms Query), not
+  posts, so no Target Query Loop is chosen and the whole page reloads.
+</p>
+
+<p>
+  Seasons, series or tags with nothing at all in them — no posts of any kind — are left out of the
+  drop-down automatically.
+</p>
 
 <h2>Theatrum Query Loop</h2>
 

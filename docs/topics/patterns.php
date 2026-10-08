@@ -57,8 +57,25 @@ if ( ! defined('ABSPATH')) {
 
 <p>
   In the editor, a shared pattern appears as a single locked-looking unit with a purple
-  outline. If you can click straight into the individual words and change them without any
-  warning, you are almost certainly editing a shared pattern for the entire site.
+  outline. Most of it can't be clicked into from the page — to change the shared design you have
+  to choose <strong>Edit original</strong> from its toolbar, which opens the master copy. That
+  extra step is your warning: anything you change there changes every page.
+</p>
+
+<h2>Parts you can fill in on one page (overrides)</h2>
+
+<p>
+  Some shared patterns have a few parts marked as yours to fill in — for example the
+  <strong>Page Header</strong>'s Pretitle, Title, Subtitle and Intro Text, the Event and Venue
+  headers, the Production Tabs and Sidebar, and the Layout starters. On the page they behave like
+  ordinary text or images: click in and type. What you put there stays on that page only; the rest
+  of the pattern is still shared.
+</p>
+
+<p>
+  Selecting one of those parts shows its name in the sidebar. If you want a part back to the
+  shared wording, choose <strong>Reset</strong> from the pattern's toolbar — that clears every
+  override on that pattern on this page.
 </p>
 
 <h2>Before you edit one: check who else uses it</h2>

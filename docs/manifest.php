@@ -9,8 +9,7 @@
  *   summary  One line, shown on the index and in the stub notice.
  *   key      true to badge it "start here" on the index.
  *   status   'stub' to force the placeholder even if a partial exists.
- *   screens  Reserved. Phase 2 will use these screen IDs to attach native
- *            help tabs on the screens a topic describes.
+ *   screens  Reserved for attaching native help tabs to the screens a topic describes.
  *
  * Adding a topic: one entry here, one file at docs/topics/<slug>.php.
  * A declared topic with no file renders the "not written yet" notice, which
@@ -144,16 +143,30 @@ return [
     ],
   ],
 
+  'blocks'     => [
+    'label'  => __('Blocks', 'theatrum-admin'),
+    'topics' => [
+      'blocks-meta'       => [
+        'title'   => __('Meta Blocks', 'theatrum-admin'),
+        'summary' => __('The blocks that pull post, term and site-option field values onto a page.', 'theatrum-admin'),
+      ],
+      'blocks-layout'     => [
+        'title'   => __('Layout Blocks', 'theatrum-admin'),
+        'summary' => __('Carousels, tabs, popovers, tables and the other structural blocks.', 'theatrum-admin'),
+      ],
+      'blocks-variations' => [
+        'title'   => __('Production Blocks', 'theatrum-admin'),
+        'summary' => __('Performance dates, press quotes and credits, read from a show\'s Details and Credits.', 'theatrum-admin'),
+      ],
+    ],
+  ],
+
   'media'      => [
     'label'  => __('Images and media', 'theatrum-admin'),
     'topics' => [
       'images-and-media' => [
         'title'   => __('Images and the media library', 'theatrum-admin'),
         'summary' => __('Uploading, alt text, choosing the right size, and finding an image again later.', 'theatrum-admin'),
-      ],
-      'icons'            => [
-        'title'   => __('Icons', 'theatrum-admin'),
-        'summary' => __('Where the site\'s icon set comes from and how to use one.', 'theatrum-admin'),
       ],
     ],
   ],
@@ -163,7 +176,7 @@ return [
     'topics' => [
       'site-options' => [
         'title'   => __('Site Options', 'theatrum-admin'),
-        'summary' => __('Current and next season, the staff and board listings, and fallback images.', 'theatrum-admin'),
+        'summary' => __('Staff and board listings and fallback images. The current season is set under Seasons → Season Settings.', 'theatrum-admin'),
         'screens' => ['toplevel_page_site-options'],
       ],
       'forms'        => [
@@ -178,7 +191,7 @@ return [
     'topics' => [
       'why-isnt-my-change-showing' => [
         'title'   => __('Why isn\'t my change showing?', 'theatrum-admin'),
-        'summary' => __('The four things that cause this, in the order they are worth checking.', 'theatrum-admin'),
+        'summary' => __('The usual causes, in the order they are worth checking.', 'theatrum-admin'),
         'key'     => true,
       ],
       'things-not-to-touch'        => [
@@ -189,24 +202,6 @@ return [
       'accessibility'              => [
         'title'   => __('Accessibility', 'theatrum-admin'),
         'summary' => __('Alt text, heading order, link text, and two checks you can run yourself.', 'theatrum-admin'),
-      ],
-    ],
-  ],
-
-  'blocks' => [
-    'label'  => __('Blocks', 'theatrum-admin'),
-    'topics' => [
-      'blocks-meta'       => [
-        'title'   => __('Meta Blocks', 'theatrum-admin'),
-        'summary' => __('The blocks that pull post, term and site-option field values onto a page.', 'theatrum-admin'),
-      ],
-      'blocks-layout'     => [
-        'title'   => __('Layout Blocks', 'theatrum-admin'),
-        'summary' => __('Carousels, tabs, popovers, tables and the other structural blocks.', 'theatrum-admin'),
-      ],
-      'blocks-variations' => [
-        'title'   => __('Variations', 'theatrum-admin'),
-        'summary' => __('Production-specific blocks that don\'t fit the other two groups.', 'theatrum-admin'),
       ],
     ],
   ],

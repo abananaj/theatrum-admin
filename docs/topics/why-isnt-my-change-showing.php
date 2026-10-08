@@ -80,6 +80,30 @@
   <?php chance_manual_see('patterns', 'How shared patterns work'); ?> — and how to put it back.
 </p>
 
+<h2>6. Is it a production?</h2>
+
+<p>
+  Shows have a few behaviours of their own that look like a missed save:
+</p>
+
+<ul>
+  <li>
+    <strong>You changed the Series and the fields didn't change.</strong> The Series decides which
+    Details fields you see and which page design the show uses, but only once the post is saved.
+    Save, then reload the editor.
+  </li>
+  <li>
+    <strong>The ticket buttons have gone.</strong> The Get Tickets and Ticket Info buttons
+    hide on their own once the show's <strong>Closing</strong> date has passed. A ticket card with
+    no link is greyed out rather than hidden, and one switched to <strong>Sold out</strong> says so.
+  </li>
+  <li>
+    <strong>An older show looks different from this season's.</strong> Shows from past seasons use
+    the <strong>Single Production (old)</strong> page design (shown in the Template setting), so a
+    change to the current production layout won't appear on them.
+  </li>
+</ul>
+
 <h2>Still stuck?</h2>
 
 <p>

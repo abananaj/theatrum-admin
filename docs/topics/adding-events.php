@@ -18,6 +18,12 @@ if ( ! defined('ABSPATH')) {
 
 <?php chance_manual_go('post-new.php?post_type=event', 'Add a new event'); ?>
 
+<p>
+  Auditions have their own starting point, <strong>Events → Add Audition</strong>, with a layout and
+  panel of their own — <?php chance_manual_see('workflow-auditions', 'Putting an audition up'); ?>.
+  Everything below is about ordinary events.
+</p>
+
 <h2>The header is inside the event, not the template</h2>
 
 <div class="notice notice-warning inline ct-manual__warning">
@@ -50,13 +56,14 @@ if ( ! defined('ABSPATH')) {
   </li>
   <li>
     <strong>Add another date?</strong> — a tick box. Turn it on and a second set of fields
-    appears: <strong>Date 2</strong>, <strong>Start 2⏳</strong> and <strong>End 2⌛</strong>.
+    appears: <strong>Date 2 📆</strong>, <strong>Start 2⏳</strong> and <strong>End 2⌛</strong>.
     This is for an event that genuinely happens twice, such as a two-night gala. If you cannot
     see those fields, the tick box is the reason.
   </li>
   <li>
-    <strong>Buy Tickets Link</strong> — the full URL of the ticketing page. Leave it empty and
-    no button appears, which is the right answer for a free event.
+    <strong>Buy Tickets Link</strong> — the full URL of the ticketing page. It only appears once
+    <strong>Date 📆</strong> is filled in. Leave it empty and no button appears, which is the right
+    answer for a free event.
   </li>
   <li>
     <strong>Related Production</strong> — the show this event belongs to, if any.
@@ -81,6 +88,11 @@ if ( ! defined('ABSPATH')) {
 </p>
 
 <p>
+  Ticking <strong>Auditions</strong> on an ordinary event swaps the details panel for the audition
+  one after you save and reload. It is simpler to start from <strong>Add Audition</strong> instead.
+</p>
+
+<p>
   <strong>Seasons</strong> files the event under a season, the same way productions are filed.
   Worth setting so the event stays findable once it is in the past.
 </p>
@@ -88,38 +100,32 @@ if ( ! defined('ABSPATH')) {
 <h2>Getting it onto the show's page</h2>
 
 <p>
-  A production page runs a list of every event pointed at it, so <strong>Related Production is
+  A production page runs a list of every event linked to it, so <strong>Related Production is
   what puts an event on the show's page</strong>. There is no second step — set that field and the
   event appears.
 </p>
 
 <p>
-  You will also see the connection from the other end: the production has an <strong>Events</strong>
-  field on its <strong>Calendar&nbsp;📆</strong> tab, and it fills itself in as events are linked to
-  the show. Treat it as something to read, not something to fill in.
+  The link works from either end. The production has an <strong>Events</strong> field on its
+  <strong>Calendar&nbsp;📆</strong> tab: add an event there and the event's Related Production is
+  filled in for you, and setting Related Production on the event adds it to that list. Use whichever
+  screen you already have open.
 </p>
 
-<div class="notice notice-warning inline ct-manual__warning">
-  <p>
-    <strong>Always make the link from the event, never from the production.</strong> Adding an event
-    to the production's Events field by hand does not tell the event about the production, so the
-    connection is only half made — it looks right on the production and the event still behaves as
-    though it belongs to nothing.
-  </p>
-</div>
-
 <p>
-  Nothing cleans up after you either: unpublishing a production does not warn you that events still
+  Nothing cleans up after you, though: unpublishing a production does not warn you that events still
   point at it.
 </p>
 
-<h2>Events can have sub-events</h2>
+<h2>Events can have sub-pages</h2>
 
 <p>
   Events are one of the few content types on this site that nest — hence
-  <strong>Add New Event Sub-page</strong> in the menu. A parent event with children is the right
-  shape for something like a festival with several sessions under it. Most events need no parent
-  at all, so leave it alone unless you are deliberately building a group.
+  <strong>Add New Event Sub-page</strong> in the menu. It opens a window asking for the
+  <strong>Parent event</strong>; pick one and click <strong>Set Parent</strong>. A sub-page starts
+  blank, without an Event Header, which is the right shape for something like a festival with
+  several sessions under it. Most events need no parent at all, so leave it alone unless you are
+  deliberately building a group.
 </p>
 
 <h2>Before you publish</h2>

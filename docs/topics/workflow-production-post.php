@@ -12,7 +12,7 @@ if ( ! defined('ABSPATH')) {
 
 <p class="ct-manual__intro">
   A show's page carries a list of related news — announcements, features, interviews. Getting a post
-  into that list is one field, and it is on the post rather than on the show.
+  into that list is one field, on either the post or the show.
 </p>
 
 <h2>1. Write the post</h2>
@@ -39,30 +39,28 @@ if ( ! defined('ABSPATH')) {
 </p>
 
 <p>
-  That is the whole mechanism. There is no second step, nothing to do on the production, and nothing
-  to publish separately. Update the post and it appears on the show's page.
+  That is the whole mechanism. There is nothing to publish separately. Update the post and it appears
+  on the show's page.
+</p>
+
+<p>
+  The link works from either end. The production has a <strong>Posts 🔗</strong> field on its
+  <strong>Buzz&nbsp;🗨️</strong> tab (on the <strong>Content&nbsp;📝</strong> tab for OTR Readings and
+  Visiting Companies). Setting Related Production on the post adds the post there, and adding a post
+  there fills in the post's Related Production. Use whichever screen you already have open.
 </p>
 
 <p>
   The same panel has <strong>Related Event(s) 📆</strong> if the post is about a specific event, and
-  a general <strong>Related Other</strong> field for linking to pages, venues, artists and classes.
+  a general <strong>Related Other</strong> field for linking to pages, venues, supporters, artists and
+  classes. Those two link one way only, from the post.
 </p>
-
-<div class="notice notice-warning inline ct-manual__warning">
-  <p>
-    <strong>Do not do this from the production instead.</strong> The production has a
-    <strong>Posts 🔗</strong> field, and it fills itself in when you link a post to the show from
-    this side. Adding a post to it directly does not link back — the post will not know about the
-    show, and it will not appear where you expect. Always link from the post.
-  </p>
-</div>
 
 <h2>4. Check it</h2>
 
 <p>
   Open the show's page as a visitor and look for the post in the news list. If it is not there, the
-  usual causes are that the post is still a draft, or that Related Production was set on the
-  production side rather than the post side.
+  usual causes are that the post is still a draft or the page is cached.
   <?php chance_manual_see('why-isnt-my-change-showing', 'The full checklist'); ?>.
 </p>
 

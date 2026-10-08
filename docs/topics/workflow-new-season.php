@@ -27,23 +27,23 @@ if ( ! defined('ABSPATH')) {
 
 <h2>1. Create the season</h2>
 
-<?php chance_manual_go('edit-tags.php?taxonomy=season&post_type=production', 'Open the Seasons list'); ?>
+<?php chance_manual_go('edit-tags.php?taxonomy=season', 'Open Seasons → All Seasons'); ?>
 
 <p>
-  Click <strong>Add New Season</strong> at the top of that page. The form holds everything a season
-  needs, so this is a single pass rather than a create-then-come-back:
+  The <strong>Add New Season</strong> form is on the left of that page. It holds everything a
+  season needs, so this is a single pass rather than a create-then-come-back:
 </p>
 
 <ul>
   <li><strong>Name</strong> — the year. Slug and Description can be left to look after themselves.</li>
   <li><strong>Hide Season?</strong> — leave unticked for a season you are announcing.</li>
-  <li><strong>Season Press Release</strong> — see <?php chance_manual_see('workflow-press-release-season'); ?> if you have one.</li>
+  <li><strong>General Press Releases</strong> and <strong>OTR Press Releases</strong> — see <?php chance_manual_see('workflow-press-release-season'); ?> if you have them yet.</li>
   <li>
     <strong>Resident Playwright</strong>, <strong>Season Producers</strong>,
     <strong>Associate Season Producers</strong> and <strong>OTR Sponsors</strong> — Artist and
     Supporter records.
   </li>
-  <li><strong>Related Page</strong> — the season's page on the site. Step 2 explains what it does.</li>
+  <li><strong>Related Page</strong> — the season's page on the site. You can leave it for now; step 2 comes back to it.</li>
 </ul>
 
 <p>
@@ -61,23 +61,25 @@ if ( ! defined('ABSPATH')) {
 
 <h2>2. Give the season a page</h2>
 
+<?php chance_manual_go('post-new.php?post_type=page&ct_layout=season', 'Seasons → New Season'); ?>
+
 <p>
-  A season is a label, not a page. But visitors expect <em>/2026-season</em> to show them something,
-  so <strong>Related Page</strong> points the season at a real page, and anyone landing on the
-  season's own address is sent straight there.
+  <strong>Seasons → New Season</strong> opens a Page that is already laid out as a season page and
+  already filed under Onstage. Before anything else, set its <strong>Season</strong> in the sidebar to
+  the season you made in step 1 — the editor shows a reminder. The producers' message and every row
+  of shows read from that setting, so without it the page stays empty.
 </p>
 
 <p>
-  Either pick an existing page, or use <strong>Add New</strong> to build it now. Whichever you do,
-  remember what a season page is: an ordinary Page carrying a query that pulls in every production
-  filed under that season. <strong>You do not list the shows on it by hand</strong> — step 3 files
-  them, and the page finds them.
+  Fill in the lead sentence and the producers' letter, then save. <strong>You do not list the shows on
+  it by hand</strong> — step 3 files them, and the page finds them.
   <?php chance_manual_see('seasons-and-series', 'How season pages are assembled'); ?>.
 </p>
 
 <p>
-  To change the link later you do not have to reopen the season: the Seasons list has a
-  <strong>Related Page</strong> column, and <strong>Quick Edit</strong> on the row sets it.
+  Then point the season at the page. Go back to <strong>Seasons → All Seasons</strong> and use
+  <strong>Quick Edit</strong> on the season's row to set <strong>Related Page</strong>. Visitors who
+  land on the season's own address (<em>/2026-season</em>) are then sent to this page.
 </p>
 
 <h2>3. Add the productions</h2>
@@ -85,14 +87,17 @@ if ( ! defined('ABSPATH')) {
 <?php chance_manual_go('post-new.php?post_type=production', 'Add a new production'); ?>
 
 <p>
-  One at a time, and for each one: save a draft first, then set <strong>Season</strong> and
-  <strong>Series</strong> in the sidebar before anything else. A show with no season will not appear
-  on the season page, and that is the single most common thing to have to come back and fix.
+  One at a time. A new production opens with a <strong>Choose a Series</strong> box: pick the series,
+  and the draft saves and reloads with the right fields and page design for that kind of show. Then
+  set <strong>Season</strong> in the sidebar before anything else. A show with no season will not
+  appear on the season page, and that is the single most common thing to have to come back and fix.
 </p>
 
 <p>
-  Then work down the <strong>Details</strong> tabs — dates, run time, venue, bylines, artwork — and
-  set a featured image. <?php chance_manual_see('adding-a-production', 'The full production walkthrough'); ?>.
+  Then work through the <strong>Details</strong> tabs — <strong>Basic</strong> for dates, run time and
+  venue, then <strong>Content</strong>, <strong>Tickets</strong>, <strong>Media</strong>,
+  <strong>Calendar</strong> and <strong>Buzz</strong> — and set a featured image.
+  <?php chance_manual_see('adding-a-production', 'The full production walkthrough'); ?>.
 </p>
 
 <h2>4. Add the cast and creative team</h2>
@@ -119,31 +124,30 @@ if ( ! defined('ABSPATH')) {
 <h2>5. Add the events</h2>
 
 <p>
-  Openings, talkbacks, galas, auditions — each is an Event, and each is created from the
-  <strong>Events</strong> menu, not from the production.
+  Openings, talkbacks, galas, auditions — each is an Event, created from the
+  <strong>Events</strong> menu (<strong>Add Audition</strong> for auditions).
 </p>
 
 <p>
-  On the event, set <strong>Related Production</strong>. That one field is what lists the event on
-  the show's page. <?php chance_manual_see('adding-events', 'Adding events'); ?>.
+  On the event, set <strong>Related Production</strong>. That links it both ways: the event is listed
+  on the show's page, and it appears in the production's own <strong>Events</strong> field on the
+  Calendar tab. Linking from the production's side works too.
+  <?php chance_manual_see('adding-events', 'Adding events'); ?>.
 </p>
-
-<div class="notice notice-warning inline ct-manual__warning">
-  <p>
-    <strong>Do it from the event, not from the production.</strong> The production has an
-    <strong>Events</strong> field on its Calendar tab, and it fills itself in as you link events to
-    the show. Typing into it directly does <em>not</em> link the other way, and leaves you with a
-    half-made connection that looks finished.
-  </p>
-</div>
 
 <h2>6. Turn the season on</h2>
 
 <p>
-  Last step, and the one that actually moves the site: set <strong>Current Season</strong> in Site
-  Options, and <strong>Next Season</strong> to the one after it. Everything that works out “what is
-  on now” reads those two fields.
-  <?php chance_manual_see('site-options', 'Site Options'); ?>.
+  Last step: an administrator sets <strong>Current Season</strong> in
+  <strong>Seasons → Season Settings</strong>, and <strong>Next Season</strong> to the one after it.
+  Past Productions and the Press Room open on the Current Season. Editors cannot open Season Settings,
+  so if you are an Editor, ask an administrator to do this one.
+  <?php chance_manual_see('seasons-and-series', 'What Current Season does'); ?>.
+</p>
+
+<p>
+  The home page works out what is on stage from the production dates by itself, but its season
+  section is set on the home page's own blocks — check it still shows the right season.
 </p>
 
 <h2>Before you call it done</h2>
@@ -151,6 +155,7 @@ if ( ! defined('ABSPATH')) {
 <ul class="ct-manual__rules">
   <li>Every production has a <strong>season</strong>, a <strong>series</strong> and a <strong>featured image</strong>.</li>
   <li>Every production has <strong>opening and closing dates</strong>, and they are the right way round.</li>
+  <li>The season page has its <strong>Season</strong> set, and every row shows the right shows.</li>
   <li>The season's page opens when you visit the season's own address.</li>
   <li>Nothing is still sitting in <strong>Draft</strong>.</li>
 </ul>

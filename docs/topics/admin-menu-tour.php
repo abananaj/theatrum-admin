@@ -21,47 +21,66 @@ if ( ! defined('ABSPATH')) {
 
 <ul>
   <li><strong>Dashboard</strong> — the landing screen. Nothing important lives here.</li>
-  <li><strong>Site Manual</strong> — this manual.</li>
+  <li>
+    <strong>Site Manual</strong> — this manual. Its submenu has one row per section, each opening
+    that section's first page.
+  </li>
 </ul>
 
 <h2>Content</h2>
+
+<p>
+  Most of these menus open the same way: the list, the <strong>Add New</strong> link, a thin
+  divider line, then the extras that belong to that kind of content.
+</p>
 
 <ul class="ct-manual__rules">
   <li>
     <strong>Media</strong> — every image, PDF and video. Its submenu has more in it than
     standard WordPress: <strong>Assistant</strong> is a more powerful table view of the same
-    library, and <strong>Icons</strong> is a separate screen for interface icons that are
-    hidden from the main library. See <?php chance_manual_see('images-and-media'); ?>.
+    library, <strong>Att. Category</strong> and <strong>Att. Tag</strong> are the media library's
+    own filing labels, and <strong>Icons</strong> is a separate screen for interface icons that
+    are hidden from the main library. See <?php chance_manual_see('images-and-media'); ?>.
   </li>
   <li>
-    <strong>Pages</strong> — the standing pages: About, Visit, Support Us. Its submenu also
-    lists several taxonomies (Categories, Event Types, Programs, Seasons, Series) which are
-    there for convenience rather than because they belong to pages.
+    <strong>Pages</strong> — the standing pages: About, Visit, Support Us. Below the divider,
+    <strong>Archived Pages</strong> lists pages that have been taken off the site but kept.
+    New season pages are not made from here — use <strong>Seasons → New Season</strong>.
   </li>
   <li>
     <strong>Blog</strong> — this is WordPress's “Posts”, renamed. Press, announcements, photos,
-    interviews. See <?php chance_manual_see('blog-posts'); ?>.
+    interviews. Its <strong>Categories</strong> and <strong>Tags</strong> sit below the divider.
+    See <?php chance_manual_see('blog-posts'); ?>.
   </li>
   <li>
-    <strong>Artists</strong> — everyone ever credited on a show, plus staff.
-    See <?php chance_manual_see('adding-an-artist'); ?>.
+    <strong>Artists</strong> — everyone ever credited on a show, plus staff. Below the divider,
+    <strong>Chance Staff</strong> is where staff roles are filled in — the same fields as the
+    staff list in Site Options. See <?php chance_manual_see('adding-an-artist'); ?>.
   </li>
   <li>
-    <strong>Events</strong> — individual dated events and performances.
+    <strong>Events</strong> — individual dated events. <strong>Add Audition</strong>, right under
+    Add New Event, starts an event already set up as an audition
+    (<?php chance_manual_see('workflow-auditions', 'Auditions'); ?>). Below the divider are
+    <strong>Event Types</strong> and <strong>Add New Event Sub-page</strong>.
   </li>
   <li>
-    <strong>Productions</strong> — the shows. Its submenu is worth reading properly:
-    <strong>Chance Productions</strong> is the full list, <strong>Visiting Companies</strong>
-    is that same list filtered to one series, and <strong>Credits</strong> opens the credits
-    records directly — which is not how you add a credit
-    (see <?php chance_manual_see('production-credits'); ?>).
+    <strong>Productions</strong> — the shows. The first four rows are all the same list, filtered
+    differently: <strong>All Productions</strong> is everything; <strong>Chance Productions</strong>
+    leaves out the Visiting Companies and the OTR readings (an OTR show that is also in the Main
+    series stays in); <strong>OTR Readings</strong> and <strong>Visiting Companies</strong> are
+    one series each. <strong>Add New Production</strong> is below the divider — it asks which
+    series the show is in before anything else, and that choice sets up the right fields.
+    See <?php chance_manual_see('adding-a-production'); ?>.
   </li>
   <li>
-    <strong>Supporters</strong> — donors and sponsors, with their own Support Levels.
+    <strong>Supporters</strong> — donors and sponsors. Below the divider: <strong>Tags</strong>,
+    <strong>Support Levels</strong>, and <strong>Board Positions</strong>, where board roles are
+    filled in (the same fields as the board list in Site Options).
   </li>
   <li>
     <strong>Conservatory</strong> — the classes. The menu says Conservatory; the content type
-    is called Class, which is why some screens say one and some say the other.
+    is called Class, which is why some screens say one and some say the other. Programs and
+    Sessions are below the divider.
   </li>
   <li>
     <strong>Venues</strong> — the performance spaces.
@@ -76,7 +95,20 @@ if ( ! defined('ABSPATH')) {
   </li>
   <li>
     <strong>Site Options</strong> — sitewide settings that are not really WordPress settings:
-    the current season, the staff and board listings, fallback images. Small screen, wide reach.
+    the staff and board listings and the fallback images. See
+    <?php chance_manual_see('site-options'); ?>.
+  </li>
+  <li>
+    <strong>Seasons</strong> — everything to do with seasons in one place:
+    <ul>
+      <li><strong>All Seasons</strong> — the list of seasons, with the form for adding a new one.</li>
+      <li><strong>New Season</strong> — starts a new season <em>page</em>, already laid out.</li>
+      <li><strong>Series</strong> — Main, OTR, TYA, Holiday and the rest.</li>
+      <li>
+        <strong>Season Settings</strong> — which season is current. Administrators only.
+      </li>
+    </ul>
+    See <?php chance_manual_see('seasons-and-series'); ?>.
   </li>
   <li>
     <strong>Global Categories</strong> — the colour schemes. This is where the Onstage,
@@ -86,11 +118,11 @@ if ( ! defined('ABSPATH')) {
   <li>
     <strong>Tags</strong> — one shared tag list for the whole site. Tagging a page, an artist
     and a blog post with the same tag puts them in one list together, and this screen is how
-    you see that list. Tags in square brackets, like <code>[main pg]</code>, are internal
-    housekeeping.
+    you see that list: the number beside a tag opens everything carrying it. Tags in square
+    brackets, like <code>[main pg]</code>, are internal housekeeping.
   </li>
   <li>
-    <strong>WPForms</strong> — forms and their submissions.
+    <strong>WPForms</strong> — forms and their submissions. Administrators only.
     See <?php chance_manual_see('forms'); ?>.
   </li>
 </ul>
@@ -130,8 +162,9 @@ if ( ! defined('ABSPATH')) {
 
 <ul>
   <li>
-    <strong>The same taxonomy appears under several menus.</strong> Seasons under Blog, Pages,
-    Events and Productions is one list, not four. Editing it in one place edits it everywhere.
+    <strong>Tags appears under several menus, but it is one list.</strong> The Tags rows under
+    Media, Blog, Supporters and Conservatory are the same shared list, filtered to that kind of
+    content. Renaming a tag in one place renames it everywhere.
   </li>
   <li>
     <strong>Most of the site is not in Pages.</strong> Shows, events, artists, classes and

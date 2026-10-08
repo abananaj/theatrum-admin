@@ -29,7 +29,7 @@ if ( ! defined('ABSPATH')) {
 
 <h2>2. Open the season</h2>
 
-<?php chance_manual_go('edit-tags.php?taxonomy=season&post_type=production', 'Open the Seasons list'); ?>
+<?php chance_manual_go('edit-tags.php?taxonomy=season', 'Open Seasons → All Seasons'); ?>
 
 <p>
   Click the season's name to open it for editing. This is the term itself, not a page — the fields
@@ -39,14 +39,13 @@ if ( ! defined('ABSPATH')) {
 <h2>3. Attach it</h2>
 
 <p>
-  Find <strong>Season Press Release</strong> and click <strong>Add Press Release</strong>. Unlike the
+  Find <strong>General Press Releases</strong> and click <strong>Add Press Release</strong>. Unlike the
   production's field, this one holds more than one file, so a season with a launch announcement and a
   later update can carry both.
 </p>
 
 <p>
-  Update the season. It is drawn onto the season's page by a shared pattern, the same way the
-  production one is.
+  Update the season. The releases are listed in the Press Room, not on the season's own page.
 </p>
 
 <p>
@@ -63,8 +62,9 @@ if ( ! defined('ABSPATH')) {
 </p>
 
 <p>
-  Which season counts as "current" is the <strong>Current Season</strong> setting in Site Options;
-  change it when a new season goes up. <?php chance_manual_see('site-options', 'Site Options'); ?>
+  Which season it opens on is the <strong>Current Season</strong> setting in
+  <strong>Seasons → Season Settings</strong>, which an administrator changes when a new season goes up.
+  <?php chance_manual_see('seasons-and-series', 'Seasons and series'); ?>
 </p>
 
 <h2>While you are in there</h2>

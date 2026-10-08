@@ -11,7 +11,7 @@
 <ol class="ct-manual__rules">
   <li>
     <strong>Save the production before adding credits.</strong> On a brand new show the panel
-    says “save the post first” and will not let you add anyone. Save a draft, then continue.
+    says “Save the post first to manage credits.” and will not let you add anyone. Save a draft, then continue.
   </li>
   <li>
     <strong>Credits save separately from the page.</strong> The panel has its own
@@ -20,8 +20,9 @@
     Use both.
   </li>
   <li>
-    <strong>Never create a “Credit” post directly.</strong> There is an old Credits area left
-    over from the previous version of the site. Everything goes through this panel instead.
+    <strong>Credits only live in this panel.</strong> The previous version of the site had a
+    separate Credits area; it is now hidden from the menu, and nothing needs to be added there.
+    Everything goes through this panel.
   </li>
 </ol>
 
@@ -45,7 +46,7 @@
   <li>Click <strong>Add Credit</strong>.</li>
   <li>Start typing a name and choose from the results. Only existing artists and supporters appear — if someone is missing, create their profile first, then come back.</li>
   <li>Type the role exactly as it should appear on the page. It is printed as written, so mind the capitalisation.</li>
-  <li>Drag the handle at the left of a row to reorder. The order here is the order visitors see.</li>
+  <li>Drag the handle on a row to reorder. The order here is the order visitors see.</li>
   <li>Click <strong>Save Credits</strong>.</li>
 </ol>
 
@@ -57,7 +58,7 @@
 <h2>Removing someone</h2>
 
 <p>
-  Use the delete button on the row, then <strong>Save Credits</strong>. This removes the credit
+  Use the <strong>Remove credit</strong> button on the row, then <strong>Save Credits</strong>. This removes the credit
   from the production; it does not delete the artist's profile, which is what you want.
 </p>
 
@@ -65,8 +66,8 @@
 
 <p>
   There is a read-only list of every credit on the site, which is useful for spotting a
-  misspelt role or a duplicate entry. It is a browsing tool only — edits happen on the
-  production.
+  misspelt role or a duplicate entry. It is no longer in the Productions menu; use the link below.
+  It is a browsing tool only — click a production name to open it and make the edit there.
 </p>
 
 <?php chance_manual_go('edit.php?post_type=production&page=theatrum-credits-list', 'Browse all credits'); ?>
@@ -76,7 +77,9 @@
 <p>
   Season-level roles — resident playwright, season producers, associate producers, season
   sponsors — belong to the <em>season</em>, not to any single show. They are set on the season
-  itself and in Site Options. Do not add them here; they will attach to one production instead
+  itself: <strong>Seasons → All Seasons</strong>, then edit the season to find
+  <strong>Resident Playwright</strong>, <strong>Season Producers</strong>,
+  <strong>Associate Season Producers</strong> and <strong>OTR Sponsors</strong>. Do not add them here; they will attach to one production instead
   of the whole season.
 </p>
 

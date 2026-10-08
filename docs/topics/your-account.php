@@ -13,14 +13,16 @@ if ( ! defined('ABSPATH')) {
 <p class="ct-manual__intro">
   What you can see and change on this site depends on the kind of account you have. There are
   two that matter here: <strong>Administrator</strong> and <strong>Editor</strong>.
+  At the time of writing almost every staff account is an Administrator (nine, against one
+  Editor), so most people reading this see the full menu.
 </p>
 
 <h2>Which one are you?</h2>
 
 <p>
-  Look at the left-hand menu. <strong>If you can see Appearance, Plugins, Tools and Settings
-  near the bottom, you are an administrator.</strong> If the menu stops after WPForms or
-  Tags, you are an Editor.
+  Look at the left-hand menu. <strong>If you can see Appearance, Plugins and Settings near
+  the bottom, you are an administrator.</strong> If the main menu stops at Tags, with
+  only Profile and Tools below it, you are an Editor.
 </p>
 
 <?php chance_manual_go('profile.php', 'Open your profile'); ?>
@@ -34,13 +36,14 @@ if ( ! defined('ABSPATH')) {
 <ul>
   <li>Write, edit, publish and delete <strong>any</strong> content — pages, blog posts, productions, events, artists, classes, venues, supporters — including other people's.</li>
   <li>Upload and manage everything in the media library.</li>
-  <li>Manage categories, tags, seasons, series and the other classifications.</li>
+  <li>Manage categories, tags, seasons, series and the other classifications, and start a new season page from <strong>Seasons → New Season</strong>.</li>
   <li>Moderate comments.</li>
-  <li>Open <strong>Site Options</strong> and this manual.</li>
+  <li>Open <strong>Site Options</strong>, <strong>Artists → Chance Staff</strong>, <strong>Supporters → Board Positions</strong> and this manual.</li>
 </ul>
 
 <p>
-  An Editor cannot reach Appearance, Plugins, Users, Tools, Settings, the form builder, or the
+  An Editor cannot reach Appearance, Plugins, Users, Settings, WPForms (forms and their
+  submissions), <strong>Seasons → Season Settings</strong> (the Current Season switch), or the
   screens where the custom fields themselves are defined. That is deliberate: those are the
   screens where a wrong click affects the whole site rather than one page.
 </p>

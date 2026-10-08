@@ -14,10 +14,10 @@ if ( ! defined('ABSPATH')) {
   <strong>Season</strong> is when a show happened — 2024, 2025, 2026. <strong>Series</strong> is
   what kind of show it is — Main, OTR Reading, TYA Family, Holiday, Visiting Companies, Online.
   Every production should have one of each, and between them they drive most of the lists on
-  the site.
+  the site. Both live under the <strong>Seasons</strong> menu.
 </p>
 
-<?php chance_manual_go('edit-tags.php?taxonomy=season&post_type=production', 'Open the Seasons list'); ?>
+<?php chance_manual_go('edit-tags.php?taxonomy=season', 'Open the Seasons list'); ?>
 
 <h2>They are not pages</h2>
 
@@ -57,24 +57,26 @@ if ( ! defined('ABSPATH')) {
 <h2>Building a season page</h2>
 
 <p>
-  A season page is an ordinary Page. What makes it a season page is the blocks on it: a query
-  that pulls in every production filed under that season, rather than a hand-written list.
+  Start it from <strong>Seasons → New Season</strong>. That opens a new Page, already filed under
+  <strong>Onstage</strong> and already laid out: the season header, a lead sentence to fill in, the
+  Season Producers' message, and one row of shows for each series — Main, OTR, TYA and Holiday.
+</p>
+
+<?php chance_manual_go('post-new.php?post_type=page&ct_layout=season', 'Start a new season page'); ?>
+
+<p>
+  <strong>Give the page its Season</strong> in the editor's sidebar before anything else — a notice at
+  the top of the editor reminds you. Everything on the page reads from that one setting: the series
+  rows show the productions filed under that season, and the producers' names come from the season
+  itself. A season page with no Season set shows empty rows.
 </p>
 
 <p>
   Which means <strong>you do not add shows to a season page.</strong> You file the show under
   the season on the production itself, and the page picks it up. If a show is missing from a
-  season page, the season on that production is the thing to check.
+  season page, the season on that production is the thing to check — and if a whole row is wrong,
+  check the series.
 </p>
-
-<div class="notice notice-warning inline ct-manual__warning">
-  <p>
-    <strong>Do not choose “Season Page” from the Template dropdown.</strong> It appears in the
-    list but the template behind it was never finished, and selecting it will leave the page
-    blank. Build a season page as a normal page. See
-    <?php chance_manual_see('things-not-to-touch'); ?>.
-  </p>
-</div>
 
 <h2>What a season term itself holds</h2>
 
@@ -84,9 +86,28 @@ if ( ! defined('ABSPATH')) {
 
 <ul>
   <li><strong>Hide Season?</strong> — takes the season out of the lists without deleting anything.</li>
-  <li><strong>Season Press Release</strong> — a file attached to the season.</li>
+  <li><strong>General Press Releases</strong> and <strong>OTR Press Releases</strong> — files attached to the season, which the Press Room lists. See <?php chance_manual_see('workflow-press-release-season'); ?>.</li>
   <li><strong>Resident Playwright</strong>, <strong>Season Producers</strong>, <strong>Associate Season Producers</strong>, <strong>OTR Sponsors</strong> — each points at Artist or Supporter records. Each has an <strong>Add New</strong> button, so a name that is not in the system yet can be created without leaving the season.</li>
+  <li><strong>Related Page</strong> — the season's page, as above.</li>
 </ul>
+
+<h2>Current Season — Season Settings</h2>
+
+<p>
+  <strong>Seasons → Season Settings</strong> holds <strong>Current Season</strong>,
+  <strong>Next Season</strong> and <strong>Hide Next Season?</strong>. Only administrators can open
+  it; if you are an Editor, ask one.
+</p>
+
+<?php chance_manual_go('admin.php?page=season-settings', 'Open Season Settings'); ?>
+
+<p>
+  What Current Season does is narrower than its name suggests. <strong>Past Productions</strong> and
+  the <strong>Press Room</strong> each show one season at a time with a <strong>Season</strong>
+  dropdown for the others, and Current Season is the one they open on. It does not decide what the
+  home page shows as on stage now — that is worked out from the opening and closing dates on each
+  production, which is why a show with missing or mistyped dates can vanish from the home page.
+</p>
 
 <h2>Moving the site on to a new season</h2>
 
@@ -100,16 +121,18 @@ if ( ! defined('ABSPATH')) {
     it is filed under it with correct opening and closing dates.
   </li>
   <li>
-    <strong>2. Build or update the season's page</strong>, and point the season term at it with
-    Quick Edit → Related Page.
+    <strong>2. Build the season's page</strong> with <strong>Seasons → New Season</strong>, give it
+    its Season, and point the season term at it with Quick Edit → Related Page.
   </li>
   <li>
-    <strong>3. Change Current Season in Site Options.</strong> This is the switch. Everything
-    that computes “what's on now” reads that one field — see
-    <?php chance_manual_see('site-options'); ?>.
+    <strong>3. Change Current Season in Seasons → Season Settings</strong> (administrators), so
+    Past Productions and the Press Room open on the new season. Set <strong>Next Season</strong>
+    to the one after it, if there is one.
   </li>
   <li>
-    <strong>4. Set Next Season</strong> to the one after it, if there is one.
+    <strong>4. Check the home page.</strong> What is on stage now follows the production dates by
+    itself, but the home page's season section is set on the home page's own blocks, so it may
+    still be showing the old season. Ask whoever looks after the home page if it needs moving on.
   </li>
 </ul>
 
@@ -120,9 +143,11 @@ if ( ! defined('ABSPATH')) {
 <h2>Series</h2>
 
 <p>
-  Series is the smaller of the two and rarely changes — the six that exist cover everything.
-  The one worth knowing is <strong>Visiting Companies</strong>, which has its own entry in the
-  Productions menu: that menu item is simply the production list filtered to that series.
+  Series is the smaller of the two and rarely changes — the six that exist cover everything. It
+  matters more than it looks: when you add a production, the <strong>Choose a Series</strong> box
+  that opens first decides which fields the show gets and which page design it uses. OTR Readings
+  and Visiting Companies each have their own row in the <strong>Productions</strong> menu, which
+  is simply the production list filtered to that series.
 </p>
 
 <p>

@@ -40,8 +40,9 @@ if ( ! defined('ABSPATH')) {
 
 <ul class="ct-manual__rules">
   <li>
-    <strong>Changing words on this page.</strong> Click into the text and type. Safe, as long
-    as the text is not part of a shared pattern — which is the one thing worth checking first.
+    <strong>Changing words on this page.</strong> Click into the text and type. Safe — inside a
+    shared pattern you can only type into the parts marked as yours for this page (overrides),
+    and those stay on this page.
   </li>
   <li>
     <strong>Changing how a block looks.</strong> Select the block and use the settings panel
@@ -63,17 +64,12 @@ if ( ! defined('ABSPATH')) {
 
 <p>
   Open the inserter (the <strong>+</strong> button, top left) and you will see the standard
-  WordPress blocks plus four categories that belong to this site:
+  WordPress blocks mixed with the ones built for this site. Each has its own page in the Blocks
+  section of this manual, which also says which inserter category to find it under:
+  <?php chance_manual_see('blocks-meta', 'Meta Blocks'); ?>,
+  <?php chance_manual_see('blocks-layout', 'Layout Blocks'); ?> and
+  <?php chance_manual_see('blocks-variations', 'Production Blocks'); ?>.
 </p>
-
-<ul>
-  <li><strong>Custom Blocks</strong> — sliders, carousels, filters and the like.</li>
-  <li>
-    <strong>Meta Blocks</strong> — blocks that display information stored on the post
-    itself: its dates, its poster image, a field, a gallery.
-  </li>
-  <li><strong>Production</strong> — show-specific blocks such as quotes and performance dates.</li>
-</ul>
 
 <p>
   If a block or one of its variations has <strong>(Deprecated)</strong> in its name, or its
@@ -156,7 +152,7 @@ if ( ! defined('ABSPATH')) {
     from the design but a screen-reader user would otherwise miss.
   </li>
   <li>
-    <strong>Inline quote</strong> and <strong>Small text</strong>, in the text toolbar under
+    <strong>Inline quote</strong> and <strong>Small</strong>, in the text toolbar under
     the arrow at its right end — for styling a few words inside a paragraph.
   </li>
   <li>

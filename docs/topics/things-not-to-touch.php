@@ -27,20 +27,14 @@
   finding the references afterwards is much harder than checking beforehand.
 </p>
 
-<h2>Don't create entries in the old Credits area</h2>
+<h2>Don't change a page's Template</h2>
 
 <p>
-  There is a leftover Credits section from the previous version of the site. Cast and creative
-  credits belong in the <strong>Production Credits</strong> panel on the show itself —
-  <?php chance_manual_see('production-credits'); ?>.
-</p>
-
-<h2>Don't choose “Season Page” from the Template menu</h2>
-
-<p>
-  It appears in the template list on pages, but there is nothing behind it yet, so the page
-  will not display as you expect. Leave the template setting alone unless you have been told
-  otherwise for a specific page.
+  Every page and show already has the right template: new productions get theirs from their
+  series, and pages keep the one they were built with. The <strong>Template</strong> list in the sidebar also
+  offers designs that belong to other kinds of content — <em>Single Production OTR</em> shows up
+  on pages, for example — and picking one gives the page the wrong header and layout. Leave the
+  setting alone unless you have been told otherwise for a specific page.
 </p>
 
 <h2>Don't edit templates in the Site Editor</h2>
@@ -60,12 +54,12 @@
   maintenance — if you see an update prompt, leave it.
 </p>
 
-<h2>Don't use “Website Manual”</h2>
+<h2>Don't use the “[demos]” page</h2>
 
 <p>
-  There is a page called <em>Website Manual</em> in the Pages list. Despite the name it is a
-  developer's scratch page for testing layouts, not documentation. The manual you want is the
-  one you are reading. Do not edit it, link to it, or use it as a starting point for a real
+  There is a page called <em>[demos]</em> in the Pages list (its address still ends in
+  <em>/website-manual</em>). It is a developer's scratch page for testing layouts, not
+  documentation. The manual you want is the one you are reading. Do not edit it, link to it, or use it as a starting point for a real
   page.
 </p>
 

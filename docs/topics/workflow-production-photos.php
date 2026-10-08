@@ -97,8 +97,9 @@ if ( ! defined('ABSPATH')) {
 <h2>5. Put them on the show's page</h2>
 
 <p>
-  Open the production, go to the <strong>Details</strong> panel and the
-  <strong>Photos&nbsp;📸</strong> tab. There are two galleries:
+  Open the production, go to the <strong>Details</strong> panel, choose the
+  <strong>Media&nbsp;🎥📷</strong> tab and open the <strong>Photos&nbsp;📷</strong> section. There are
+  two galleries:
 </p>
 
 <ul>
@@ -108,8 +109,14 @@ if ( ! defined('ABSPATH')) {
 
 <p>
   Add your images to whichever applies, and update the production. <strong>This is the step that
-  makes them appear on the site.</strong> Until a photo is in one of these two galleries, the show's
-  page says “No photos yet, check back soon!” no matter how many files are attached to it.
+  makes them appear on the site.</strong> They show in the <strong>Photos</strong> tab on the show's
+  page. Until a photo is in one of these galleries, that tab says “No photos yet, check back soon!”
+  no matter how many files are attached to the show.
+</p>
+
+<p>
+  OTR Readings and Visiting Companies have a single gallery instead, <strong>Workshop Photos</strong>,
+  directly on their <strong>Media&nbsp;🎥📷</strong> tab. It fills the same Photos tab on the page.
 </p>
 
 <h2>So what was the Parent ID for?</h2>

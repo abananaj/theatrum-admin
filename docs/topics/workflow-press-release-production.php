@@ -40,30 +40,46 @@ if ( ! defined('ABSPATH')) {
 <h2>2. Attach it to the show</h2>
 
 <p>
-  Open the production, go to the <strong>Details</strong> panel, and choose the
-  <strong>Buzz&nbsp;🗨️</strong> tab. The first field is <strong>Press Release</strong>. Click
-  <strong>Add File</strong> and pick the PDF you just uploaded.
+  Open the production, go to the <strong>Details</strong> panel, choose the
+  <strong>Media&nbsp;🎥📷</strong> tab and open the <strong>Files&nbsp;📄</strong> section. Under
+  <strong>Press Release</strong>, click <strong>Add File</strong> and pick the PDF you just uploaded.
 </p>
 
 <p>
-  Update the production. The show's page now offers the release as a download.
+  For an OTR Reading or a Visiting Company, <strong>Press Release</strong> sits directly on the
+  <strong>Media&nbsp;🎥📷</strong> tab, with no sections to open.
 </p>
 
-<h2>What else is on that tab</h2>
+<p>
+  Update the production. Three places pick it up:
+</p>
+
+<ul>
+  <li>The show's page gets a <strong>Press Release</strong> button in its sidebar, next to <strong>See Playbill</strong>. It opens the PDF in a pop-up, with a link to view or download it.</li>
+  <li>The show's card in the Press Room links to it.</li>
+  <li>The show's card on the Past Productions page links to it.</li>
+</ul>
 
 <p>
-  <strong>Buzz 🗨️</strong> is also where <strong>Quotes 💬</strong> and <strong>Awards 🏆</strong>
-  live — the review pull-quotes and award lines that appear on the show's page. If you are adding a
-  press release you are often adding those at the same time.
+  With the field empty there is no button, so a show without a release looks finished rather than
+  broken.
+</p>
+
+<h2>What else to update while you are there</h2>
+
+<p>
+  The review pull-quotes and award lines live on the <strong>Buzz&nbsp;🗨️</strong> tab —
+  <strong>Quotes 💬</strong> and <strong>Awards 🏆</strong>. If you are adding a press release you are
+  often adding those at the same time.
   <?php chance_manual_see('adding-a-production', 'The production walkthrough'); ?>.
 </p>
 
-<h2>If the link does not appear</h2>
+<h2>If the button does not appear</h2>
 
 <p>
-  The download link is drawn by a shared pattern on the production page. If the file is attached but
-  nothing shows, that pattern is missing from the page rather than the file being wrong — which is a
-  different problem from the usual ones.
+  The button is drawn by the shared <strong>Production Sidebar</strong> pattern on the production
+  page. If the file is attached but nothing shows, check that the page still has that sidebar — a
+  show whose layout was rebuilt by hand may have lost it — and then work through the usual causes.
   <?php chance_manual_see('why-isnt-my-change-showing', 'Work through the checklist'); ?>.
 </p>
 
