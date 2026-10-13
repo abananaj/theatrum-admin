@@ -37,6 +37,7 @@ require_once THEATRUM_ADMIN_DIR . 'overflow-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'z-index-controls.php';
 require_once THEATRUM_ADMIN_DIR . 'copy-caption.php';
 require_once THEATRUM_ADMIN_DIR . 'acf-admin.php';
+require_once THEATRUM_ADMIN_DIR . 'rich-excerpt.php';
 
 /**
  * Enqueue SR-Only block editor script (outer editor UI — block filters)
@@ -145,6 +146,29 @@ function chance_enqueue_list_view_css_indicator_script() {
   }
 }
 add_action('enqueue_block_editor_assets', 'chance_enqueue_list_view_css_indicator_script');
+
+/**
+ * Enqueue Rich Excerpt sidebar panel — post edit screens only, since the site editor and patterns reuse the excerpt panel as "Description"
+ */
+function chance_enqueue_rich_excerpt_script() {
+  $screen           = get_current_screen();
+  $script_dist_path = plugin_dir_path(__FILE__) . 'dist/rich-excerpt.js';
+
+  if ( ! $screen || 'post' !== $screen->base || 'wp_block' === $screen->post_type || ! post_type_supports($screen->post_type, 'excerpt')) {
+    return;
+  }
+
+  if (file_exists($script_dist_path)) {
+    wp_enqueue_script(
+        'chance-rich-excerpt',
+        plugin_dir_url(__FILE__) . 'dist/rich-excerpt.js',
+        ['wp-components', 'wp-data', 'wp-editor', 'wp-element', 'wp-plugins'],
+        filemtime($script_dist_path),
+        true
+    );
+  }
+}
+add_action('enqueue_block_editor_assets', 'chance_enqueue_rich_excerpt_script');
 
 /**
  * Enqueue SR-Only styles into the block editor iFrame and on the frontend

@@ -18,7 +18,7 @@ For the full architecture, feature-by-feature breakdown, and current known issue
 
 ```bash
 npm install
-npm run build        # runs every Vite config (index, sr-only editor, position, overflow, z-index, formats, list-view-css, copy-caption ×2, sr-only-css)
+npm run build        # runs every Vite config (index, sr-only editor, position, overflow, z-index, formats, list-view-css, copy-caption ×2, sr-only-css, rich-excerpt)
 npm run build:watch  # ⚠️ watch mode only rebuilds the DEFAULT config and empties dist/ each run —
                       # do not rely on this alone; it silently strips the other 5 built files
 npm run deploy        # identical to build
@@ -41,7 +41,8 @@ theatrum-admin/
 │   ├── sr-only-blocks.php            # srOnly attribute + render_block class injection
 │   ├── position-controls.php         # position attrs + render_block style injection
 │   ├── overflow-controls.php         # Group/Columns overflowClip/overflowClipMargin attrs + render_block style injection
-│   └── z-index-controls.php          # Group/Columns zIndex attr + render_block style injection
+│   ├── z-index-controls.php          # Group/Columns zIndex attr + render_block style injection
+│   └── rich-excerpt.php              # core/post-excerpt render filter keeping manual-excerpt formatting (HTML-aware word trim)
 ├── src/
 │   ├── index.ts                      # bundles SCSS
 │   ├── sr-only-blocks.tsx            # editor toggle + outline badge
@@ -50,6 +51,7 @@ theatrum-admin/
 │   ├── overflow-controls.tsx         # Group/Columns "Clip overflow" toggle + clip-margin field (Advanced panel)
 │   ├── z-index-controls.tsx          # Group/Columns "Z-index" field (Advanced panel)
 │   ├── list-view-css-indicator.ts    # List View "CSS" badge for blocks with Additional CSS set
+│   ├── rich-excerpt.tsx              # TinyMCE Excerpt panel (compact sidebar + full-toolbar pop-up) replacing the core textarea
 │   └── scss/                         # sr-only.scss, svg-media-library.scss
 ├── dist/                             # build output (gitignored)
 └── vite.config*.js                   # one config per feature — see README's directory map
