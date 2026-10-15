@@ -32,6 +32,12 @@
 </ul>
 
 <p>
+  To line up cards of different heights, such as a row of logos, select the carousel and use the
+  <strong>Change vertical alignment</strong> button in the block toolbar: Align top, Align middle
+  or Align bottom. With none chosen, each card's content starts at the top.
+</p>
+
+<p>
   On the live site visitors can drag, swipe or use the arrows; each arrow click moves the row by
   half the carousel's width. The arrows are always there — the one pointing past the end of the
   row fades out. On phones a card is never wider than 70% of the screen.
