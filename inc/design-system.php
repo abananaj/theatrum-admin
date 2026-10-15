@@ -163,9 +163,8 @@ usort(
 
 // render patterns page
 function chance_render_patterns_page() {
-  // Check for category / tag filters
+  // Check for category filter
   $filter_category = isset($_GET['pattern_category']) ? sanitize_text_field(wp_unslash($_GET['pattern_category'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
-  $filter_tag      = isset($_GET['pattern_tag']) ? sanitize_text_field(wp_unslash($_GET['pattern_tag'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page render / list filter; no state change in this file.
 
   // Get registered patterns from WordPress registry
   $registry            = WP_Block_Patterns_Registry::get_instance();
@@ -249,15 +248,6 @@ $db_patterns = get_posts(
       }
     }
 
-    // Get tags (post_tag taxonomy, registered for wp_block by patterns-admin.php)
-    $raw_tags = wp_get_post_terms($pattern->ID, 'post_tag');
-    $tag_list = [];
-    if ( ! is_wp_error($raw_tags)) {
-      foreach ($raw_tags as $tag) {
-        $tag_list[] = ['name' => $tag->name, 'slug' => $tag->slug];
-      }
-    }
-
     $usage_count = function_exists('ct_get_all_pattern_usage_counts')
       ? (ct_get_all_pattern_usage_counts()[$pattern->ID] ?? 0)
       : 0;
@@ -269,7 +259,6 @@ $db_patterns = get_posts(
       'id'          => $pattern->ID,
       'synced'      => $is_synced,
       'categories'  => $category_list,
-      'tags'        => $tag_list,
       'usage_count' => $usage_count,
     ];
     $processed_slugs[] = $pattern->post_name;
@@ -292,7 +281,6 @@ $db_patterns = get_posts(
         'id'          => $file['id'],
         'categories'  => $category_list,
         'synced'      => $file['synced'],
-        'tags'        => [],
         'usage_count' => 0,
       ];
     }
@@ -313,21 +301,6 @@ usort(
         function ($p) use ($filter_category) {
         foreach ($p['categories'] as $cat) {
           if ($cat['slug'] === $filter_category) {
-            return true;
-          }
-        }
-        return false;
-        }
-    );
-  }
-
-  // Filter by tag if specified
-  if ( ! empty($filter_tag)) {
-    $patterns = array_filter(
-        $patterns,
-        function ($p) use ($filter_tag) {
-        foreach ($p['tags'] as $tag) {
-          if ($tag['slug'] === $filter_tag) {
             return true;
           }
         }
@@ -390,12 +363,6 @@ $unsynced_patterns = array_filter(
         <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns')); ?>">Clear filter</a>
       </p>
     <?php endif; ?>
-    <?php if ( ! empty($filter_tag)) : ?>
-      <p>
-        Filtering by tag: <strong><?php echo esc_html($filter_tag); ?></strong>
-        <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns')); ?>">Clear filter</a>
-      </p>
-    <?php endif; ?>
 
     <h2>Synced Patterns (<?php echo count($synced_patterns); ?>)</h2>
     <?php foreach ($synced_grouped as $category_name => $category_patterns) : ?>
@@ -406,7 +373,6 @@ $unsynced_patterns = array_filter(
             <th scope="col">Title</th>
             <th scope="col">Slug</th>
             <th scope="col">Categories</th>
-            <th scope="col">Tags</th>
             <th>Used In</th>
             <th scope="col">Source</th>
           </tr>
@@ -429,15 +395,6 @@ $unsynced_patterns = array_filter(
                   <?php foreach ($pattern['categories'] as $index => $cat) : ?>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_category=' . $cat['slug'])); ?>"><?php echo esc_html($cat['name']); ?></a><?php echo ($index < count($pattern['categories']) - 1) ? ', ' : ''; ?>
                   <?php endforeach; ?>
-                <?php endif; ?>
-              </td>
-              <td>
-                <?php if ( ! empty($pattern['tags'])) : ?>
-                  <?php foreach ($pattern['tags'] as $index => $tag) : ?>
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
-                  <?php endforeach; ?>
-                <?php else : ?>
-                  <span style="color:#646970">—</span>
                 <?php endif; ?>
               </td>
               <td>
@@ -469,7 +426,6 @@ $unsynced_patterns = array_filter(
             <th scope="col">Title</th>
             <th scope="col">Slug</th>
             <th scope="col">Categories</th>
-            <th scope="col">Tags</th>
             <th>Used In</th>
             <th scope="col">Source</th>
           </tr>
@@ -492,15 +448,6 @@ $unsynced_patterns = array_filter(
                   <?php foreach ($pattern['categories'] as $index => $cat) : ?>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_category=' . $cat['slug'])); ?>"><?php echo esc_html($cat['name']); ?></a><?php echo ($index < count($pattern['categories']) - 1) ? ', ' : ''; ?>
                   <?php endforeach; ?>
-                <?php endif; ?>
-              </td>
-              <td>
-                <?php if ( ! empty($pattern['tags'])) : ?>
-                  <?php foreach ($pattern['tags'] as $index => $tag) : ?>
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=chance-patterns&pattern_tag=' . $tag['slug'])); ?>"><?php echo esc_html($tag['name']); ?></a><?php echo ($index < count($pattern['tags']) - 1) ? ', ' : ''; ?>
-                  <?php endforeach; ?>
-                <?php else : ?>
-                  <span style="color:#646970">—</span>
                 <?php endif; ?>
               </td>
               <td>
